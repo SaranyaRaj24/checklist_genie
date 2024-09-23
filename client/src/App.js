@@ -3,13 +3,11 @@ import {
   BrowserRouter,
   Routes,
   Route,
-  Navigate,
   Outlet,
 } from "react-router-dom";
 
 
 import './App.css';
-import {BrowserRouter,Routes,Route, Outlet} from 'react-router-dom';
 import AdminHome from './Pages/admin/Home/Home';
 import AdminDashboard from './Pages/admin/Dashboard/Dashboard';
 import AdminNavbar from './Components/Navbar';

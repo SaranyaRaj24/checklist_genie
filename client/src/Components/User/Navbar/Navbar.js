@@ -2,7 +2,7 @@
 import React from "react";
 import { FaUserCircle, FaBars } from "react-icons/fa";
 import "./Navbar.css";
-import checklistImage from "../../Assets/checklist.jpg.jpg";
+import checklistImage from "../../../Assets/checklist.jpg.jpg";
 import Box from "@mui/material/Box";
 import Drawer from "@mui/material/Drawer";
 import Button from "@mui/material/Button";
@@ -22,7 +22,7 @@ import Typography from "@mui/material/Typography";
 import { MdAssignmentTurnedIn, MdAssignment } from "react-icons/md";
 import { BiSolidHourglassBottom } from "react-icons/bi";
 import { useNavigate } from "react-router-dom";
-import Image from "../../Assets/task.jpg";
+import Image from "../../../Assets/task.jpg";
 
 function Navbar() {
   const navigate = useNavigate();

@@ -4,29 +4,32 @@ import {
   Routes,
   Route,
   Navigate,
+  Outlet,
 } from "react-router-dom";
-import Home from "./Components/Home/Home";
-import Navbar from "./Components/Navbar/Navbar";
-import Assigned from "./Components/Assigned/Assigned";
-import Reports from "./Components/Reports/Reports";
-import Priority from "./Components/Priority/Priority";
-import Pending from "./Components/Pending/Pending";
-import Notification from "./Components/Notification/Notification";
-import Settings from "./Components/Settings/Settings";
+import UserHome from "./Components/User/Home/Home";
+import UserNavbar from "./Components/User/Navbar/Navbar";
+import UserAssigned from "./Components/User/Assigned/Assigned";
+import UserReports from "./Components/User/Reports/Reports";
+import UserPriority from "./Components/User/Priority/Priority";
+import UserPending from "./Components/User/Pending/Pending";
+import UserSettings from "./Components/User/Settings/Settings";
+import UserNotification from "./Components/User/Notification/Notification";
 
 function App() {
   return (
     <Router>
       <Routes>
-        <Route index element={<Navigate to="/dashboard" />} />
-        <Route path="/dashboard" element={<Home />} />
-        <Route path="/Navbar" element={<Navbar />} />
-        <Route path="/Assigned" element={<Assigned />} />
-        <Route path="/Reports" element={<Reports />} />
-        <Route path="/Priority" element={<Priority />} />
-        <Route path="/Pending" element={<Pending />} />
-        <Route path="/Notification" element={<Notification />} />
-        <Route path="/Settings" element={<Settings />} />
+        <Route index element={<Navigate to="user/dashboard" />} />
+        <Route path="user" element={<Outlet />}>
+          <Route path="dashboard" element={<UserHome />} />
+          <Route path="Navbar" element={<UserNavbar />} />
+          <Route path="Assigned" element={<UserAssigned />} />
+          <Route path="Reports" element={<UserReports />} />
+          <Route path="Priority" element={<UserPriority />} />
+          <Route path="Pending" element={<UserPending />} />
+          <Route path="Notification" element={<UserNotification />} />
+          <Route path="Settings" element={<UserSettings />} />
+        </Route>
       </Routes>
     </Router>
   );

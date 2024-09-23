@@ -1,4 +1,14 @@
 
+import React from "react";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+  Outlet,
+} from "react-router-dom";
+
+
 import './App.css';
 import {BrowserRouter,Routes,Route} from 'react-router-dom';
 import Home from './Pages/Home/Home';
@@ -9,6 +19,15 @@ import Report from './Pages/Report/Report';
 import Shared from './Pages/Shared/Shared';
 import Notification from './Pages/Notification/Notification';
 import Tag from './Pages/Tag/Tag'
+
+import UserHome from "./Components/User/Home/Home";
+import UserNavbar from "./Components/User/Navbar/Navbar";
+import UserAssigned from "./Components/User/Assigned/Assigned";
+import UserReports from "./Components/User/Reports/Reports";
+import UserPriority from "./Components/User/Priority/Priority";
+import UserPending from "./Components/User/Pending/Pending";
+import UserSettings from "./Components/User/Settings/Settings";
+import UserNotification from "./Components/User/Notification/Notification";
 
 
 function App() {
@@ -25,11 +44,22 @@ function App() {
       <Route path='/shared-task' element={<Shared/>}> </Route>
       <Route path='/notification' element={<Notification/>}> </Route> 
       <Route path='Tag' element={<Tag/>}> </Route>
+<Route path="user" element={<Outlet />}>
+          <Route path="dashboard" element={<UserHome />} />
+          <Route path="Navbar" element={<UserNavbar />} />
+          <Route path="Assigned" element={<UserAssigned />} />
+          <Route path="Reports" element={<UserReports />} />
+          <Route path="Priority" element={<UserPriority />} />
+          <Route path="Pending" element={<UserPending />} />
+          <Route path="Notification" element={<UserNotification />} />
+          <Route path="Settings" element={<UserSettings />} />
+        </Route>
     </Routes>
     </BrowserRouter>
     
     </>
     
+
   );
 }
 

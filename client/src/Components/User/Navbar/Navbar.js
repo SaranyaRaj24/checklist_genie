@@ -26,9 +26,7 @@ import Image from "../../../Assets/task.jpg";
 
 function Navbar() {
   const navigate = useNavigate();
-  const [state, setState] = React.useState({
-    left: false,
-  });
+  const [state, setState] = React.useState({ left: false });
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [activeView, setActiveView] = React.useState("");
 
@@ -59,18 +57,25 @@ function Navbar() {
     handleCloseMenu();
   };
 
-  const handleSidebarClick = (path) => {
-    switch (path) {
-      case "/daily-checklist":
-        path = "/assigned";
+  const handleSidebarClick = (text) => {
+    let path;
+    switch (text) {
+      case "Dashboard":
+        path = "/dashboard";
         break;
-      case "/pending-checklist":
-        path = "/pending";
+      case "Daily Checklist":
+        path = "/assigned"; 
+        break;
+      case "Pending Checklist":
+        path = "/pending"; 
+        break;
+      case "Priority":
+        path = "/priority"; 
         break;
       default:
-        break;
+        return;
     }
-    navigate(path);
+    navigate(`/user${path}`);
     setActiveView(path === "/dashboard" ? "dashboard" : "");
   };
 
@@ -82,20 +87,17 @@ function Navbar() {
       onKeyDown={toggleDrawer(false)}
     >
       <List>
-        {["Dashboard", "Daily Checklist", "Pending checklist", "Priority"].map(
-          (text, index) => {
-            const path = `/${text.replace(" ", "-").toLowerCase()}`;
-            return (
-              <ListItem key={text} disablePadding>
-                <ListItemButton onClick={() => handleSidebarClick(path)}>
-                  <ListItemIcon style={{ color: "#25274D" }}>
-                    {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                  </ListItemIcon>
-                  <ListItemText primary={text} />
-                </ListItemButton>
-              </ListItem>
-            );
-          }
+        {["Dashboard", "Daily Checklist", "Pending Checklist", "Priority"].map(
+          (text, index) => (
+            <ListItem key={text} disablePadding>
+              <ListItemButton onClick={() => handleSidebarClick(text)}>
+                <ListItemIcon style={{ color: "#25274D" }}>
+                  {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+                </ListItemIcon>
+                <ListItemText primary={text} />
+              </ListItemButton>
+            </ListItem>
+          )
         )}
       </List>
       <Divider />
@@ -106,9 +108,11 @@ function Navbar() {
               <ListItemButton
                 onClick={() => {
                   if (text === "Performance Reports") {
-                    navigate("/reports");
-                  } else if (text === "Notifications") {
-                    navigate("/notification"); 
+                    navigate("/user/reports");
+                  } else if (text === "Settings") {
+                    navigate("/user/settings");
+                  } else if (text === "Notification") {
+                    navigate("/user/notification");
                   }
                 }}
               >
@@ -134,8 +138,7 @@ function Navbar() {
             component="div"
             className="card-title"
           >
-            Hi User
-            Welcome to Checklist-Genie!
+            Hi User! Welcome to Checklist-Genie!
             <img
               src={Image}
               alt="task"
@@ -153,32 +156,32 @@ function Navbar() {
       </Card>
       <div className="task-cards">
         <Card
-          onClick={() => handleCardClick("/assigned")}
+          onClick={() => handleCardClick("/user/assigned")}
           className="clickable-card"
         >
           <CardContent>
             <Typography variant="h5" component="div" className="card-title">
-              Assigned checklist <MdAssignment className="card-icon" />
+              Assigned Checklist <MdAssignment className="card-icon" />
             </Typography>
           </CardContent>
         </Card>
         <Card
-          onClick={() => handleCardClick("/pending")}
+          onClick={() => handleCardClick("/user/pending")}
           className="clickable-card"
         >
           <CardContent>
             <Typography variant="h5" component="div" className="card-title">
-              Pending checklist <BiSolidHourglassBottom className="card-icon" />
+              Pending Checklist <BiSolidHourglassBottom className="card-icon" />
             </Typography>
           </CardContent>
         </Card>
         <Card
-          onClick={() => handleCardClick("/completed-tasks")}
+          onClick={() => handleCardClick("/user/completed-tasks")}
           className="clickable-card"
         >
           <CardContent>
             <Typography variant="h5" component="div" className="card-title">
-              Completed checklist <MdAssignmentTurnedIn className="card-icon" />
+              Completed Checklist <MdAssignmentTurnedIn className="card-icon" />
             </Typography>
           </CardContent>
         </Card>
@@ -227,3 +230,4 @@ function Navbar() {
 }
 
 export default Navbar;
+

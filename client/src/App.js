@@ -11,7 +11,6 @@ import Notification from './Pages/Notification/Notification';
 import Tag from './Pages/Tag/Tag'
 
 
-
 function App() {
   return (
     <> 
@@ -19,7 +18,7 @@ function App() {
   
     <Routes>
       <Route path='/' element={<Home/>}>  </Route>
-      <Route path='/Dashboard' element={<Dashboard/>}> </Route>
+      <Route path='Admin/Dashboard' element={<Dashboard/>}> </Route>
       <Route path='/Navbar' element={<Navbar/>}> </Route>
       <Route path='Template' element={<Template/>}> </Route>
       <Route path='Reports' element={<Report/>}></Route>

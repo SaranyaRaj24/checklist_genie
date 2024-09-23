@@ -7,16 +7,17 @@ import {
   Outlet,
 } from "react-router-dom";
 
-import "./App.css";
 
-import Home from "./Pages/Home/Home";
-import Dashboard from "./Pages/Dashboard/Dashboard";
-import Navbar from "./Components/Navbar";
-import Template from "./Pages/Template/Template";
-import Report from "./Pages/Report/Report";
-import Shared from "./Pages/Shared/Shared";
-import Notification from "./Pages/Notification/Notification";
-import Tag from "./Pages/Tag/Tag";
+import './App.css';
+import {BrowserRouter,Routes,Route, Outlet} from 'react-router-dom';
+import AdminHome from './Pages/admin/Home/Home';
+import AdminDashboard from './Pages/admin/Dashboard/Dashboard';
+import AdminNavbar from './Components/Navbar';
+import AdminTemplate from './Pages/admin/Template/Template';
+import AdminReport from './Pages/admin/Report/Report';
+import AdminShared from './Pages/admin/Shared/Shared';
+import AdminNotification from './Pages/admin/Notification/Notification';
+import AdminTag from './Pages/admin/Tag/Tag';
 
 import UserHome from "./Components/User/Home/Home";
 import UserNavbar from "./Components/User/Navbar/Navbar";
@@ -29,31 +30,21 @@ import UserNotification from "./Components/User/Notification/Notification";
 
 function App() {
   return (
-    <>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Home />}>
-            {" "}
-          </Route>
-          <Route path="Admin/Dashboard" element={<Dashboard />}>
-            {" "}
-          </Route>
-          <Route path="/Navbar" element={<Navbar />}>
-            {" "}
-          </Route>
-          <Route path="Template" element={<Template />}>
-            {" "}
-          </Route>
-          <Route path="Reports" element={<Report />}></Route>
-          <Route path="/shared-task" element={<Shared />}>
-            {" "}
-          </Route>
-          <Route path="/notification" element={<Notification />}>
-            {" "}
-          </Route>
-          <Route path="Tag" element={<Tag />}>
-            {" "}
-          </Route>
+    <> 
+    <BrowserRouter>
+  
+    <Routes>
+      <Route index element={<AdminHome/>}/>  
+      <Route path='admin' element={<Outlet/>}>
+      <Route path='dashboard' element={<AdminDashboard/>}/> 
+      <Route path='navbar' element={<AdminNavbar/>}/> 
+      <Route path='template' element={<AdminTemplate/>}/> 
+      <Route path='reports' element={<AdminReport/>}/>
+      <Route path='shared-task' element={<AdminShared/>}/> 
+      <Route path='notification' element={<AdminNotification/>}/>  
+      <Route path='tag' element={<AdminTag/>}/> 
+      </Route>
+    
           <Route path="user" element={<Outlet />}>
             <Route path="dashboard" element={<UserHome />} />
             <Route path="Navbar" element={<UserNavbar />} />

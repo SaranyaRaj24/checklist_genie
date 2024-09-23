@@ -1,3 +1,12 @@
+import React from "react";
+import {
+  BrowserRouter,
+  Routes,
+  Route,
+  Navigate,
+  Outlet,
+} from "react-router-dom";
+
 
 import './App.css';
 import {BrowserRouter,Routes,Route, Outlet} from 'react-router-dom';
@@ -10,7 +19,14 @@ import AdminShared from './Pages/admin/Shared/Shared';
 import AdminNotification from './Pages/admin/Notification/Notification';
 import AdminTag from './Pages/admin/Tag/Tag';
 
-
+import UserHome from "./Components/User/Home/Home";
+import UserNavbar from "./Components/User/Navbar/Navbar";
+import UserAssigned from "./Components/User/Assigned/Assigned";
+import UserReports from "./Components/User/Reports/Reports";
+import UserPriority from "./Components/User/Priority/Priority";
+import UserPending from "./Components/User/Pending/Pending";
+import UserSettings from "./Components/User/Settings/Settings";
+import UserNotification from "./Components/User/Notification/Notification";
 
 function App() {
   return (
@@ -28,13 +44,21 @@ function App() {
       <Route path='notification' element={<AdminNotification/>}/>  
       <Route path='tag' element={<AdminTag/>}/> 
       </Route>
-    </Routes>
-    </BrowserRouter>
     
+          <Route path="user" element={<Outlet />}>
+            <Route path="dashboard" element={<UserHome />} />
+            <Route path="Navbar" element={<UserNavbar />} />
+            <Route path="Assigned" element={<UserAssigned />} />
+            <Route path="Reports" element={<UserReports />} />
+            <Route path="Priority" element={<UserPriority />} />
+            <Route path="Pending" element={<UserPending />} />
+            <Route path="Notification" element={<UserNotification />} />
+            <Route path="Settings" element={<UserSettings />} />
+          </Route>
+        </Routes>
+      </BrowserRouter>
     </>
-    
   );
 }
 
 export default App;
-

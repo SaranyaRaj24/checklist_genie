@@ -102,7 +102,7 @@ function Navbar() {
       </List>
       <Divider />
       <List>
-        {["Performance Reports", "Settings", "Notification"].map(
+        {[ "Settings", "Notification"].map(
           (text, index) => (
             <ListItem key={text} disablePadding>
               <ListItemButton

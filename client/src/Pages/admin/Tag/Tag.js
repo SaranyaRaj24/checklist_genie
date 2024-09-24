@@ -24,7 +24,7 @@ const Tag = () => {
         {deleted && <div className="alert-message">Deleted Successfully!</div>}
         <div className='notification-container'>
           <div className="notification-header">
-            <h2>Tags</h2>
+            <h2 className='tag-position'>Tags</h2>
           </div>
           <div className="tag-form">
             <div className="form-row">

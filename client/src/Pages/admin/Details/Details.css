@@ -1,0 +1,51 @@
+.details-outline{
+    border:1px solid hsl(0, 14%, 96%);
+    border-radius: 10px;
+    box-shadow: 5px 5px 5px hsla(0,0%,0%,0.1);
+    margin-left: 7.7rem;
+    height: 30rem;
+    width: 78rem;
+    display: inline-block;
+    margin-top: 2rem;
+    background-color: white;
+}
+
+.table-width{
+    width: 78rem;
+    border-radius: 10px;
+   
+}
+
+.table-width th{
+    border: grey;
+    
+}
+
+.task-allignment{
+    text-align: center;
+    /* background-color: black;
+    color: white; */
+    /* width: 10rem; */
+    /* justify-content: center; */
+    /* display: flex; */
+    
+}
+
+.report-align{
+    margin-top: 2rem;
+    text-align: center;
+}
+
+.progress{
+    border:1px solid hsl(0, 14%, 96%);
+    border-radius: 10px;
+    box-shadow: 5px 5px 5px hsla(0,0%,0%,0.1);
+    margin-left: 4rem;
+    height: 14.1rem;
+    width: 20rem;
+    display: inline-block;
+    background-color: #aaa8aa;
+    margin-top: 2rem;
+    text-align: center;
+}
+

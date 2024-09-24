@@ -40,13 +40,13 @@ const Template = () => {
         {shared && <div className="alert-message-position">Shared Successfully!</div>}
         <div className='content'> 
           <div className='sky'> 
-            <div className='ready'> PROJECT TITLE </div>
+            <div className='ready'> Checklist Template  </div>
             <div className='awesome'>
               <table>
                 <thead>
                   <tr> 
                     <th>S.No</th>
-                    <th>Template Name</th>
+                    <th>Checklist Items</th>
                     <th>Yes</th>
                     <th>No</th>
                     <th>Comments</th>

@@ -12,7 +12,8 @@ const Notification = () => {
     <h2 className='notify'> Notification</h2>
     
     <div className='okay'>  
-    <h3 className='data'> From: <input placeholder='User Name'/> </h3>
+    <h3 className='data'> From UserName: </h3>
+    <div> Checklist 1 Completed </div>
       </div>
     </div>
    

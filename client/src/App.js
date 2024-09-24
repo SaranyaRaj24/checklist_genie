@@ -10,6 +10,8 @@ import AdminTemplate from './Pages/admin/Template/Template';
 import AdminNotification from './Pages/admin/Notification/Notification';
 import AdminTag from './Pages/admin/Tag/Tag';
 import AdminDetails from "./Pages/admin/Details/Details";
+import AdminSettings from './Pages/admin/Settings/Settings'
+
 
 
 import UserHome from "./Components/User/Home/Home";
@@ -34,6 +36,8 @@ function App() {
       <Route path='notification' element={<AdminNotification/>}/>  
       <Route path='tag' element={<AdminTag/>}/> 
       <Route path="details" element={<AdminDetails/>}/>
+      <Route path="settings" element={<AdminSettings/>}/>
+
       
       </Route>
     

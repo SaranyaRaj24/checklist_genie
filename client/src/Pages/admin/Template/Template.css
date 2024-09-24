@@ -8,7 +8,7 @@
  .ready{
      display: flex;
      justify-content: center;
-     font-size: 1.2rem;
+     font-size: 1.5rem;
      font-weight: bold;
   
  }
@@ -121,7 +121,7 @@
     width: 70rem;
     padding: 30px;
     margin-left: 11rem;
-    height: 35rem;
+    height: 34rem;
     padding-right: 4rem;
 }
 
@@ -143,7 +143,7 @@
     margin: 0;
     border: 1px solid #007bff; 
     border-radius: 5px; 
-    background-color: #585b95;
+    background-color: #25274D;
     color: white; 
     text-align: center; 
     cursor: pointer; 
@@ -170,14 +170,13 @@
     height: 2.3rem;
     border-radius: 5px;
     font-weight: bold;
-    background-color: #585b95;
     color: white;
     position: absolute;
     font-size: 1rem;     
 }
 
 .dd:hover{
-    background-color: #25274D;
+    
     border-color: #004080; 
     cursor: pointer;
 
@@ -197,6 +196,41 @@
     margin-left: 40rem;
   }
 
+  .dropdown {
+    position: absolute;
+    background: white;
+    border: 1px solid #ccc;
+    z-index: 1000;
+    width: 150px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    margin-left: 35rem;
+  }
+
+
+  .dropdown-option {
+    padding: 10px;
+    cursor: pointer;
+    
+  }
+  .dropdown-option:hover {
+    background: #f0f0f0;
+    font-weight: bold;
+  }
+  .selected-user {
+    margin-top: 10px;
+    font-weight: bold;
+    text-align: center;
+    font-size: 1.5rem;
+    margin-top: 6rem;
+  }     
+        
+  .priority-position{
+    margin-top: 3.5rem;
+    margin-left: 2rem;
+    width: 6rem;
+    font-size: 1rem;
+    font-weight: bold;
+  }
  
 
 

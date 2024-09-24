@@ -21,11 +21,12 @@ import DashboardIcon from '@mui/icons-material/Dashboard';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import TemplateIcon from '@mui/icons-material/Description';
 import imagelogo from '../Assets/logo.jpg';
-import { IoPersonCircleSharp } from "react-icons/io5";
+import { IoPersonCircleSharp} from "react-icons/io5";
 import InboxIcon from '@mui/icons-material/Inbox';
 import { Link } from 'react-router-dom';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem'; 
+import SettingsIcon from '@mui/icons-material/Settings'; 
 import { useNavigate } from 'react-router-dom';
 
 const drawerWidth = 240;
@@ -275,6 +276,10 @@ export default function MiniDrawer() {
             text: 'Notification',
             icon: <NotificationsIcon />
           },
+          {
+            text: 'settings',
+            icon: <SettingsIcon/>
+          }
           ].map(({ text, icon }) => (
             <ListItem key={text} disablePadding sx={{ display: 'block' }}>
               <Link to={`/admin/${text.toLowerCase().replace(' ', '-')}`} style={{ textDecoration: 'none' }}>

@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import Navbar from '../../../Components/Navbar';
 import '../../admin/Tag/Tag.css';
 
+
+
 const Tag = () => {
   const [saved, setSaved] = useState(false);
   const [deleted, setDeleted] = useState(false);
@@ -16,10 +18,21 @@ const Tag = () => {
     setTimeout(() => setSaved(false), 3000);
   };
 
+
+
+
+
+
+
+
+
+
+
   return (
     <> 
       <div className='dashboard-container'> 
         <Navbar/>
+        <h3 className='tag-pos'>Tags</h3>
         {saved && <div className="alert-message">Saved Successfully!</div>}
         {deleted && <div className="alert-message">Deleted Successfully!</div>}
         <div className='notification-container'>
@@ -54,6 +67,14 @@ const Tag = () => {
             <button onClick={handleSave}>Save</button>
           </div>
         </div>
+
+
+
+
+
+
+
+        
       </div> 
     </>
   );

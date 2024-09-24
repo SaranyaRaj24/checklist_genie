@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import '../../admin/Template/Template.css';
 import Navbar from '../../../Components/Navbar';
@@ -10,15 +9,14 @@ const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
 
 const Template = () => {
   const [activeCheckbox, setActiveCheckbox] = useState(null);
+  const [update, setUpdated] = useState(false);
+ 
+  const [dropdownVisible, setDropdownVisible] = useState(false);
+  const [selectedUser, setSelectedUser] = useState('');
 
- const handleCheckboxChange = (index) => {
+  const handleCheckboxChange = (index) => {
     setActiveCheckbox(index);
   };
-
-
-  const [update, setUpdated] = useState(false);
-  const [shared, setShared] = useState(false);
-
 
   const handleUpdate = () => {
     setUpdated(true);
@@ -26,21 +24,29 @@ const Template = () => {
   };
 
   const handleShared = () => {
-    setShared(true);
-    setTimeout(() => setShared(false), 3000);
+    setDropdownVisible(true); 
   };
 
+  const handleSelectUser = (user) => {
+    setSelectedUser(user);
+    setDropdownVisible(false); 
+    console.log(`Assigned to: ${user}`);
+  };
 
+  const users = ['Ashwin', 'Amal', 'Swetha', 'Krishna', 'Kiran', 'Devaraj'];
 
   return (
     <> 
       <div className='dashboard-container'> 
-        <Navbar/>
+        <Navbar />
         {update && <div className="alert-message-position">Updated Successfully!</div>}
-        {shared && <div className="alert-message-position">Shared Successfully!</div>}
+       
+        
+   
+
         <div className='content'> 
           <div className='sky'> 
-            <div className='ready'> Checklist Template  </div>
+            <div className='ready'> Checklist Template </div>
             <div className='awesome'>
               <table>
                 <thead>
@@ -51,6 +57,7 @@ const Template = () => {
                     <th>No</th>
                     <th>Comments</th>
                     <th>Action</th>
+                   
                   </tr>
                 </thead>
                 <tbody>
@@ -76,9 +83,9 @@ const Template = () => {
                         <textarea></textarea>
                       </td>
                       <td>
-                        <button><FontAwesomeIcon icon={faPen}/></button>
+                        <button><FontAwesomeIcon icon={faPen} /></button>
                         <span></span>
-                        <button><FontAwesomeIcon icon={faTrash}/></button>
+                        <button><FontAwesomeIcon icon={faTrash} /></button>
                       </td>
                     </tr>
                   ))}
@@ -87,19 +94,32 @@ const Template = () => {
             </div>
             <br />
             <button className='dd'>Add +</button>
+            <button className='priority-position'> Priority</button>
             <div className='ad'> 
               <p onClick={handleUpdate}>Update</p> 
-              <p onClick={handleShared}>Share</p> 
+              <p onClick={handleShared}>Assign to</p> 
             </div>
+                 
+        {dropdownVisible && (
+          <div className="dropdown">
+            {users.map((user, index) => (
+              <div key={index} onClick={() => handleSelectUser(user)} className="dropdown-option">
+                {user}
+              </div>
+            ))}
+          </div>
+        )}
           </div>
         </div>
+
+
+        {selectedUser && <div className="selected-user">Checklist Assigned to: {selectedUser}</div>}
       </div>
+
+
     </>
   );
 };
 
 export default Template;
-
-
-
 

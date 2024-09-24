@@ -12,14 +12,14 @@ import "./Assigned.css";
 
 function Assigned() {
   const [tasks, setTasks] = useState([
-    { id: 1, name: "Daily clock in", yes: false, no: false },
-    { id: 2, name: "Monday meeting", yes: false, no: false },
-    { id: 3, name: "Testing", yes: false, no: false },
-    { id: 4, name: "Workdone email", yes: false, no: false },
-    { id: 5, name: "Clock out", yes: false, no: false },
+    { id: 1, name: "Daily clock in", yes: false, no: false, comment: "" },
+    { id: 2, name: "Monday meeting", yes: false, no: false, comment: "" },
+    { id: 3, name: "Testing", yes: false, no: false, comment: "" },
+    { id: 4, name: "Workdone email", yes: false, no: false, comment: "" },
+    { id: 5, name: "Clock out", yes: false, no: false, comment: "" },
   ]);
 
-  const [searchQuery, setSearchQuery] = useState(""); 
+  const [searchQuery, setSearchQuery] = useState("");
 
   const handleCheckboxChange = (id, type) => {
     setTasks((prevTasks) =>
@@ -29,12 +29,18 @@ function Assigned() {
     );
   };
 
- 
   const handleSearchChange = (event) => {
     setSearchQuery(event.target.value);
   };
 
- 
+  const handleCommentChange = (id, value) => {
+    setTasks((prevTasks) =>
+      prevTasks.map((task) =>
+        task.id === id ? { ...task, comment: value } : task
+      )
+    );
+  };
+
   const filteredTasks = tasks.filter((task) =>
     task.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
@@ -76,6 +82,7 @@ function Assigned() {
                   <th>CheckList</th>
                   <th>Yes</th>
                   <th>No</th>
+                  <th>Comments</th>
                 </tr>
               </thead>
               <tbody>
@@ -96,6 +103,17 @@ function Assigned() {
                         onChange={() => handleCheckboxChange(task.id, "no")}
                       />
                     </td>
+                    <td>
+                      <TextField
+                        variant="outlined"
+                        size="small"
+                        value={task.comment}
+                        onChange={(e) =>
+                          handleCommentChange(task.id, e.target.value)
+                        }
+                        placeholder="Add comment"
+                      />
+                    </td>
                   </tr>
                 ))}
               </tbody>
@@ -105,7 +123,7 @@ function Assigned() {
               variant="contained"
               color="success"
               className="submit-buttonn"
-              onClick={handleSubmit} 
+              onClick={handleSubmit}
             >
               Submit
             </Button>

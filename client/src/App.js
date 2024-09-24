@@ -1,10 +1,5 @@
 import React from "react";
-import {
-  BrowserRouter,
-  Routes,
-  Route,
-  Outlet,
-} from "react-router-dom";
+import {BrowserRouter,Routes,Route,Outlet } from "react-router-dom";
 
 
 import './App.css';
@@ -12,10 +7,10 @@ import AdminHome from './Pages/admin/Home/Home';
 import AdminDashboard from './Pages/admin/Dashboard/Dashboard';
 import AdminNavbar from './Components/Navbar';
 import AdminTemplate from './Pages/admin/Template/Template';
-import AdminReport from './Pages/admin/Report/Report';
-import AdminShared from './Pages/admin/Shared/Shared';
 import AdminNotification from './Pages/admin/Notification/Notification';
 import AdminTag from './Pages/admin/Tag/Tag';
+import AdminDetails from "./Pages/admin/Details/Details";
+
 
 import UserHome from "./Components/User/Home/Home";
 import UserNavbar from "./Components/User/Navbar/Navbar";
@@ -36,10 +31,10 @@ function App() {
       <Route path='dashboard' element={<AdminDashboard/>}/> 
       <Route path='navbar' element={<AdminNavbar/>}/> 
       <Route path='template' element={<AdminTemplate/>}/> 
-      <Route path='reports' element={<AdminReport/>}/>
-      <Route path='shared-task' element={<AdminShared/>}/> 
       <Route path='notification' element={<AdminNotification/>}/>  
       <Route path='tag' element={<AdminTag/>}/> 
+      <Route path="details" element={<AdminDetails/>}/>
+      
       </Route>
     
           <Route path="user" element={<Outlet />}>

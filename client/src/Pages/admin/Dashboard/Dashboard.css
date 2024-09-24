@@ -44,11 +44,14 @@
     margin-top: 2.6rem;
     background-color: #e8e8eb;
     height: 2rem;
-    border-radius: 8px;
-    
+    border-radius: 8px; 
    
-   
-   
+}
+
+.more:hover{
+    cursor: pointer;
+    color: white;
+    background-color: #25274d;
 }
 .full{
     text-align: center;

@@ -20,11 +20,9 @@ import ListItemText from '@mui/material/ListItemText';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import TemplateIcon from '@mui/icons-material/Description';
-import ShareIcon from '@mui/icons-material/Share';
 import imagelogo from '../Assets/logo.jpg';
 import { IoPersonCircleSharp } from "react-icons/io5";
 import InboxIcon from '@mui/icons-material/Inbox';
-import AssessmentIcon from '@mui/icons-material/Assessment';
 import { Link } from 'react-router-dom';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem'; 
@@ -215,11 +213,8 @@ export default function MiniDrawer() {
           {
             text: 'Tag',
             icon: <InboxIcon />
-          },
-          {
-            text: 'Reports',
-            icon: <AssessmentIcon />
           }
+         
           ].map(({ text, icon }) => (
             <ListItem key={text} disablePadding sx={{ display: 'block' }}>
               <Link to={`/admin/${text.toLowerCase()}`} style={{ textDecoration: 'none' }}>
@@ -276,11 +271,6 @@ export default function MiniDrawer() {
         <List>
           {[
 
-            {
-            text: 'Shared Task',
-            icon: <ShareIcon />
-            
-          },
           {
             text: 'Notification',
             icon: <NotificationsIcon />

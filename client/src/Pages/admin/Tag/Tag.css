@@ -163,6 +163,7 @@ textarea {
    justify-content: center;
    font-weight: bold;
    margin-bottom: 1rem;
+  
 }
 
 .tag-form {
@@ -208,11 +209,13 @@ textarea {
    font-weight: bold;
    font-size: 1rem;
    background-color: #AAA8BB;
+   background-color: #24254d;
+   
    
 }
 
 .del button:hover{
-   background-color: #24254d;
+   background-color: #484878;
    color: white;
    cursor: pointer;
 }
@@ -231,3 +234,4 @@ textarea {
    margin-left: 40rem;
  }
  
+

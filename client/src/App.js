@@ -10,12 +10,13 @@ import AdminTemplate from './Pages/admin/Template/Template';
 import AdminNotification from './Pages/admin/Notification/Notification';
 import AdminTag from './Pages/admin/Tag/Tag';
 import AdminDetails from "./Pages/admin/Details/Details";
+import AdminSettings from './Pages/admin/Settings/Settings'
+
 
 
 import UserHome from "./Components/User/Home/Home";
 import UserNavbar from "./Components/User/Navbar/Navbar";
 import UserAssigned from "./Components/User/Assigned/Assigned";
-import UserReports from "./Components/User/Reports/Reports";
 import UserPriority from "./Components/User/Priority/Priority";
 import UserPending from "./Components/User/Pending/Pending";
 import UserSettings from "./Components/User/Settings/Settings";
@@ -35,6 +36,8 @@ function App() {
       <Route path='notification' element={<AdminNotification/>}/>  
       <Route path='tag' element={<AdminTag/>}/> 
       <Route path="details" element={<AdminDetails/>}/>
+      <Route path="settings" element={<AdminSettings/>}/>
+
       
       </Route>
     
@@ -42,7 +45,6 @@ function App() {
             <Route path="dashboard" element={<UserHome />} />
             <Route path="Navbar" element={<UserNavbar />} />
             <Route path="Assigned" element={<UserAssigned />} />
-            <Route path="Reports" element={<UserReports />} />
             <Route path="Priority" element={<UserPriority />} />
             <Route path="Pending" element={<UserPending />} />
             <Route path="Notification" element={<UserNotification />} />

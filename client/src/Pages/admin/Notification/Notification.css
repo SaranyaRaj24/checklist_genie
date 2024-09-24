@@ -1,14 +1,14 @@
 .okay{
-   
-     text-align: center;
+
      display: grid;
      background-color: #f9f9f9;          
      border-radius: 10px;     
      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); 
      width: 50rem;
      margin-left: 23rem;
-     height: 6rem;
+     height: 10rem;
      margin-top: 2rem;
+     padding-bottom: 2rem;
 
 }
 
@@ -16,6 +16,7 @@
      margin-top: 2rem;
      height: 2rem;
      width: 15rem;
+     
      
 }
 
@@ -25,3 +26,14 @@
     justify-content: center;
 }
 
+.input-width{
+     width: 40rem;
+     margin-left: 4rem;
+     
+
+}
+
+.data{
+     margin-left: 4rem;
+     margin-top: 2rem;
+}

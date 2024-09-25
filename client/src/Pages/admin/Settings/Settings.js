@@ -2,7 +2,10 @@
 import React, { useState } from "react";
 import '../../admin/Settings/Settings.css';
 import Navbar from '../../../Pages/admin/Navbar/Navbar'
+<<<<<<< HEAD
 
+=======
+>>>>>>> 840e5dadd569e1d2249335d4060139a906ea3221
 
 const Settings = () => {
   const [lightMode, setLightMode] = useState(false);
@@ -18,6 +21,25 @@ const Settings = () => {
 
   const handleCancel = () => {
     alert("Changes canceled!");
+  };
+
+
+  const toggleLightMode = () => {
+    if (!lightMode) {
+      setLightMode(true);
+      setDarkMode(false);
+    } else {
+      setLightMode(false); 
+    }
+  };
+
+  const toggleDarkMode = () => {
+    if (!darkMode) {
+      setDarkMode(true);
+      setLightMode(false); 
+    } else {
+      setDarkMode(false); 
+    }
   };
 
   return (
@@ -50,7 +72,7 @@ const Settings = () => {
               <input
                 type="checkbox"
                 checked={lightMode}
-                onChange={() => setLightMode(!lightMode)}
+                onChange={toggleLightMode}
               />
               Light Mode
             </label>
@@ -58,7 +80,7 @@ const Settings = () => {
               <input
                 type="checkbox"
                 checked={darkMode}
-                onChange={() => setDarkMode(!darkMode)}
+                onChange={toggleDarkMode}
               />
               Dark Mode
             </label>

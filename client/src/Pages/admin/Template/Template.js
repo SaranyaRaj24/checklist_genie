@@ -45,7 +45,7 @@ const Template = () => {
 
         <div className='content'> 
           <div className='sky'> 
-            <div className='ready'> Checklist Template </div>
+            <div className='ready'> Daily Checklist Template </div>
             <div className='awesome'>
               <table>
                 <thead>
@@ -93,10 +93,15 @@ const Template = () => {
             </div>
             <br />
             <button className='dd'>Add Items </button>
+<<<<<<< HEAD
             <button className='priority-position'> Priority</button>
+=======
+
+            
+>>>>>>> 840e5dadd569e1d2249335d4060139a906ea3221
             <div className='ad'> 
               <p onClick={handleUpdate}>Update</p> 
-              <p onClick={handleShared}>Assign to</p> 
+              <p onClick={handleShared}>Share to</p> 
             </div>
                  
         {dropdownVisible && (
@@ -112,7 +117,7 @@ const Template = () => {
         </div>
 
 
-        {selectedUser && <div className="selected-user">Checklist Assigned to: {selectedUser}</div>}
+        {selectedUser && <div className="selected-user">Daily Checklist Shared to: {selectedUser}</div>}
       </div>
 
 

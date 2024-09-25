@@ -5,7 +5,8 @@ import {BrowserRouter,Routes,Route,Outlet } from "react-router-dom";
 import './App.css';
 import AdminHome from './Pages/admin/Home/Home';
 import AdminDashboard from './Pages/admin/Dashboard/Dashboard';
-import AdminNavbar from './Components/Navbar';
+// import AdminNavbar from './Components/Navbar';
+import AdminNavbar from './Pages/admin/Navbar/Navbar'
 import AdminTemplate from './Pages/admin/Template/Template';
 import AdminNotification from './Pages/admin/Notification/Notification';
 import AdminTag from './Pages/admin/Tag/Tag';

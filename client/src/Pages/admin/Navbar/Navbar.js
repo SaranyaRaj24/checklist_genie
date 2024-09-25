@@ -34,8 +34,6 @@ import './Navbar.css';
 
 
 
-
-
 const drawerWidth = 240;
 const openedMixin = (theme) => ({
   width: drawerWidth,

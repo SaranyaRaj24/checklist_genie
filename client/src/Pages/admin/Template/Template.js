@@ -34,6 +34,7 @@ const Template = () => {
   };
 
   const users = ['Ashwin', 'Amal', 'Swetha', 'Krishna', 'Kiran', 'Devaraj'];
+  
 
   return (
     <> 
@@ -41,8 +42,6 @@ const Template = () => {
         <Navbar />
         {update && <div className="alert-message-position">Updated Successfully!</div>}
        
-        
-   
 
         <div className='content'> 
           <div className='sky'> 
@@ -93,7 +92,7 @@ const Template = () => {
               </table>
             </div>
             <br />
-            <button className='dd'>Add +</button>
+            <button className='dd'>Add Items </button>
             <button className='priority-position'> Priority</button>
             <div className='ad'> 
               <p onClick={handleUpdate}>Update</p> 

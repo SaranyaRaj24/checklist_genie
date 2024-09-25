@@ -5,10 +5,6 @@ import {BrowserRouter,Routes,Route,Outlet } from "react-router-dom";
 import './App.css';
 import AdminHome from './Pages/admin/Home/Home';
 import AdminDashboard from './Pages/admin/Dashboard/Dashboard';
-<<<<<<< HEAD
-// import AdminNavbar from './Components/Navbar';
-=======
->>>>>>> 840e5dadd569e1d2249335d4060139a906ea3221
 import AdminNavbar from './Pages/admin/Navbar/Navbar'
 import AdminTemplate from './Pages/admin/Template/Template';
 import AdminNotification from './Pages/admin/Notification/Notification';
@@ -29,20 +25,11 @@ import UserComplete from "./Components/User/Complete/Complete";
 
 function App() {
   return (
-<<<<<<< HEAD
     <>
       <BrowserRouter>
         <Routes>
-          <Route index element={<AdminHome />} />
-          <Route path="admin" element={<Outlet />}>
-            <Route path="dashboard" element={<AdminDashboard />} />
-            <Route path="navbar" element={<AdminNavbar />} />
-            <Route path="template" element={<AdminTemplate />} />
-            <Route path="notification" element={<AdminNotification />} />
-            <Route path="tag" element={<AdminTag />} />
-            <Route path="details" element={<AdminDetails />} />
-            <Route path="settings" element={<AdminSettings />} />
-          </Route>
+          
+          
 
           <Route path="user" element={<Outlet />}>
             <Route path="dashboard" element={<UserHome />} />
@@ -55,9 +42,8 @@ function App() {
             <Route path="Settings" element={<UserSettings />} />
           </Route>
         </Routes>
-=======
-    <> 
-    <BrowserRouter>
+
+    
   
     <Routes>
       <Route index element={<AdminHome/>}/>  
@@ -72,17 +58,10 @@ function App() {
       <Route path="checklist" element={<AdminChecklist/>}/>
       </Route>
     
-      <Route path="user" element={<Outlet />}>
-      <Route path="dashboard" element={<UserHome />} />
-      <Route path="Navbar" element={<UserNavbar />} />
-      <Route path="Assigned" element={<UserAssigned />} />
-      <Route path="Priority" element={<UserPriority />} />
-      <Route path="Pending" element={<UserPending />} />
-      <Route path="Notification" element={<UserNotification />} />
-      <Route path="Settings" element={<UserSettings />} />
-      </Route>
+      
+      
       </Routes>
->>>>>>> 840e5dadd569e1d2249335d4060139a906ea3221
+
       </BrowserRouter>
     </>
   );

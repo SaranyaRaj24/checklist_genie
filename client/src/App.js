@@ -5,13 +5,13 @@ import {BrowserRouter,Routes,Route,Outlet } from "react-router-dom";
 import './App.css';
 import AdminHome from './Pages/admin/Home/Home';
 import AdminDashboard from './Pages/admin/Dashboard/Dashboard';
-// import AdminNavbar from './Components/Navbar';
 import AdminNavbar from './Pages/admin/Navbar/Navbar'
 import AdminTemplate from './Pages/admin/Template/Template';
 import AdminNotification from './Pages/admin/Notification/Notification';
 import AdminTag from './Pages/admin/Tag/Tag';
 import AdminDetails from "./Pages/admin/Details/Details";
 import AdminSettings from './Pages/admin/Settings/Settings'
+import AdminChecklist from './Pages/admin/Checklist/Checklist'
 
 
 import UserHome from "./Components/User/Home/Home";
@@ -37,6 +37,7 @@ function App() {
       <Route path='tag' element={<AdminTag/>}/> 
       <Route path="details" element={<AdminDetails/>}/>
       <Route path="settings" element={<AdminSettings/>}/>
+      <Route path="checklist" element={<AdminChecklist/>}/>
       </Route>
     
       <Route path="user" element={<Outlet />}>

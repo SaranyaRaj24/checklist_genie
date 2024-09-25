@@ -20,6 +20,16 @@ const Settings = () => {
     alert("Changes canceled!");
   };
 
+  const handleLightModeChange = () => {
+    setLightMode(true);
+    setDarkMode(false);
+  };
+
+  const handleDarkModeChange = () => {
+    setLightMode(false);
+    setDarkMode(true);
+  };
+
   return (
     <>
       <Navbar />
@@ -57,7 +67,7 @@ const Settings = () => {
             <input
               type="checkbox"
               checked={lightMode}
-              onChange={() => setLightMode(!lightMode)}
+              onChange={handleLightModeChange}
             />
             Light Mode
           </label>
@@ -65,7 +75,7 @@ const Settings = () => {
             <input
               type="checkbox"
               checked={darkMode}
-              onChange={() => setDarkMode(!darkMode)}
+              onChange={handleDarkModeChange}
             />
             Dark Mode
           </label>
@@ -142,4 +152,3 @@ const Settings = () => {
 };
 
 export default Settings;
-

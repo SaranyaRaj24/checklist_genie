@@ -93,8 +93,12 @@ const Template = () => {
             </div>
             <br />
             <button className='dd'>Add Items </button>
+<<<<<<< HEAD
+            <button className='priority-position'> Priority</button>
+=======
 
             
+>>>>>>> 840e5dadd569e1d2249335d4060139a906ea3221
             <div className='ad'> 
               <p onClick={handleUpdate}>Update</p> 
               <p onClick={handleShared}>Share to</p> 

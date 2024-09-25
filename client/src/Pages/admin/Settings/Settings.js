@@ -2,6 +2,10 @@
 import React, { useState } from "react";
 import '../../admin/Settings/Settings.css';
 import Navbar from '../../../Pages/admin/Navbar/Navbar'
+<<<<<<< HEAD
+
+=======
+>>>>>>> 840e5dadd569e1d2249335d4060139a906ea3221
 
 const Settings = () => {
   const [lightMode, setLightMode] = useState(false);

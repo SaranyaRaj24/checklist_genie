@@ -102,7 +102,7 @@ function Navbar() {
       </List>
       <Divider />
       <List>
-        {[ "Settings", "Notification"].map(
+        {[ "Settings", "Notification","Admin"].map(
           (text, index) => (
             <ListItem key={text} disablePadding>
               <ListItemButton
@@ -113,6 +113,8 @@ function Navbar() {
                     navigate("/user/settings");
                   } else if (text === "Notification") {
                     navigate("/user/notification");
+                  }else if (text==="Admin"){
+                    navigate("/admin/dashboard")
                   }
                 }}
               >
@@ -230,4 +232,5 @@ function Navbar() {
 }
 
 export default Navbar;
+
 

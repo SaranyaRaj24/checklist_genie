@@ -20,7 +20,7 @@ import ListItemText from '@mui/material/ListItemText';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import TemplateIcon from '@mui/icons-material/Description';
-import imagelogo from '../Assets/logo.jpg';
+import imagelogo from '../../../Assets/logo.jpg';
 import { IoPersonCircleSharp} from "react-icons/io5";
 import InboxIcon from '@mui/icons-material/Inbox';
 import { Link } from 'react-router-dom';
@@ -30,6 +30,10 @@ import SettingsIcon from '@mui/icons-material/Settings';
 import { useNavigate } from 'react-router-dom';
 import PersonIcon from '@mui/icons-material/Person';
 import { useTheme } from '@mui/material/styles';
+import './Navbar.css';
+
+
+
 
 
 const drawerWidth = 240;

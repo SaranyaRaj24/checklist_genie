@@ -1,7 +1,8 @@
 
 import React, { useState } from "react";
 import '../../admin/Settings/Settings.css';
-import Navbar from '../../../Components/Navbar';
+import Navbar from '../../../Pages/admin/Navbar/Navbar'
+
 
 const Settings = () => {
   const [lightMode, setLightMode] = useState(false);

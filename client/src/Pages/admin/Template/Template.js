@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import '../../admin/Template/Template.css';
-import Navbar from '../../../Components/Navbar';
+import Navbar from '../../../Pages/admin/Navbar/Navbar'
 import Checkbox from '@mui/material/Checkbox';
 import { faPen, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';

@@ -28,16 +28,8 @@ function App() {
     <>
       <BrowserRouter>
         <Routes>
-          <Route index element={<AdminHome />} />
-          <Route path="admin" element={<Outlet />}>
-            <Route path="dashboard" element={<AdminDashboard />} />
-            <Route path="navbar" element={<AdminNavbar />} />
-            <Route path="template" element={<AdminTemplate />} />
-            <Route path="notification" element={<AdminNotification />} />
-            <Route path="tag" element={<AdminTag />} />
-            <Route path="details" element={<AdminDetails />} />
-            <Route path="settings" element={<AdminSettings />} />
-          </Route>
+          
+          
 
           <Route path="user" element={<Outlet />}>
             <Route path="dashboard" element={<UserHome />} />
@@ -66,7 +58,9 @@ function App() {
       <Route path="checklist" element={<AdminChecklist/>}/>
       </Route>
     
+
      
+
       </Routes>
 
       </BrowserRouter>

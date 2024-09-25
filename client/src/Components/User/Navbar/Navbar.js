@@ -178,7 +178,7 @@ function Navbar() {
           </CardContent>
         </Card>
         <Card
-          onClick={() => handleCardClick("/user/completed-tasks")}
+          onClick={() => handleCardClick("/user/complete")}
           className="clickable-card"
         >
           <CardContent>

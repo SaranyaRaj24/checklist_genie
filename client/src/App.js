@@ -13,7 +13,6 @@ import AdminDetails from "./Pages/admin/Details/Details";
 import AdminSettings from './Pages/admin/Settings/Settings'
 
 
-
 import UserHome from "./Components/User/Home/Home";
 import UserNavbar from "./Components/User/Navbar/Navbar";
 import UserAssigned from "./Components/User/Assigned/Assigned";
@@ -37,20 +36,18 @@ function App() {
       <Route path='tag' element={<AdminTag/>}/> 
       <Route path="details" element={<AdminDetails/>}/>
       <Route path="settings" element={<AdminSettings/>}/>
-
-      
       </Route>
     
-          <Route path="user" element={<Outlet />}>
-            <Route path="dashboard" element={<UserHome />} />
-            <Route path="Navbar" element={<UserNavbar />} />
-            <Route path="Assigned" element={<UserAssigned />} />
-            <Route path="Priority" element={<UserPriority />} />
-            <Route path="Pending" element={<UserPending />} />
-            <Route path="Notification" element={<UserNotification />} />
-            <Route path="Settings" element={<UserSettings />} />
-          </Route>
-        </Routes>
+      <Route path="user" element={<Outlet />}>
+      <Route path="dashboard" element={<UserHome />} />
+      <Route path="Navbar" element={<UserNavbar />} />
+      <Route path="Assigned" element={<UserAssigned />} />
+      <Route path="Priority" element={<UserPriority />} />
+      <Route path="Pending" element={<UserPending />} />
+      <Route path="Notification" element={<UserNotification />} />
+      <Route path="Settings" element={<UserSettings />} />
+      </Route>
+      </Routes>
       </BrowserRouter>
     </>
   );

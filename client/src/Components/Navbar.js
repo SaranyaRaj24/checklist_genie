@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { styled, useTheme } from '@mui/material/styles';
+import { styled} from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import MuiDrawer from '@mui/material/Drawer';
 import MuiAppBar from '@mui/material/AppBar';
@@ -28,6 +28,9 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem'; 
 import SettingsIcon from '@mui/icons-material/Settings'; 
 import { useNavigate } from 'react-router-dom';
+import PersonIcon from '@mui/icons-material/Person';
+import { useTheme } from '@mui/material/styles';
+
 
 const drawerWidth = 240;
 const openedMixin = (theme) => ({
@@ -109,8 +112,9 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 );
 
 export default function MiniDrawer() {
-  const theme = useTheme();
+  
   const [open, setOpen] = React.useState(false);
+  const theme = useTheme();
 
   const [anchorEl, setAnchorEl] = React.useState(null);
   const openMenu = Boolean(anchorEl);
@@ -133,8 +137,6 @@ export default function MiniDrawer() {
   const navigate=useNavigate();
   const handleLogout = () => {
     navigate('/')
-
-    
     handleMenuClose();
   };
 
@@ -197,7 +199,7 @@ export default function MiniDrawer() {
       <Drawer variant="permanent" open={open}>
         <DrawerHeader>
           <IconButton onClick={handleDrawerClose}>
-            {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
+          {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
           </IconButton>
         </DrawerHeader>
         <Divider />
@@ -270,68 +272,53 @@ export default function MiniDrawer() {
         </List>
         <Divider />
         <List>
-          {[
-
-          {
-            text: 'Notification',
-            icon: <NotificationsIcon />
-          },
-          {
-            text: 'settings',
-            icon: <SettingsIcon/>
+  {[
+    {
+      text: 'Notification',
+      icon: <NotificationsIcon />
+    },
+    {
+      text: 'Settings',
+      icon: <SettingsIcon />
+    },
+    {
+      text: 'User',
+      icon: <PersonIcon />
+    }
+  ].map(({ text, icon }) => (
+    <ListItem key={text} disablePadding sx={{ display: 'block' }}>
+      <ListItemButton
+        sx={[
+          { minHeight: 48, px: 2.5 },
+          open ? { justifyContent: 'initial' } : { justifyContent: 'center' }
+        ]}
+        onClick={() => {
+          if (text === 'User') {
+            navigate('/user/dashboard');
+          } else {
+            navigate(`/admin/${text.toLowerCase().replace(' ', '-')}`);
           }
-          ].map(({ text, icon }) => (
-            <ListItem key={text} disablePadding sx={{ display: 'block' }}>
-              <Link to={`/admin/${text.toLowerCase().replace(' ', '-')}`} style={{ textDecoration: 'none' }}>
-                <ListItemButton
-                  sx={[
-                    {
-                      minHeight: 48,
-                      px: 2.5,
-                    },
-                    open
-                      ? {
-                          justifyContent: 'initial',
-                        }
-                      : {
-                          justifyContent: 'center',
-                        },
-                  ]}
-                >
-                  <ListItemIcon
-                    sx={[
-                      {
-                        minWidth: 0,
-                        justifyContent: 'center',
-                      },
-                      open
-                        ? {
-                            mr: 3,
-                          }
-                        : {
-                            mr: 'auto',
-                          },
-                    ]}
-                  >
-                    {icon}
-                  </ListItemIcon>
-                  <ListItemText
-                    primary={text}
-                    sx={[
-                      open
-                        ? {
-                            opacity: 1,
-                          }
-                        : {
-                            opacity: 0,
-                          },
-                    ]}
-                  />
-                </ListItemButton>
-              </Link>
-            </ListItem>
-          ))}
-        </List>
+        }}
+      >
+        <ListItemIcon
+          sx={[
+            { minWidth: 0, justifyContent: 'center' },
+            open ? { mr: 3 } : { mr: 'auto' },
+          ]}
+        >
+          {icon}
+        </ListItemIcon>
+        <ListItemText
+          primary={text}
+          sx={[
+            open ? { opacity: 1 } : { opacity: 0 },
+          ]}
+        />
+      </ListItemButton>
+    </ListItem>
+  ))}
+</List>
+
       </Drawer>
       <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
         <DrawerHeader />

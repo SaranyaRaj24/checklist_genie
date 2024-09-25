@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import '../../admin/Template/Template.css';
-import Navbar from '../../../Components/Navbar';
+import Navbar from '../../../Pages/admin/Navbar/Navbar'
 import Checkbox from '@mui/material/Checkbox';
 import { faPen, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -34,6 +34,7 @@ const Template = () => {
   };
 
   const users = ['Ashwin', 'Amal', 'Swetha', 'Krishna', 'Kiran', 'Devaraj'];
+  
 
   return (
     <> 
@@ -41,8 +42,6 @@ const Template = () => {
         <Navbar />
         {update && <div className="alert-message-position">Updated Successfully!</div>}
        
-        
-   
 
         <div className='content'> 
           <div className='sky'> 
@@ -93,7 +92,7 @@ const Template = () => {
               </table>
             </div>
             <br />
-            <button className='dd'>Add +</button>
+            <button className='dd'>Add Items </button>
             <button className='priority-position'> Priority</button>
             <div className='ad'> 
               <p onClick={handleUpdate}>Update</p> 

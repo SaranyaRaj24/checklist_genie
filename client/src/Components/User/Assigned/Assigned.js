@@ -24,7 +24,13 @@ function Assigned() {
   const handleCheckboxChange = (id, type) => {
     setTasks((prevTasks) =>
       prevTasks.map((task) =>
-        task.id === id ? { ...task, [type]: !task[type] } : task
+        task.id === id
+          ? {
+              ...task,
+              yes: type === "yes",
+              no: type === "no",
+            }
+          : task
       )
     );
   };
@@ -46,7 +52,7 @@ function Assigned() {
   );
 
   const handleSubmit = () => {
-    alert("Task completed successfully");
+    alert("Checklist completed successfully");
   };
 
   return (
@@ -55,7 +61,7 @@ function Assigned() {
       <div className="search-bar-container">
         <TextField
           variant="outlined"
-          placeholder="Search checklist"
+          placeholder="Browse checklist"
           value={searchQuery}
           onChange={handleSearchChange}
           InputProps={{

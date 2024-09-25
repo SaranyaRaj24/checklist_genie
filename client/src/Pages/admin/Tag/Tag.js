@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
-import Navbar from '../../../Components/Navbar';
 import '../../admin/Tag/Tag.css';
-
+import Navbar from '../../../Pages/admin/Navbar/Navbar'
 
 
 const Tag = () => {
@@ -17,15 +16,6 @@ const Tag = () => {
     setSaved(true);
     setTimeout(() => setSaved(false), 3000);
   };
-
-
-
-
-
-
-
-
-
 
 
   return (
@@ -67,12 +57,6 @@ const Tag = () => {
             <button onClick={handleSave}>Save</button>
           </div>
         </div>
-
-
-
-
-
-
 
         
       </div> 

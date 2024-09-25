@@ -1,6 +1,7 @@
 import React from 'react'
 import '../../admin/Notification/Notification.css';
-import Navbar from '../../../Components/Navbar';
+
+import Navbar from '../../../Pages/admin/Navbar/Navbar'
 
 
 const Notification = () => {

@@ -69,7 +69,7 @@ function Navbar() {
       case "Pending Checklist":
         path = "/pending"; 
         break;
-      case "Priority":
+      case "Assigned Checklist":
         path = "/priority"; 
         break;
       default:
@@ -87,7 +87,7 @@ function Navbar() {
       onKeyDown={toggleDrawer(false)}
     >
       <List>
-        {["Dashboard", "Daily Checklist", "Pending Checklist", "Priority"].map(
+        {["Dashboard", "Daily Checklist", "Pending Checklist", "Assigned Checklist"].map(
           (text, index) => (
             <ListItem key={text} disablePadding>
               <ListItemButton onClick={() => handleSidebarClick(text)}>
@@ -158,7 +158,7 @@ function Navbar() {
       </Card>
       <div className="task-cards">
         <Card
-          onClick={() => handleCardClick("/user/assigned")}
+          onClick={() => handleCardClick("/user/Priority")}
           className="clickable-card"
         >
           <CardContent>

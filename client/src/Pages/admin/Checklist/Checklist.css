@@ -14,7 +14,7 @@
  }
  
  
- .awe td,th,tr{
+  .awe td,th,tr{
      border: 2px solid black;
      padding-left: 1rem;
      padding-right: 1rem;
@@ -29,7 +29,7 @@
     color: #6c09aa;
     font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
     
- }
+ } 
  
  
  .cork{
@@ -59,74 +59,22 @@
  }
  
  
- .awe td{
-    font-size: 18px;
-    font-weight: bold;
- }
- 
- 
- 
- .awe input{
-     width: 4.5rem;
-     height: 2rem;
-     border-radius: 4px;
-     border-color: black;
-     
- }
- .awe textarea{
-     height: 2rem;
-     border-radius: 4px;
-     border-color: black;
-     
-    
- 
- }
-
-.awe button{
-    
-    width: 3rem;
-    height: 2rem;
-    border-radius: 4px;
-    border-color: black;
-    font-weight: bold;
-    font-size: 1rem;
-    
-    
-}
-
-.awe button.shade{
-    
-    
-    background-color: #6f4d85;
-    color: white;
-    cursor: pointer;
-    height: 2rem;
-    width: 5rem;
-    
-
-}
-
-.awe button.paint{
-    background-color: rgb(97, 97, 104);
-    color: white;
-    cursor: pointer;
-    width: 5rem;
-    height: 2rem;
-    background-color: #25274D;
-}
 .sky-position{
     background-color: #f9f9f9;          
     border-radius: 10px;     
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); 
-    width: 70rem;
+    width: 60rem;
     padding: 30px;
-    margin-left: 11rem;
-    height: 37rem;
+    margin-left: 18rem;
+    height: 20rem;
     padding-right: 4rem;
+    margin-top: 4rem;
+    
 }
 
+
 .ad{
-    margin-top: 15rem;
+    margin-top: 1rem;
     display: flex;
     gap: 2rem;
     text-align: center;
@@ -165,14 +113,15 @@
 }
 
 .add-position{
-    margin-left: 56rem;
+    margin-left: 18rem;
     width: 8rem;
-    height: 2.3rem;
+    height: 2.5rem;
     border-radius: 5px;
     font-weight: bold;
     color: white;
     position: absolute;
-    font-size: 1rem;     
+    font-size: 1rem;  
+    top: 19rem;   
 }
 
 .dd:hover{
@@ -197,27 +146,28 @@
   }
 
   .dropdown {
-    position: absolute;
+    position: relative;
     background: white;
     border: 1px solid #ccc;
     z-index: 1000;
-    width: 150px;
+    width: 130px;
     box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-    margin-left: 37rem;
-    
-    
+    margin-left: 27rem;
+    top: 0.5rem;
+     
   }
-
 
   .dropdown-option {
     padding: 10px;
-    cursor: pointer;
+    cursor: pointer; 
+    text-align: center;
     
     
   }
   .dropdown-option:hover {
     background: #f0f0f0;
     font-weight: bold;
+    
   }
   .selected-user-assign {
     margin-top: 10px;
@@ -228,30 +178,30 @@
   }     
         
  .item-header{
-    margin-left: 11rem;
+    margin-left: 1rem;
     margin-top: 1rem;
    
    
  }
 
- .item-header th{
-   width: 15rem;
- }
+ 
 
  .priority-label {
     cursor: pointer;
     position: relative;
+    font-weight: bold;
+    font-size: 1rem;
   }
   
   .priority-dropdown {
     position: absolute;
-    top: 100%; 
-    left: 33rem;
+    left: 83rem;
     background-color: white;
     border: 1px solid #ccc;
-    width: 150px;
+    width: 130px;
     z-index: 1000; 
     box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    
   }
   
   .dropdown-option {
@@ -264,9 +214,40 @@
     background-color: #f0f0f0;
   }
   
+  .first-fill{
+    display: flex;
+    margin-left: 66rem;
+    gap: 2rem;
+  }
  
+  .priority-label {
+    cursor: pointer;
+    margin-bottom: 0; 
+    position: relative; 
+    display: inline-block;
+  }
   
-
+  .priority-dropdown {
+    position: absolute;
+    background-color: white;
+    border: 1px solid #ddd;
+    padding: 0; 
+    margin-top: 0; 
+    z-index: 1;
+    width: 7rem; 
+    top: 13rem; 
+    left: 70;
+  }
+  
+  .dropdown-option {
+    padding: 8px 12px; 
+    cursor: pointer;
+  }
+  
+  .dropdown-option:hover {
+    background-color: #f0f0f0;
+  }
+  
 
 
 

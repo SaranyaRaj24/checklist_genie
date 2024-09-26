@@ -25,7 +25,7 @@ export default function Dashboard() {
             <div className='full'>FULL STACK DEVELOPERS</div>
             <div className='card'>
               <img src={ash} alt='ashpic' className='pic' />
-              <h2 className='vin'>Ashvin <input className='in' type='text' placeholder='95%' /></h2>
+              <h2 className='vin'>Ashvin <input className='in' type='text' placeholder='85%' /></h2>
               <h3 className='more' onClick={() => individualdetails('Ashvin')}>View More</h3>
             </div>
             <div className='card'>
@@ -35,25 +35,32 @@ export default function Dashboard() {
             </div>
             <div className='card'>
               <img src={swetha} alt='swethapic' className='pic' />
-              <h2 className='vin'>Swetha <input type='text' className='in' placeholder='77%' /></h2>
+              <h2 className='vin'>Swetha <input type='text' className='in' placeholder='85%' /></h2>
               <h3 className='more' onClick={() => individualdetails('Swetha')}>View More</h3>
             </div>
             <div className='card'>
               <img src={amal} alt='krishnapic' className='pic' />
-              <h2 className='vin'>Krishna <input type='text' className='in' placeholder='70%' /></h2>
+              <h2 className='vin'>Krishna <input type='text' className='in' placeholder='85%' /></h2>
               <h3 className='more' onClick={() => individualdetails('Krishna')}>View More</h3>
             </div>
             <div className='power'>POWER BI DEVELOPERS</div>
             <div className='card'>
               <img src={ash} alt='devarajpic' className='pic' />
-              <h2 className='vin'>Devaraj <input type='text' className='in' placeholder='70%' /></h2>
+              <h2 className='vin'>Devaraj <input type='text' className='in' placeholder='85%' /></h2>
               <h3 className='more' onClick={() => individualdetails('Devaraj')}>View More</h3>
             </div>
             <div className='card'>
               <img src={amal} alt='kiranpic' className='pic' />
-              <h2 className='vin'>Kiran <input className='in' type='text' placeholder='80%' /></h2>
+              <h2 className='vin'>Kiran <input className='in' type='text' placeholder='85%' /></h2>
               <h3 className='more' onClick={() => individualdetails('Kiran')}>View More</h3>
             </div>
+            <div className='power'>SALES TEAM</div>
+            <div className='card'>
+              <img src={ash} alt='devarajpic' className='pic' />
+              <h2 className='vin'>Selva <input type='text' className='in' placeholder='85%' /></h2>
+              <h3 className='more' onClick={() => individualdetails('Devaraj')}>View More</h3>
+            </div>
+          
           </div>
         </div>
       </div>

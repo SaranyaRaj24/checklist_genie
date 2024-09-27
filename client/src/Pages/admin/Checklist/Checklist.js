@@ -1,22 +1,20 @@
-
 import React, { useState } from 'react';
 import '../../admin/Checklist/Checklist.css';
 import Navbar from '../../../Pages/admin/Navbar/Navbar';
-import { faPen, faTrash } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
 
 const Checklist = () => {
-  const [update, setUpdated] = useState(false);
+  const [update] = useState(false);
   const [dropdownVisible, setDropdownVisible] = useState(false);
   const [selectedUser, setSelectedUser] = useState('');
-  const [priorityVisible, setPriorityVisible] = useState(false); 
-  const [selectedPriority, setSelectedPriority] = useState('');  
-  const [selectedDate, setSelectedDate] = useState(''); 
+  const [priorityVisible, setPriorityVisible] = useState(false);
+  const [selectedPriority, setSelectedPriority] = useState('');
+  const [selectedDate, setSelectedDate] = useState('');
+  const [isModalOpen, setIsModalOpen] = useState(false); 
+  const [newItem, setNewItem] = useState(''); 
+  const [newDescription, setNewDescription] = useState(''); 
 
-  const handleUpdate = () => {
-    setUpdated(true);
-    setTimeout(() => setUpdated(false), 3000);
-  };
+ 
 
   const handleShared = () => {
     setDropdownVisible(true);
@@ -29,7 +27,7 @@ const Checklist = () => {
   };
 
   const handlePriorityClick = () => {
-    setPriorityVisible(!priorityVisible); 
+    setPriorityVisible(!priorityVisible);
   };
 
   const handleSelectPriority = (priority) => {
@@ -38,12 +36,23 @@ const Checklist = () => {
     console.log(`Priority selected: ${priority}`);
   };
 
-  const users = ['All','Ashwin', 'Amal', 'Swetha', 'Krishna', 'Kiran', 'Devaraj','Saranya','Hari','Aswathi','Selva'];
-  const priorities = ['High', 'Medium', 'Low']; 
-
   const handleDateChange = (e) => {
     setSelectedDate(e.target.value);
     console.log(`Selected date: ${e.target.value}`);
+  };
+
+  const users = ['Public'," Full Stack Developers"," Power BI Developers",'Salesforce','Sales', 'Ashwin', 'Amal', 'Swetha', 'Krishna', 'Kiran', 'Devaraj', 'Saranya', 'Hari', 'Aswathi', 'Selva'];
+  const priorities = ['High', 'Medium', 'Low'];
+
+  
+  const handleAddItemsClick = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleSaveNewItem = () => {
+    console.log(`New Item: ${newItem}, Description: ${newDescription}`);
+    
+    setIsModalOpen(false);
   };
 
   return (
@@ -54,62 +63,10 @@ const Checklist = () => {
 
         <div className='content'>
           <div className='ready-check'>Checklist Name</div>
-          <div className='first-fill'> 
-          <button> Date:   <input 
-                type="date" 
-                value={selectedDate}
-                onChange={handleDateChange} 
-                className="date-picker" 
-              /></button>
-
-              <button onClick={handlePriorityClick} className="priority-label">Priority: {selectedPriority || 'Select'}</button> 
-              {priorityVisible && (
-              <div className="priority-dropdown">
-                {priorities.map((priority, index) => (
-                  <div
-                    key={index}
-                    onClick={() => handleSelectPriority(priority)}
-                    className="dropdown-option"
-                  >
-                    {priority}
-                  </div>
-                ))}
-              </div>
-            )} </div>
-
-            <br/> <br/>
           
-          
-          <br />
-          <br />
-          <button className='add-position'>Add Items</button>
-          <div className='sky-position'>
-            <table className='item-header'>
-              <thead>
-                <tr>
-                  <th>S.No</th>
-                  <th>Checklist Items</th>
-                  <th>Description</th>
-                  <th> Action</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>1</td>
-                  <td>fix the bug</td>
-                  <td><textarea></textarea></td>
-                  <td> <button>  <FontAwesomeIcon icon={faPen} /></button> <button> <FontAwesomeIcon icon={faTrash} /></button></td>
-                </tr>
-              </tbody>
-            </table>
-
+          <button className='add-position' onClick={handleAddItemsClick}>Add Items</button> 
+          <div>
             <br />
-
-            <div className='ad'>
-           
-              <p onClick={handleUpdate}>Save</p>
-              <p onClick={handleShared}>Assign to</p>
-            </div>
             {dropdownVisible && (
               <div className="dropdown">
                 {users.map((user, index) => (
@@ -127,9 +84,69 @@ const Checklist = () => {
         </div>
 
         {selectedUser && <div className="selected-user-assign">Checklist Assigned to: {selectedUser}</div>}
+        {isModalOpen && (
+          <div className="modal">
+            <div className="modal-content">
+              <h2>Checklist Name</h2>
+              <div className='first-fill'>
+            <button>
+              Date:{' '}
+              <input
+                type="date"
+                value={selectedDate}
+                onChange={handleDateChange}
+                className="date-picker"
+              />
+            </button>
+
+            <button onClick={handlePriorityClick} className="priority-label">
+              Priority: {selectedPriority || 'Select'}
+            </button>
+            {priorityVisible && (
+              <div className="priority-dropdown">
+                {priorities.map((priority, index) => (
+                  <div
+                    key={index}
+                    onClick={() => handleSelectPriority(priority)}
+                    className="dropdown-option"
+                  >
+                    {priority}
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+          <br/> 
+          <div className='input-field'> 
+              <label>Item Name:</label>
+              <input
+                type="text"
+                value={newItem}
+                onChange={(e) => setNewItem(e.target.value)}
+              />
+              <label>Description:</label>
+              <textarea
+                value={newDescription}
+                onChange={(e) => setNewDescription(e.target.value)}
+              />
+              <label> Comments:</label>
+              <textarea
+                value={newDescription}
+                onChange={(e) => setNewDescription(e.target.value)}
+              />
+              </div>
+              <label>  <button> Edit  </button>  </label>
+             <br/>
+
+              <button onClick={handleSaveNewItem}>Save</button>
+              <button >  <p onClick={handleShared}>Assign to</p></button>
+            </div>
+          </div>
+        )}
       </div>
     </>
   );
 };
 
 export default Checklist;
+

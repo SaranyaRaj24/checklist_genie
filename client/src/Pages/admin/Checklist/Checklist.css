@@ -54,24 +54,10 @@
  }
 
  .cork:hover{
-    background-color: red;
+    
     background-color: rgb(51, 50, 50);
  }
  
- 
-.sky-position{
-    background-color: #f9f9f9;          
-    border-radius: 10px;     
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); 
-    width: 60rem;
-    padding: 30px;
-    margin-left: 18rem;
-    height: 20rem;
-    padding-right: 4rem;
-    margin-top: 4rem;
-    
-}
-
 
 .ad{
     margin-top: 1rem;
@@ -82,9 +68,7 @@
     font-weight: bold;
    
 }
-
-
-  
+ 
   .ad p {
     height: 2.5rem;
     padding: 10px 20px; 
@@ -121,7 +105,7 @@
     color: white;
     position: absolute;
     font-size: 1rem;  
-    top: 19rem;   
+    top: 14rem;   
 }
 
 .dd:hover{
@@ -181,10 +165,7 @@
     margin-left: 1rem;
     margin-top: 1rem;
    
-   
  }
-
- 
 
  .priority-label {
     cursor: pointer;
@@ -216,10 +197,11 @@
   
   .first-fill{
     display: flex;
-    margin-left: 66rem;
+    margin-left: 2rem;
     gap: 2rem;
   }
  
+  
   .priority-label {
     cursor: pointer;
     margin-bottom: 0; 
@@ -246,6 +228,39 @@
   
   .dropdown-option:hover {
     background-color: #f0f0f0;
+  }
+  
+
+
+  .modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .modal-content {
+    background: white;
+    padding: 20px;
+    border-radius: 5px;
+    width: 400px;
+    width: 60rem;
+    text-align: center;
+  }
+  
+  .modal-content input,
+  .modal-content textarea {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+  
+  .modal-content button {
+    margin: 5px;
   }
   
 

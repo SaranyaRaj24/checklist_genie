@@ -23,6 +23,7 @@ import UserSettings from "./Components/User/Settings/Settings";
 import UserNotification from "./Components/User/Notification/Notification";
 import UserComplete from "./Components/User/Complete/Complete";
 import UserView from "./Components/User/View/View";
+import UserLogin1 from "./Components/User/Login1/Login1";
 
 function App() {
   return (
@@ -42,6 +43,7 @@ function App() {
             <Route path="Notification" element={<UserNotification />} />
             <Route path="Settings" element={<UserSettings />} />
             <Route path="View" element={<UserView />} />
+            <Route path="Login1" element={<UserLogin1/>}/> 
           </Route>
         </Routes>
 

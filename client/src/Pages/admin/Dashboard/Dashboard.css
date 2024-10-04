@@ -7,14 +7,14 @@
     margin-top: 5rem;
 }
 
-.lor{ 
+/* .lor{ 
     
     background-color: #AAABB8;
     height: 100%;
     width: 100%;
-}
+} */
 
-.card{
+.cardd{
     border:1px solid hsl(0, 14%, 96%);
     border-radius: 10px;
     box-shadow: 5px 5px 5px hsla(0,0%,0%,0.1);
@@ -86,7 +86,7 @@
     width: 85rem;
     padding: 30px;
     margin-left: 5rem;
-    height: 45rem;
+    height: 68rem;
     padding-right: 4rem;
 }
 

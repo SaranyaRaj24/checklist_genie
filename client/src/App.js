@@ -24,6 +24,8 @@ import UserNotification from "./Components/User/Notification/Notification";
 import UserComplete from "./Components/User/Complete/Complete";
 import UserView from "./Components/User/View/View";
 
+import UserLogin1 from "./Components/User/Login1/Login1";
+
 function App() {
   return (
     <>
@@ -42,6 +44,9 @@ function App() {
             <Route path="Notification" element={<UserNotification />} />
             <Route path="Settings" element={<UserSettings />} />
             <Route path="View" element={<UserView />} />
+
+            <Route path="Login1" element={<UserLogin1/>}/> 
+
           </Route>
         </Routes>
 
@@ -63,22 +68,7 @@ function App() {
 
     
   
-    <Routes>
-      <Route index element={<AdminHome/>}/>  
-      <Route path='admin' element={<Outlet/>}>
-      <Route path='dashboard' element={<AdminDashboard/>}/> 
-      <Route path='navbar' element={<AdminNavbar/>}/> 
-      <Route path='template' element={<AdminTemplate/>}/> 
-      <Route path='notification' element={<AdminNotification/>}/>  
-      <Route path='tag' element={<AdminTag/>}/> 
-      <Route path="details" element={<AdminDetails/>}/>
-      <Route path="settings" element={<AdminSettings/>}/>
-      <Route path="checklist" element={<AdminChecklist/>}/>
-      </Route>
-    
-      
-      
-      </Routes>
+
 
 
       </BrowserRouter>

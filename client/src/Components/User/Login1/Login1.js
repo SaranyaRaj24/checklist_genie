@@ -1,5 +1,3 @@
-
-
 import React, { useState } from 'react';
 import './Login1.css';
 import imagelogo from "../../../Assets/logo.jpg";

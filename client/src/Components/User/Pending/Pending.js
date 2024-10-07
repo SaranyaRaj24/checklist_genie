@@ -19,7 +19,7 @@ function Pending() {
             <div className="task-header">
               <h2 className="task-title">Checklist </h2>
             </div>
-            <div className="task-info">
+            {/* <div className="task-info">
               <p>
                 <strong>Due Date:</strong> 09/15/2024
               </p>
@@ -27,7 +27,7 @@ function Pending() {
                 <strong>Time:</strong> 3:00 PM
               </p>
               
-            </div>
+            </div> */}
             <div className="task-description">
               <h3 className="section-heading">Description:</h3>
               <p>Complete the pending checklist soon</p>
@@ -48,8 +48,9 @@ function Pending() {
                 
               
             </div>
+            <br></br>
             <div className="task-comments">
-              <h3 className="section-heading">Comments:</h3>
+              <h3 className="section-heading" >Comments:</h3>
               <textarea placeholder="Add a comment..."></textarea>
               <button className="add-comment-btn">Add Comment</button>
             </div>

@@ -262,7 +262,7 @@ function Assigned({ onClose }) {
                 <tr>
                   <th>SI.No</th>
                   <th>CheckList</th>
-                  <th>Type</th>
+                  <th>Response</th>
                   <th>Comments</th>
                 </tr>
               </thead>
@@ -278,10 +278,9 @@ function Assigned({ onClose }) {
                             type="radio"
                             name={`task-${task.id}`}
                             value="Yes"
-                            checked={task.answer === "Yes"}
-                            onChange={() => handleRadioChange(task.id, "Yes")}
-                          />{" "}
-                          Yes
+                            checked={task.answer ==="Yes"}
+                            onChange={() => handleRadioChange(task.id,"Yes")}
+                          />Yes
                         </label>
                         <label>
                           <input
@@ -290,7 +289,7 @@ function Assigned({ onClose }) {
                             value="No"
                             checked={task.answer === "No"}
                             onChange={() => handleRadioChange(task.id, "No")}
-                          />{" "}
+                          />
                           No
                         </label>
                       </div>

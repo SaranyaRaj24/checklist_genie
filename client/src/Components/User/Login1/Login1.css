@@ -11,19 +11,11 @@
     text-align: center;
 }
 
-.but-position{
-    text-align: center;
-    margin-top: 2.8rem;
-    font-size: 1.1rem;
-}
-
-
 
 .save-position{
     margin-top: 5rem;
     text-align: center;
-    justify-content: center;
-   
+    justify-content: center;  
 }
 
 .save-but{
@@ -31,6 +23,7 @@
     font-size: 1.1rem;  
     
 }
+
 
 .department:hover{
     background-color: rgb(178, 170, 170);
@@ -44,11 +37,47 @@
 .log{
     height: 50px;
     margin-top: 0.5rem;
-    margin-left: 4rem;
-   
-    
-  }
+    margin-left: 4rem;   
+}
+
+
 .color{
     background-color: #25274d;
     height: 4rem;
 }
+
+.but-position {
+    text-align: center;
+    margin-top: 2.8rem;
+    font-size: 1.1rem;
+    background-color: #25274d;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.but-position.active {
+    background-color: rgb(154, 151, 151); 
+    color: white;
+    font-weight: bold;
+    
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

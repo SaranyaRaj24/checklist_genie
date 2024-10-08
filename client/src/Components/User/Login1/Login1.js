@@ -23,7 +23,6 @@ const Login1 = () => {
   };
 
   const handleLogout = () => {
-    
     navigate('/'); 
   };
 
@@ -96,3 +95,4 @@ const Login1 = () => {
 };
 
 export default Login1;
+

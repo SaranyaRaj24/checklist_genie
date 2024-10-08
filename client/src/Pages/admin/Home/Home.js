@@ -5,19 +5,15 @@ import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {faHouse} from '@fortawesome/free-solid-svg-icons';
 import { FcGoogle } from "react-icons/fc";
 
-import { useNavigate } from 'react-router-dom';
 
 
 
 const Home = () => {
-  const navigate = useNavigate();
+  
   const handleGoogleSignIn=()=>{
     window.location.href = `${process.env.REACT_APP_BACKEND_SERVER_URL}/auth/google`;  
-    navigate('/user/Login1');
+    
   }
-
- 
-  
  
   return (
     <>
@@ -41,6 +37,4 @@ const Home = () => {
 }
 
 export default Home
-
-
 

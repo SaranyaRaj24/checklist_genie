@@ -3,9 +3,13 @@ const express = require('express');
 const session = require('express-session');
 const passport = require('./utils/passport.config');
 const authRoutes = require('./routes/auth.routes');
-const userRoutes = require('./routes/user.routes')
-const generateToken = require('./utils/jwt');
-const cors = require('cors')
+const userRoutes = require('./routes/user.routes');
+const tagRoutes = require('./routes/tags.routes');
+const templateRoutes = require('./routes/template.routes')
+const itemRoutes = require('./routes/items.routes')
+
+const cors = require('cors');
+const { authentication } = require('./utils/jwt');
 const app = express();
 const port = 5002;
 
@@ -21,6 +25,10 @@ app.use(passport.session());
 
 app.use('/', authRoutes);
 app.use('/api',userRoutes);
+app.use(authentication)
+app.use('/tags',tagRoutes);
+app.use('/template',templateRoutes);
+app.use('/items',itemRoutes);
 
 app.listen(port, () => {
   console.log('Server is running on port ' + port);

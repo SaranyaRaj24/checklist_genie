@@ -16,4 +16,5 @@ const failure = (req, res) => {
   res.send('Failed...!');
 };
 
+
 module.exports = { googleCallback, failure };

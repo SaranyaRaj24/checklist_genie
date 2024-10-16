@@ -37,8 +37,8 @@ CREATE TABLE `Organisation_Users` (
 CREATE TABLE `Organisation_User_position` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `organisation_user_id` INTEGER NOT NULL,
-    `user_id` INTEGER NOT NULL,
-    `user_position` ENUM('DEVELOPER', 'POWER_BI', 'SALESFORCE', 'TESTER', 'GRAPHIC_DESIGNER') NOT NULL,
+    `user_id` INTEGER NULL,
+    `user_position` VARCHAR(191) NOT NULL,
     `created_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
 
     UNIQUE INDEX `Organisation_User_position_organisation_user_id_user_id_key`(`organisation_user_id`, `user_id`),
@@ -52,7 +52,7 @@ CREATE TABLE `tags` (
     `organisation_user_id` INTEGER NOT NULL,
     `created_at` DATETIME(3) NOT NULL,
     `recurrent` BOOLEAN NOT NULL DEFAULT false,
-    `user_positon` ENUM('DEVELOPER', 'POWER_BI', 'SALESFORCE', 'TESTER', 'GRAPHIC_DESIGNER') NOT NULL,
+    `user_position` VARCHAR(191) NOT NULL,
 
     UNIQUE INDEX `tags_tag_name_key`(`tag_name`),
     PRIMARY KEY (`id`)
@@ -110,12 +110,30 @@ CREATE TABLE `checklist_template_owners` (
 -- CreateTable
 CREATE TABLE `checklist_items` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
-    `checklist_name` VARCHAR(191) NULL DEFAULT 'Daily Clock-In',
+    `checklist_name` VARCHAR(191) NOT NULL,
     `tag_id` INTEGER NOT NULL,
     `organisation_user_id` INTEGER NOT NULL,
     `organisation_id` INTEGER NOT NULL,
     `Instructions` VARCHAR(191) NOT NULL,
     `Input_type` VARCHAR(191) NOT NULL,
+    `status` ENUM('PENDING', 'COMPLETED', 'IN_PROGRESS', 'NOT_STARTED') NOT NULL DEFAULT 'COMPLETED',
+
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `checklist_item_response` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `status` BOOLEAN NOT NULL,
+    `comments` VARCHAR(191) NOT NULL,
+    `organisation_user_id` INTEGER NOT NULL,
+    `checklist_template_linked_items_id` INTEGER NOT NULL,
+    `user_assigned_checklist_template_id` INTEGER NOT NULL,
+    `template_version` INTEGER NOT NULL,
+    `input_type` VARCHAR(191) NULL,
+    `number_input` INTEGER NULL,
+    `text_input` VARCHAR(191) NULL,
+    `boolean_input` BOOLEAN NULL,
 
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
@@ -130,7 +148,7 @@ ALTER TABLE `Organisation_Users` ADD CONSTRAINT `Organisation_Users_organisation
 ALTER TABLE `Organisation_User_position` ADD CONSTRAINT `Organisation_User_position_organisation_user_id_fkey` FOREIGN KEY (`organisation_user_id`) REFERENCES `Organisation_Users`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `Organisation_User_position` ADD CONSTRAINT `Organisation_User_position_user_id_fkey` FOREIGN KEY (`user_id`) REFERENCES `User`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `Organisation_User_position` ADD CONSTRAINT `Organisation_User_position_user_id_fkey` FOREIGN KEY (`user_id`) REFERENCES `User`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `tags` ADD CONSTRAINT `tags_organisation_user_id_fkey` FOREIGN KEY (`organisation_user_id`) REFERENCES `Organisation_Users`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
@@ -161,3 +179,12 @@ ALTER TABLE `checklist_template_owners` ADD CONSTRAINT `checklist_template_owner
 
 -- AddForeignKey
 ALTER TABLE `checklist_template_owners` ADD CONSTRAINT `checklist_template_owners_organisation_user_id_fkey` FOREIGN KEY (`organisation_user_id`) REFERENCES `Organisation_Users`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `checklist_item_response` ADD CONSTRAINT `checklist_item_response_organisation_user_id_fkey` FOREIGN KEY (`organisation_user_id`) REFERENCES `Organisation_Users`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `checklist_item_response` ADD CONSTRAINT `checklist_item_response_checklist_template_linked_items_id_fkey` FOREIGN KEY (`checklist_template_linked_items_id`) REFERENCES `checklist_template_linked_items`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `checklist_item_response` ADD CONSTRAINT `checklist_item_response_template_version_fkey` FOREIGN KEY (`template_version`) REFERENCES `checklist_template_version`(`version_id`) ON DELETE RESTRICT ON UPDATE CASCADE;

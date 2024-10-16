@@ -14,8 +14,8 @@ const getAllTags = async (req,res) => {
 
 const createTags = async (req,res) => {
     try {
-        const { tag_name, created_at } = req.body; 
-        const userPosition = req.body.userPosition || "DEVELOPER";
+        const { tag_name } = req.body; 
+        const {user_position} = req.body;
         const {organisation_user_id} = req.user;
 
         
@@ -23,7 +23,7 @@ const createTags = async (req,res) => {
             data : {
                 tag_name,
                 created_at : new Date(),
-                user_position : userPosition,
+                user_position,
                 organisation_user_id
             }
             

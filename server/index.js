@@ -5,13 +5,19 @@ const passport = require('./utils/passport.config');
 const authRoutes = require('./routes/auth.routes');
 const userRoutes = require('./routes/user.routes');
 const tagRoutes = require('./routes/tags.routes');
-const templateRoutes = require('./routes/template.routes')
+const templateRoutes = require('./routes/template.routes');
 const itemRoutes = require('./routes/items.routes')
-
+const linkedRoutes = require('./routes/linkedItems.routes');
+const responseRoutes = require('./routes/itemResponse.routes')
+const positionRoutes = require('./routes/userPosition.routes')
 const cors = require('cors');
 const { authentication } = require('./utils/jwt');
 const app = express();
+var morgan = require('morgan')
 const port = 5002;
+
+
+app.use(morgan('dev'))
 
 app.use(cors({
   origin : `${process.env.CLIENT_URL}`,
@@ -25,10 +31,15 @@ app.use(passport.session());
 
 app.use('/', authRoutes);
 app.use('/api',userRoutes);
-app.use(authentication)
+app.use(authentication);
 app.use('/tags',tagRoutes);
 app.use('/template',templateRoutes);
 app.use('/items',itemRoutes);
+app.use('/link',linkedRoutes);
+app.use('/response',responseRoutes);
+
+
+app.use('/position',positionRoutes);
 
 app.listen(port, () => {
   console.log('Server is running on port ' + port);

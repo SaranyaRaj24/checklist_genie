@@ -5,6 +5,7 @@ const generateToken = (user) => {
     {
       organisation_id: user.organisation,
       organisation_user_id: user.organisation_user_id,
+      user_id : user.user_id,
       email: user.email,
       name: user.name,
     },

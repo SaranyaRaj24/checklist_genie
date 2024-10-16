@@ -8,18 +8,19 @@ generator client {
   provider = "prisma-client-js"
 }
 
-enum userPosition {
-  DEVELOPER
-  POWER_BI
-  SALESFORCE
-  TESTER
-  GRAPHIC_DESIGNER
-}
+
 
 enum priority {
   HIGH
   MEDIUM
   LOW
+}
+
+enum checklistItemStatus {
+  PENDING
+  COMPLETED
+  IN_PROGRESS
+  NOT_STARTED
 }
 
 model User {
@@ -63,11 +64,11 @@ model Organisation_Users{
  model Organisation_User_position {
   id Int @id @default(autoincrement())
   organisation_user_id Int
-  user_id Int
-  user_position  userPosition
+  user_id Int?
+  user_position  String
   created_at DateTime @default(now())
   OrganisationUsers Organisation_Users @relation(fields: [organisation_user_id] , references: [id])
-  user User @relation(fields: [user_id],references: [id])
+  user User? @relation(fields: [user_id],references: [id])
   @@unique([organisation_user_id,user_id])
  }
 
@@ -77,7 +78,7 @@ model tags {
   organisation_user_id Int
   created_at DateTime
   recurrent  Boolean @default(false)
-  user_position userPosition
+  user_position String
   OrganisationUsers Organisation_Users? @relation(fields: [organisation_user_id],references: [id]) 
   ChecklistTemplate checklist_template[] 
 }
@@ -88,7 +89,7 @@ model checklist_template{
   id Int @id @default(autoincrement())
   template_name String @unique
   repeating Boolean @default(false)
-  tag_id Int?  
+  tag_id Int  
   priority priority
   organisation_user_id Int
   created_at DateTime
@@ -97,7 +98,7 @@ model checklist_template{
   instructions String
   ChecklistTemplateVersion checklist_template_version[]
   ChecklistTemplateOwners checklist_template_owners[]
-  Tags tags? @relation(fields: [tag_id], references: [id])
+  Tags tags @relation(fields: [tag_id], references: [id])
   OrganisationUsers Organisation_Users? @relation(fields: [organisation_user_id],references: [id]) 
   Organisation Organisation? @relation(fields: [organisation_id], references: [id])
   }
@@ -106,7 +107,7 @@ model checklist_template{
   version_id Int @id @default(autoincrement())
   checklist_template_id Int @unique
   organisation_user_id Int
-  created_at DateTime
+  created_at DateTime 
   ChecklistTemplate checklist_template @relation(fields: [checklist_template_id], references: [id])
   OrganisationUsers Organisation_Users @relation(fields: [organisation_user_id],references: [id])
   ChecklistTemplateLinkedItems checklist_template_linked_items[]
@@ -141,6 +142,7 @@ model checklist_items {
   organisation_id Int
   Instructions String
   Input_type String
+  status checklistItemStatus @default(COMPLETED)
   ChecklistTemplateLinkedItems checklist_template_linked_items[]
 }
 
@@ -152,11 +154,12 @@ model checklist_item_response {
   checklist_template_linked_items_id Int
   user_assigned_checklist_template_id Int
   template_version Int
-  input_type String
-  number_input Int
-  text_input String
-  boolean_input Boolean
+  input_type String?
+  number_input Int?
+  text_input String?
+  boolean_input Boolean?
   OrganisationUserChecklistItemResponse Organisation_Users @relation(fields: [organisation_user_id],references: [id])
-  ChecklistTemplateLinkedItems checklist_template_linked_items @relation(fields: [id],references: [id])
+  ChecklistTemplateLinkedItems checklist_template_linked_items @relation(fields: [checklist_template_linked_items_id],references: [id])
   ChecklistTemplateVersion checklist_template_version @relation(fields: [template_version],references: [version_id])
 }
+

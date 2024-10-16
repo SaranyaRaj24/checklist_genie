@@ -1,6 +1,6 @@
 const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth2').Strategy;
-const { PrismaClient } = require('@prisma/client');
+const { PrismaClient, priority } = require('@prisma/client');
 const prisma = new PrismaClient();
 
 passport.use(new GoogleStrategy({
@@ -12,7 +12,7 @@ passport.use(new GoogleStrategy({
   async function(request, accessToken, refreshToken, profile, done) {
     try {
       const email = profile.email;
-      const userPosition = request.body.userPosition  || "DEVELOPER";
+      const {user_position} = request.body;
 
       const user = await prisma.user.upsert({
         where: { email: email },
@@ -51,41 +51,24 @@ passport.use(new GoogleStrategy({
           }
         },
         update: {
-          user_position: userPosition,  
+          user_position, 
            created_at: new Date(),
         },
         create: {
           organisation_id: organisation.id,
           user_id: user.id,
-          user_position: userPosition,  
+          user_position,
           created_at: new Date(),
         }
       });
 
-      const org_user_position = await prisma.organisation_User_position.upsert({
-        where : {
-          organisation_user_id_user_id : {
-          organisation_user_id :org_user.id,
-          user_id : user.id,
-          }
-        },
-        update : {
-          user_position: userPosition,
-          created_at : new Date(),
-        },
-        create : {
-          organisation_user_id : org_user.id,
-          user_id : user.id,
-          user_position: userPosition,
-          created_at : new Date(),
-        }
-      })
 
-      return done(null, 
+           return done(null, 
         {
-       
+         
         organisation : organisation.id,
         organisation_user_id:org_user.id,
+        user_id : user.id,
         name: user.name,
         email: user.email,
       });

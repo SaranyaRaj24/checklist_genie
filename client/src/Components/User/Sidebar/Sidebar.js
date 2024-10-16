@@ -17,6 +17,7 @@ import ListItemText from "@mui/material/ListItemText";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import TemplateIcon from "@mui/icons-material/Description";
 import SettingsIcon from "@mui/icons-material/Settings";
+import PersonIcon from '@mui/icons-material/Person';
 import imagelogo from "../../../Assets/logo.jpg";
 import { IoPersonCircleSharp } from "react-icons/io5";
 import Menu from "@mui/material/Menu";
@@ -173,6 +174,11 @@ export default function MiniDrawer() {
                 text: "Settings",
                 icon: <SettingsIcon />,
                 path: "/user/settings",
+              },
+              {
+                text: "Admin",
+                icon: <PersonIcon />,
+                path: "/admin/Dashboard",
               },
             ].map(({ text, icon, path }) => (
               <ListItem key={text} disablePadding sx={{ display: "block" }}>

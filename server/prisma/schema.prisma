@@ -75,32 +75,34 @@ model Organisation_Users{
 model tags {
   id Int @id @default(autoincrement())
   tag_name String @unique
+  description String
   organisation_user_id Int
   created_at DateTime
   recurrent  Boolean @default(false)
   user_position String
   OrganisationUsers Organisation_Users? @relation(fields: [organisation_user_id],references: [id]) 
   ChecklistTemplate checklist_template[] 
+
 }
 
 
 
 model checklist_template{
   id Int @id @default(autoincrement())
-  template_name String @unique
+  template_name String 
   repeating Boolean @default(false)
-  tag_id Int  
-  priority priority
+  tag_id Int
+  priority priority 
   organisation_user_id Int
   created_at DateTime
   organisation_id Int
-  current_version_id Int
-  instructions String
-  ChecklistTemplateVersion checklist_template_version[]
-  ChecklistTemplateOwners checklist_template_owners[]
+  current_version_id Int?
   Tags tags @relation(fields: [tag_id], references: [id])
   OrganisationUsers Organisation_Users? @relation(fields: [organisation_user_id],references: [id]) 
   Organisation Organisation? @relation(fields: [organisation_id], references: [id])
+  TemplateVersion checklist_template_version? @relation(name: "Current Version",fields: [current_version_id],references: [version_id])
+  ChecklistTemplate checklist_template_version[] @relation("Version")
+  ChecklistTemplateOwners checklist_template_owners[]
   }
 
   model checklist_template_version {
@@ -108,11 +110,13 @@ model checklist_template{
   checklist_template_id Int @unique
   organisation_user_id Int
   created_at DateTime 
-  ChecklistTemplate checklist_template @relation(fields: [checklist_template_id], references: [id])
+  ChecklistTemplate checklist_template @relation(name: "Version" ,fields: [checklist_template_id], references: [id])
   OrganisationUsers Organisation_Users @relation(fields: [organisation_user_id],references: [id])
+  ChecklistTemplateVersion checklist_template[] @relation(name: "Current Version")
   ChecklistTemplateLinkedItems checklist_template_linked_items[]
-  ChecklistTemplateVersion checklist_item_response[]
+  ChecklistTemplateResponse checklist_item_response[]
 }
+
 
 model checklist_template_linked_items {
   id Int @id @default(autoincrement())
@@ -137,18 +141,18 @@ model checklist_template_owners {
 model checklist_items {
   id Int @id @default(autoincrement())
   checklist_name String
-  tag_id Int
+  tag_id Int?
   organisation_user_id Int
   organisation_id Int
   Instructions String
-  Input_type String
   status checklistItemStatus @default(COMPLETED)
-  ChecklistTemplateLinkedItems checklist_template_linked_items[]
+   ChecklistTemplateLinkedItems checklist_template_linked_items[]
+   
 }
 
 model checklist_item_response {
   id Int @id @default(autoincrement())
-  status Boolean
+  status Boolean @default(false)
   comments String
   organisation_user_id Int
   checklist_template_linked_items_id Int
@@ -162,4 +166,7 @@ model checklist_item_response {
   ChecklistTemplateLinkedItems checklist_template_linked_items @relation(fields: [checklist_template_linked_items_id],references: [id])
   ChecklistTemplateVersion checklist_template_version @relation(fields: [template_version],references: [version_id])
 }
+
+
+
 

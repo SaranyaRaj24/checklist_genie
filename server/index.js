@@ -7,9 +7,9 @@ const userRoutes = require('./routes/user.routes');
 const tagRoutes = require('./routes/tags.routes');
 const templateRoutes = require('./routes/template.routes');
 const itemRoutes = require('./routes/items.routes')
-const linkedRoutes = require('./routes/linkedItems.routes');
-const responseRoutes = require('./routes/itemResponse.routes')
-const positionRoutes = require('./routes/userPosition.routes')
+// const linkedRoutes = require('./routes/linkedItems.routes');
+const responseRoutes = require('./routes/itemResponse.routes');
+const positionRoutes = require('./routes/userPosition.routes');
 const cors = require('cors');
 const { authentication } = require('./utils/jwt');
 const app = express();
@@ -35,7 +35,7 @@ app.use(authentication);
 app.use('/tags',tagRoutes);
 app.use('/template',templateRoutes);
 app.use('/items',itemRoutes);
-app.use('/link',linkedRoutes);
+// app.use('/link',linkedRoutes);
 app.use('/response',responseRoutes);
 
 

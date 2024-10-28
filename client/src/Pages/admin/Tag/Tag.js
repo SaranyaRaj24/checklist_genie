@@ -1,27 +1,54 @@
 import React, { useState } from 'react';
+import axios from 'axios';  
 import '../../admin/Tag/Tag.css';
-import Navbar from '../../../Pages/admin/Navbar/Navbar'
-
+import Navbar from '../../../Pages/admin/Navbar/Navbar';
 
 const Tag = () => {
   const [saved, setSaved] = useState(false);
   const [deleted, setDeleted] = useState(false);
+  const [tagName, setTagName] = useState('');
+  const [description, setDescription] = useState('');
+  const [frequency, setFrequency] = useState('');
+  const [type, setType] = useState('');
+  const [applicableTeam, setApplicableTeam] = useState('');
 
   const handleDelete = () => {
     setDeleted(true);
     setTimeout(() => setDeleted(false), 3000);
   };
 
-  const handleSave = () => {
-    setSaved(true);
-    setTimeout(() => setSaved(false), 3000);
+ 
+
+  const handleSave = async () => {
+    try {
+      const token = localStorage.getItem('token')
+
+      const tag = await axios.post(`${process.env.REACT_APP_BACKEND_SERVER_URL}/tags/createTags`, 
+        {
+        tag_name: tagName,
+        description,
+        frequency,
+        type,
+        user_position: applicableTeam,  
+      },
+      {
+        headers : {
+           'Authorization': `Bearer ${token}`
+        }
+      }
+    );
+      console.log('Tag created:', tag.data);
+      setSaved(true);
+      setTimeout(() => setSaved(false), 3000);
+    } catch (error) {
+      console.error('Error saving tag:', error);
+    }
   };
 
-
   return (
-    <> 
-      <div className='dashboard-container'> 
-        <Navbar/>
+    <>
+      <div className='dashboard-container'>
+        <Navbar />
         <h3 className='tag-pos'>Tags</h3>
         {saved && <div className="alert-message">Saved Successfully!</div>}
         {deleted && <div className="alert-message">Deleted Successfully!</div>}
@@ -32,34 +59,32 @@ const Tag = () => {
           <div className="tag-form">
             <div className="form-row">
               <label>Tag Name</label>
-              <input type="text" />
+              <input type="text" value={tagName} onChange={(e) => setTagName(e.target.value)} />
             </div>
             <div className="form-row">
               <label>Description</label>
-              <textarea />
+              <textarea value={description} onChange={(e) => setDescription(e.target.value)} />
             </div>
             <div className="form-row">
               <label>Frequency</label>
-              <input type="text" />
+              <input type="text" value={frequency} onChange={(e) => setFrequency(e.target.value)} />
             </div>
             <div className="form-row">
               <label>Type</label>
-              <input type="text" />
+              <input type="text" value={type} onChange={(e) => setType(e.target.value)} />
             </div>
             <div className="form-row">
               <label>Applicable Team</label>
-              <input type="text" />
+              <input type="text" value={applicableTeam} onChange={(e) => setApplicableTeam(e.target.value)} />
             </div>
           </div>
-          <div className='del'> 
+          <div className='del'>
             <button>Edit</button>
             <button onClick={handleDelete}>Delete</button>
             <button onClick={handleSave}>Save</button>
           </div>
         </div>
-
-        
-      </div> 
+      </div>
     </>
   );
 }

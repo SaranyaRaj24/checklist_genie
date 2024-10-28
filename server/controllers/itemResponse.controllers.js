@@ -18,25 +18,19 @@ const getItemResponses = async (req, res) => {
 
 const updateItemResponse  = async (req,res) => {
     try {
-        const {comments,checklist_template_linked_items_id, user_assigned_checklist_template_id,template_version} = req.body;
+        const {status,comments, checklist_template_linked_items_id,user_assigned_checklist_template_id,template_version,number_input} = req.body;
           const {organisation_user_id} = req.user;
 
-           const updatingItems = await prisma.checklist_item_response.upsert({
-            where : {
-                checklist_template_linked_items_id,
-                template_version,
-            },
-            update : {
-                checklist_template_linked_items_id,
-                template_version,
-            },
-            create : {
-                status : true,
+           const updatingItems = await prisma.checklist_item_response.create({
+            
+            data : {
+                status : status,
                 organisation_user_id,
                 comments,
                   checklist_template_linked_items_id,
-                  user_assigned_checklist_template_id,
-                  template_version
+                  user_assigned_checklist_template_id : user_assigned_checklist_template_id || 1,
+                  template_version, 
+                  number_input
             }
            })
 
@@ -46,6 +40,7 @@ const updateItemResponse  = async (req,res) => {
 
     } catch (error) {
         console.log(error)
+        res.status(400).json({error : "Error in Response"})
     }
 }
 

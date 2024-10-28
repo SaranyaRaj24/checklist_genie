@@ -49,6 +49,7 @@ CREATE TABLE `Organisation_User_position` (
 CREATE TABLE `tags` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `tag_name` VARCHAR(191) NOT NULL,
+    `description` VARCHAR(191) NOT NULL,
     `organisation_user_id` INTEGER NOT NULL,
     `created_at` DATETIME(3) NOT NULL,
     `recurrent` BOOLEAN NOT NULL DEFAULT false,
@@ -68,10 +69,8 @@ CREATE TABLE `checklist_template` (
     `organisation_user_id` INTEGER NOT NULL,
     `created_at` DATETIME(3) NOT NULL,
     `organisation_id` INTEGER NOT NULL,
-    `current_version_id` INTEGER NOT NULL,
-    `instructions` VARCHAR(191) NOT NULL,
+    `current_version_id` INTEGER NULL,
 
-    UNIQUE INDEX `checklist_template_template_name_key`(`template_name`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
@@ -111,11 +110,10 @@ CREATE TABLE `checklist_template_owners` (
 CREATE TABLE `checklist_items` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `checklist_name` VARCHAR(191) NOT NULL,
-    `tag_id` INTEGER NOT NULL,
+    `tag_id` INTEGER NULL,
     `organisation_user_id` INTEGER NOT NULL,
     `organisation_id` INTEGER NOT NULL,
     `Instructions` VARCHAR(191) NOT NULL,
-    `Input_type` VARCHAR(191) NOT NULL,
     `status` ENUM('PENDING', 'COMPLETED', 'IN_PROGRESS', 'NOT_STARTED') NOT NULL DEFAULT 'COMPLETED',
 
     PRIMARY KEY (`id`)
@@ -124,7 +122,7 @@ CREATE TABLE `checklist_items` (
 -- CreateTable
 CREATE TABLE `checklist_item_response` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
-    `status` BOOLEAN NOT NULL,
+    `status` BOOLEAN NOT NULL DEFAULT false,
     `comments` VARCHAR(191) NOT NULL,
     `organisation_user_id` INTEGER NOT NULL,
     `checklist_template_linked_items_id` INTEGER NOT NULL,
@@ -161,6 +159,9 @@ ALTER TABLE `checklist_template` ADD CONSTRAINT `checklist_template_organisation
 
 -- AddForeignKey
 ALTER TABLE `checklist_template` ADD CONSTRAINT `checklist_template_organisation_id_fkey` FOREIGN KEY (`organisation_id`) REFERENCES `Organisation`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `checklist_template` ADD CONSTRAINT `checklist_template_current_version_id_fkey` FOREIGN KEY (`current_version_id`) REFERENCES `checklist_template_version`(`version_id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `checklist_template_version` ADD CONSTRAINT `checklist_template_version_checklist_template_id_fkey` FOREIGN KEY (`checklist_template_id`) REFERENCES `checklist_template`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;

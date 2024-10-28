@@ -1,13 +1,14 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './Login1.css';
 import imagelogo from "../../../Assets/logo.jpg";
 import { IoPersonCircleSharp } from "react-icons/io5";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 const Login1 = () => {
   const [selectedDepartments, setSelectedDepartments] = useState([]);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
 
   const handleToggle = (department) => {
     setSelectedDepartments((prev) =>
@@ -17,12 +18,33 @@ const Login1 = () => {
     );
   };
 
+  useEffect(() => {
+    const storeTokenNew = () => {
+      const params = new URLSearchParams(location.search);
+      const token = params.get('token'); 
+      if (token) {
+        localStorage.setItem('token', token); 
+        console.log('Token stored from URL:', token); 
+      }
+    };
+
+    storeTokenNew(); 
+
+    const storedToken = localStorage.getItem('token');
+    if (storedToken) {
+      console.log('Token retrieved:', storedToken); 
+    } else {
+      console.log('No token found');
+    }
+  }, [location.search]); 
+
   const handleSave = () => {
     console.log('Saved departments:', selectedDepartments);
-    navigate('/User/Browse')
+    navigate('/User/Browse');
   };
 
   const handleLogout = () => {
+    localStorage.removeItem('token');
     navigate('/'); 
   };
 
@@ -56,7 +78,7 @@ const Login1 = () => {
             className="dropdown-menu"
             style={{
               position: 'absolute',
-              top: '60px', 
+              top: '60px',
               right: '15px',
               backgroundColor: 'white',
               padding: '10px',
@@ -76,9 +98,7 @@ const Login1 = () => {
       {departments.map((department) => (
         <h2 className='department' key={department}>
           <button
-            className={`but-position ${
-              selectedDepartments.includes(department) ? 'active' : ''
-            }`}
+            className={`but-position ${selectedDepartments.includes(department) ? 'active' : ''}`}
             onClick={() => handleToggle(department)}
           >
             {department}
@@ -90,9 +110,13 @@ const Login1 = () => {
           Save
         </button>
       </div>
+      
+      
+       
+      
     </>
   );
 };
 
-export default Login1;
 
+export default Login1;

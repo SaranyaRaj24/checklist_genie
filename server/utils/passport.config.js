@@ -1,12 +1,12 @@
 const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth2').Strategy;
-const { PrismaClient, priority } = require('@prisma/client');
+const { PrismaClient} = require('@prisma/client');
 const prisma = new PrismaClient();
 
 passport.use(new GoogleStrategy({
     clientID: process.env.CLIENT_ID,
     clientSecret: process.env.CLIENT_SECRET,
-    callbackURL: "http://localhost:5002/google/callback",
+    callbackURL: "https://checklist-genie.onrender.com/google/callback",
     passReqToCallback: true
   },
   async function(request, accessToken, refreshToken, profile, done) {

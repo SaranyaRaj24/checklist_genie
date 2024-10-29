@@ -6,7 +6,7 @@ const prisma = new PrismaClient();
 passport.use(new GoogleStrategy({
     clientID: process.env.CLIENT_ID,
     clientSecret: process.env.CLIENT_SECRET,
-    callbackURL: "https://checklist-genie.onrender.com/google/callback",
+    callbackURL: process.env.CALL_BACK_URL,
     passReqToCallback: true
   },
   async function(request, accessToken, refreshToken, profile, done) {

@@ -6,14 +6,15 @@ import { faHouse } from '@fortawesome/free-solid-svg-icons';
 import { FcGoogle } from "react-icons/fc";
 
 const Home = () => {
-  
+  console.log(
+    "dddddddddddddddddddddd",
+    process.env.REACT_APP_BACKEND_SERVER_URL
+  );
 
   const handleGoogleSignIn = () => {
     window.location.href = `${process.env.REACT_APP_BACKEND_SERVER_URL}/auth/google`;
-    
   };
   
- 
   return (
     <>
       <div className='ggg'>

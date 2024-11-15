@@ -40,6 +40,8 @@ const Login1 = () => {
 
   const handleSave = () => {
     console.log('Saved departments:', selectedDepartments);
+      console.log("Saved departmentsghfffffffffffffffffffffffffffffffffffffffff:", selectedDepartments);
+
     navigate('/User/Browse');
   };
 
@@ -87,7 +89,7 @@ const Login1 = () => {
               zIndex: 1000,
             }}
           >
-            <button onClick={handleLogout}>Logout</button>
+            <button onClick={handleLogout}>Logouttttttttttttttttt</button>
           </div>
         )}
         <img src={imagelogo} alt="logo" className="log" />

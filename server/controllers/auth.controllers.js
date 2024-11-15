@@ -1,7 +1,11 @@
 const { generateToken } = require('../utils/jwt');
 
 const googleCallback = (req, res) => {
+  console.log("ddddddddddddddddddd", process.env.CLIENT_URL);
+
   const user = req.user;
+  console.log("ddddddddddddddddddd", process.env.CLIENT_URL);
+
   const token = generateToken(user);
  
   console.log(user)

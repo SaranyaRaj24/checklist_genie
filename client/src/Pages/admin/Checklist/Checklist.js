@@ -81,6 +81,7 @@ const Checklist = () => {
     storeTokenNew();
 
     const storedToken = localStorage.getItem("token");
+    
     if (storedToken) {
       console.log("Token retrieved:", storedToken);
     } else {
@@ -90,6 +91,7 @@ const Checklist = () => {
     const getTags = async () => {
       try {
         const token = localStorage.getItem("token");
+        console.log("Attempting to fetch templates...");
         const response = await axios.get(
           `${process.env.REACT_APP_BACKEND_SERVER_URL}/tags/getAll`,
           {

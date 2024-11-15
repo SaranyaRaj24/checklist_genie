@@ -19,10 +19,21 @@ const port = 5002;
 
 app.use(morgan('dev'))
 
-app.use(cors({
-  origin : `${process.env.CLIENT_URL}`,
-  credentials:true
-}))
+// app.use(cors({
+//   origin : `${process.env.CLIENT_URL}`,
+//   credentials:true
+// }))
+
+const corsOptions = {
+  origin: [
+    `${process.env.CLIENT_URL}`,
+    `${process.env.REACT_APP_BACKEND_SERVER_URL}`,
+  ],
+  methods: ["GET", "POST", "PUT", "DELETE"],
+  credentials: true,
+};
+
+app.use(cors(corsOptions));
 
 app.use(express.json())
 app.use(session({ secret: process.env.SECRET, resave: false, saveUninitialized: true }));

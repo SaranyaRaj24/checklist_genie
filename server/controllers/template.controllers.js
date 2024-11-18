@@ -69,7 +69,28 @@ const createTemplate = async (req,res) =>
   }
 };
 
+const getTemplatesByTags  = async (req, res) => {
+  try {
+    const { organisation_user_id } = req.user;
+
+    const templates = await prisma.checklist_template.findMany({
+      where: {
+        organisation_user_id: organisation_user_id,
+      },
+      include: {
+        Tags: true, 
+      },
+    });
+
+    res.status(200).json(templates);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Failed to fetch templates.' });
+  }
+};
 
 
 
-module.exports = { getAllTemplate, createTemplate };
+module.exports = { getAllTemplate, createTemplate,
+  getTemplatesByTags 
+ };

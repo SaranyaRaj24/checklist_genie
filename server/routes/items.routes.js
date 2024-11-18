@@ -1,8 +1,18 @@
 const express = require('express');
-const { getAllItems, createItems } = require('../controllers/items.controllers');
+const { authentication } = require('../utils/jwt');
+
+const { getAllItems, createItems,
+    getItemsByTemplate, getChecklistItemsForToday, saveOrUpdateChecklistResponse
+ } = require('../controllers/items.controllers');
 const router = express.Router();
+
+router.use(authentication);
 
 router.get('/getItems',getAllItems);
 router.post('/createItems',createItems);
+
+router.get('/getItemsByTemplate',getItemsByTemplate);
+router.post('/saveOrUpdateChecklistResponse',saveOrUpdateChecklistResponse);
+router.get('/getChecklistItemsForToday',getChecklistItemsForToday);
 
 module.exports = router;

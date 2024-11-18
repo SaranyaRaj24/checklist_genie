@@ -40,8 +40,6 @@ const Login1 = () => {
 
   const handleSave = () => {
     console.log('Saved departments:', selectedDepartments);
-      console.log("Saved departmentsghfffffffffffffffffffffffffffffffffffffffff:", selectedDepartments);
-
     navigate('/User/Browse');
   };
 

@@ -14,6 +14,8 @@ const generateToken = (user) => {
 };
 
 const authentication = (req, res, next) => {
+
+  console.log("req headers", req.headers)
   const authHeaders = req.headers.authorization; 
   console.log(authHeaders, "1234");
   

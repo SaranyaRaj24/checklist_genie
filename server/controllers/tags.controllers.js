@@ -101,14 +101,6 @@ const getAllTagsPosition = async (req, res) => {
                 }))
             }))
            }))
-
-
-
-        
-
-
-
-
     
                  res.status(200).json(mapTags)
  } catch (error) {
@@ -165,9 +157,28 @@ const getTagsForPosition = async (req, res) => {
     }
 }
 
+const getTagsByUserPosition = async (req, res) => {
+    try {
+      const { organisation_user_id } = req.user;
+  
+      const tags = await prisma.tags.findMany({
+        where: {
+          organisation_user_id: organisation_user_id,
+        },
+      });
+  
+      res.status(200).json(tags);
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: 'Failed to fetch tags.' });
+    }
+  };
+  
 
 
-module.exports = { getAllTags, createTags, getAllTagsPosition,getTagsForPosition};
+
+module.exports = { getAllTags, createTags, getAllTagsPosition,getTagsForPosition, 
+    getTagsByUserPosition};
 
 
 

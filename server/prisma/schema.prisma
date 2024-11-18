@@ -8,8 +8,6 @@ generator client {
   provider = "prisma-client-js"
 }
 
-
-
 enum priority {
   HIGH
   MEDIUM
@@ -40,8 +38,6 @@ model Organisation {
   OrganisationUsers Organisation_Users[] 
   OrganisationTemplate  checklist_template[]
 }
-
-
 
 model Organisation_Users{
   id Int @id @default(autoincrement())
@@ -80,11 +76,11 @@ model tags {
   created_at DateTime
   recurrent  Boolean @default(false)
   user_position String
+  type String
   OrganisationUsers Organisation_Users? @relation(fields: [organisation_user_id],references: [id]) 
   ChecklistTemplate checklist_template[] 
 
 }
-
 
 
 model checklist_template{
@@ -97,6 +93,7 @@ model checklist_template{
   created_at DateTime
   organisation_id Int
   current_version_id Int?
+  Instructions String
   Tags tags @relation(fields: [tag_id], references: [id])
   OrganisationUsers Organisation_Users? @relation(fields: [organisation_user_id],references: [id]) 
   Organisation Organisation? @relation(fields: [organisation_id], references: [id])
@@ -145,9 +142,9 @@ model checklist_items {
   organisation_user_id Int
   organisation_id Int
   Instructions String
+  input_type String
   status checklistItemStatus @default(COMPLETED)
-   ChecklistTemplateLinkedItems checklist_template_linked_items[]
-   
+  ChecklistTemplateLinkedItems checklist_template_linked_items[]
 }
 
 model checklist_item_response {
@@ -162,11 +159,8 @@ model checklist_item_response {
   number_input Int?
   text_input String?
   boolean_input Boolean?
+  responded_at DateTime
   OrganisationUserChecklistItemResponse Organisation_Users @relation(fields: [organisation_user_id],references: [id])
   ChecklistTemplateLinkedItems checklist_template_linked_items @relation(fields: [checklist_template_linked_items_id],references: [id])
   ChecklistTemplateVersion checklist_template_version @relation(fields: [template_version],references: [version_id])
 }
-
-
-
-

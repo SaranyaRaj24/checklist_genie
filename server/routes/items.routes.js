@@ -11,7 +11,7 @@ router.use(authentication);
 router.get('/getItems',getAllItems);
 router.post('/createItems',createItems);
 
-router.get('/getItemsByTemplate',getItemsByTemplate);
+router.get('/getItemsByTemplate/:tag_id',getItemsByTemplate);
 router.post('/saveOrUpdateChecklistResponse',saveOrUpdateChecklistResponse);
 router.get('/getChecklistItemsForToday',getChecklistItemsForToday);
 

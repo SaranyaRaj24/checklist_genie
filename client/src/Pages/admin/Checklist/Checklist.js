@@ -64,7 +64,35 @@ const Checklist = () => {
   ];
   const priorities = ["High", "Medium", "Low"];
 
-  const handleAddItemsClick = () => {
+  const handleAddItemsClick = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      console.log("Payload:", {
+        template_name,
+        tag_id: parseInt(tag_id),
+        tag_name,
+      });
+      const template = await axios.post(
+        `${process.env.REACT_APP_BACKEND_SERVER_URL}/template/createTemplate`,
+        {
+          template_name,
+          tag_id : parseInt(tag_id),
+          tag_name,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      alert("Template Created Successfully!!!")
+      console.log("Template Created:", template.data);
+      setUpdate(true);
+    } catch (error) {
+      console.log("Error saving template:", error);
+      alert("No Templates created!!")
+    }
+
     setIsModalOpen(true);
   };
 
@@ -110,41 +138,19 @@ const Checklist = () => {
     getTags();
   }, []);
 
-  const handleSelectId = (e) => {
-    const selectedTagId = e.target.value;
-   
-    setTag_id(selectedTagId);
-   
-  };
+
 
   const handleSelectName = (e) => {
     const selectedTagName = e.target.value;
     setTag_name(selectedTagName);
-  }
 
-  const handleSaveNewItem = async () => {
-    try {
-      const token = localStorage.getItem("token");
-
-      const template = await axios.post(
-        `${process.env.REACT_APP_BACKEND_SERVER_URL}/template/createTemplate`,
-        {
-          template_name,
-          tag_id: parseInt(tag_id),
-          tag_name,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      console.log("Template Created:", template.data);
-      setUpdate(true);
-    } catch (error) {
-      console.log("Error saving template:", error);
+    const selectedTag = tags.find((tag) => tag.tag_name === selectedTagName);
+    if (selectedTag) {
+      setTag_id(selectedTag.id);
     }
-
+  };
+  const handleSaveNewItem = async () => {
+    
 
     try {
       const token = localStorage.getItem('token')
@@ -152,7 +158,7 @@ const Checklist = () => {
         {
           checklist_name,
           Instructions,
-          tag_id : parseInt(tag_id),
+          tag_id :parseInt(tag_id),
           
         },
         {
@@ -161,11 +167,13 @@ const Checklist = () => {
         },
       }
       );
+      alert("Items created Successfully")
       console.log("item", item.data)
     } catch (error) {
       console.log(error)
+      alert("No items created")
     }
-    setIsModalOpen(false);
+    
   };
 
   return (
@@ -186,17 +194,7 @@ const Checklist = () => {
             />
           </div>
 
-          <div className="tag-dropdown">
-            <label>Select Tag ID:</label>
-            <select value={tag_id} onChange={handleSelectId}>
-    <option value="">Select a tag ID</option>
-    {tags.map((tag) => (
-      <option key={tag.id} value={tag.id}>
-        {tag.id}
-      </option>
-    ))}
-  </select>
-          </div>
+         
 
           <div className="tag-dropdown">
             <label>Select Tag:</label>
@@ -205,6 +203,7 @@ const Checklist = () => {
     {tags.map((tag) => (
       <option key={tag.id} value={tag.tag_name}>
         {tag.tag_name}
+        
       </option>
     ))}
   </select>

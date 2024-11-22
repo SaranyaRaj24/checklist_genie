@@ -16,40 +16,60 @@ const getItemResponses = async (req, res) => {
     }
 };
 
-const updateItemResponse  = async (req,res) => {
-    try {
-        const {status,comments, checklist_template_linked_items_id,user_assigned_checklist_template_id,template_version,number_input} = req.body;
-          const {organisation_user_id} = req.user;
-
-           const updatingItems = await prisma.checklist_item_response.create({
-            
-            data : {
-                status : status,
-                organisation_user_id,
-                comments,
-                  checklist_template_linked_items_id,
-                  user_assigned_checklist_template_id : user_assigned_checklist_template_id || 1,
-                  template_version, 
-                  number_input
-            }
-           })
+const updateItemResponse = async (req, res) => {
+  try {
+    const { status,comments,checklist_template_linked_items_id,template_version,selected_date } = req.body;
+     
+   console.log("req.body ", status, comments)
 
 
-      
-        return res.status(200).json({ message: ' Updated Successfully', updatingItems });
+    const { organisation_user_id } = req.user;
 
-    } catch (error) {
-        console.log(error)
-        res.status(400).json({error : "Error in Response"})
+   const linkedItems = await prisma.checklist_template_linked_items.findMany({
+    where : {
+      id : checklist_template_linked_items_id
     }
-}
+    
+   })
+   console.log("Linked Items ID ",linkedItems)
+
+    const templateVersions = await prisma.checklist_template_version.findMany({
+      where: {
+        version_id : template_version
+      }
+    })
+    console.log("Template Version ID ", templateVersions)
+
+  
+    const linkedItem = linkedItems[0];
+    const templateVersion = templateVersions[0];
+    
+
+    const dateTime =  selected_date ? new Date(selected_date).toISOString().split("T")[0]  : new Date().toISOString().split("T")[0];
+
+    const updatedItem = await prisma.checklist_item_response.create({
+      data: {
+        status ,
+        organisation_user_id,
+        comments,
+        checklist_template_linked_items_id : linkedItem.id,
+        user_assigned_checklist_template_id: 1,
+        template_version : templateVersion.version_id,
+        selected_date : dateTime,
+        responded_at: new Date(),
+      },
+    });
+
+    return res.status(200).json({ message: "Response updated successfully", updatedItem });
+  } catch (error) {
+    console.error("Error updating item response:", error);
+    return res.status(500).json({ error: "Error updating item response" });
+  }
+};
 
 
 
-
-
-module.exports = { getItemResponses , updateItemResponse};
-
+module.exports = { getItemResponses , updateItemResponse };
 
 
 

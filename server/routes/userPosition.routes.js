@@ -1,5 +1,5 @@
 const express = require('express');
-const { getUserPosition, createUserPosition } = require('../controllers/userPosition.controllers');
+const { getUserPosition,createUserPosition } = require('../controllers/userPosition.controllers');
 const router = express.Router();
 
 

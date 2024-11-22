@@ -46,29 +46,37 @@ passport.use(
               email.lastIndexOf("@") + 1,
               email.lastIndexOf(".")
             ),
-
             created_at: new Date(),
           },
         });
 
-        const org_user = await prisma.organisation_Users.upsert({
+        let org_user = await prisma.organisation_Users.findFirst({
           where: {
-            organisation_id_user_id: {
-              organisation_id: organisation.id,
-              user_id: user.id,
-            },
-          },
-          update: {
-            user_position,
-            created_at: new Date(),
-          },
-          create: {
             organisation_id: organisation.id,
             user_id: user.id,
-            user_position,
-            created_at: new Date(),
           },
         });
+
+        if (org_user) {
+          org_user = await prisma.organisation_Users.update({
+            where: {
+              id: org_user.id, 
+            },
+            data: {
+              user_position,
+              created_at: new Date(),
+            },
+          });
+        } else {
+          org_user = await prisma.organisation_Users.create({
+            data: {
+              organisation_id: organisation.id,
+              user_id: user.id,
+              user_position,
+              created_at: new Date(),
+            },
+          });
+        }
 
         return done(null, {
           organisation: organisation.id,
@@ -83,7 +91,6 @@ passport.use(
     }
   )
 );
-
 passport.serializeUser(function (user, done) {
   done(null, user);
 });

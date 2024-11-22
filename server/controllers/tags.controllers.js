@@ -97,7 +97,6 @@ const getAllTagsPosition = async (req, res) => {
                 ChecklistItems : template.TemplateVersion.ChecklistTemplateLinkedItems.map(item => ({
                     id : item.ChecklistItems.id,
                     Item_name : item.ChecklistItems.checklist_name,
-                    input_type : item.ChecklistItems.Input_type
                 }))
             }))
            }))

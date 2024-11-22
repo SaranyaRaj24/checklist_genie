@@ -51,18 +51,18 @@ const createItems = async (req, res) => {
 
 const getItemsByTemplate = async (req, res) => {
   try {
-    const { organisation_user_id } = req.user;
+    const {tag_id} = req.params;
 
     const items = await prisma.checklist_items.findMany({
       where: {
-        organisation_user_id: organisation_user_id,
+        tag_id : parseInt(tag_id)
       },
     });
 
     res.status(200).json(items);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: 'Failed to fetch checklist items.' });
+    res.status(500).json({ message: 'Failed to fetch checklist items.'});
   }
 };
 
@@ -178,6 +178,4 @@ const getChecklistItemsForToday = async (req, res) => {
 };
 
 
-module.exports = { getAllItems, createItems,
-  getItemsByTemplate, getChecklistItemsForToday, saveOrUpdateChecklistResponse
-};
+module.exports = { getAllItems, createItems,getItemsByTemplate, getChecklistItemsForToday, saveOrUpdateChecklistResponse};

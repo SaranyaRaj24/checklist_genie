@@ -3,8 +3,8 @@ const {  getItemResponses, updateItemResponse } = require('../controllers/itemRe
 const router = express.Router();
 
 
-router.get('/getResponse',getItemResponses);
-router.post('/createResponse',updateItemResponse)
 
+router.get('/getResponse',getItemResponses );
+router.post('/createResponse',updateItemResponse );
 
 module.exports = router;

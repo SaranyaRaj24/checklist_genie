@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "./Browse.css";
@@ -13,6 +12,9 @@ function Browse() {
   const [modalContent, setModalContent] = useState(null);
   const [templates, setTemplates] = useState([]);
   const [items, setItems] = useState([]);
+  const [selectedDate, setSelectedDate] = useState("");
+  const [isTrue , setIsTrue] = useState(false);
+  const [tag_id, setTag_id] = useState('');
   const [completedChecklist, setCompletedChecklist] = useState(false);
   const navigate = useNavigate();
 
@@ -28,7 +30,7 @@ function Browse() {
     const fetchTemplates = async () => {
       try {
         const response = await axios.get(
-          `${process.env.REACT_APP_BACKEND_SERVER_URL}/template/getTemplate`,
+          `${process.env.REACT_APP_BACKEND_SERVER_URL}/template/getTemplatesByTags`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -44,31 +46,24 @@ function Browse() {
     fetchTemplates();
   }, [navigate]);
 
-  const handleView = async (name) => {
-    if (name === "Daily Checklist") {
-      setModalContent("Daily");
+  const handleView = async (tag_id) => {
+    try {
+      setTag_id(tag_id)
+      const token = localStorage.getItem("token");
+      const response = await axios.get(
+        `${process.env.REACT_APP_BACKEND_SERVER_URL}/items/getItemsByTemplate/${tag_id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      setItems(response.data);
+      setModalContent("Items");
       setIsModalOpen(true);
-    } else if (name === "Decision Coach") {
-      setModalContent("Decision");
-      setIsModalOpen(true);
-    } else {
-      try {
-        const token = localStorage.getItem("token");
-        const response = await axios.get(
-          `${process.env.REACT_APP_BACKEND_SERVER_URL}/items/getItems`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-            params: { templateName: name },
-          }
-        );
-        setItems(response.data);
-        setModalContent("Items");
-        setIsModalOpen(true);
-      } catch (error) {
-        console.error("Error fetching items:", error);
-      }
+      
+    } catch (error) {
+      console.error("Error fetching items:", error);
     }
   };
 
@@ -92,26 +87,68 @@ function Browse() {
 
   const handleYesNoChange = (index, value) => {
     const updatedItems = [...items];
-    updatedItems[index].response = value;
+    updatedItems[index].response = value === "Yes"  ? true : false; 
     setItems(updatedItems);
+    setIsTrue(true)
   };
-
-  const handleSubmitChecklist = () => {
-    setCompletedChecklist(true);
-    setTimeout(() => {
-      setCompletedChecklist(false);
-    }, 3000);
-  };
+  
 
   const handleActionClick = (index) => {
     const item = items[index];
-    if (item.response || item.numericValue) {
-      handleSubmitChecklist();
+
+    console.log(item,"kkkkkkkkkkkkkkkkkkkkkkkk")
+    
+    if (isTrue) {
+      handleSubmitChecklist(item);  
     } else {
       alert("Please select a response or enter a number before submitting.");
     }
   };
+  
+  const handleSubmitChecklist = async (item) => {
+    try {
+      const token = localStorage.getItem("token");
+  
+      const payload = {
+        status: item.response, 
+        comments: item.comments || null, 
+        checklist_template_linked_items_id: item.linkedItemId, 
+        user_assigned_checklist_template_id: 1,
+        template_version: item.templateVersionId, 
+        number_input: item.numericValue || null, 
+        selected_date: selectedDate,
+      };
+  
+      const response = await axios.post(
+        `${process.env.REACT_APP_BACKEND_SERVER_URL}/response/createResponse`,
+        payload,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+  
+      console.log("Response from server:", response);
+  
+      if (response.status === 200) {
+        alert("Checklist submitted successfully!");
+        setCompletedChecklist(true);
+        setTimeout(() => setCompletedChecklist(false), 3000);
+      }
+    } catch (error) {
+      console.error("Error submitting checklist:", error);
+      alert("Failed to submit checklist. Please try again.");
+    }
+  };
 
+
+  const handleDateChange = (e) => {
+    setSelectedDate(e.target.value);
+    console.log(`Selected date: ${e.target.value}`);
+  };
+
+ 
   return (
     <>
       <Sidebar />
@@ -152,9 +189,10 @@ function Browse() {
                 templates.map((template) => (
                   <div key={template.id} className="card">
                     <h3>{template.template_name}</h3>
+                    
                     <h3
                       className="view"
-                      onClick={() => handleView(template.template_name)}
+                      onClick={() =>      handleView(template.tag_id)}
                     >
                       View
                     </h3>
@@ -172,8 +210,20 @@ function Browse() {
                 <span className="close" onClick={handleCloseModal}>
                   &times;
                 </span>
+                
+                
                 {modalContent === "Items" && (
                   <div>
+                    <button>
+                  Date:{" "}
+                  <input
+                    type="date"
+                    value={selectedDate}
+                    onChange={handleDateChange}
+                    className="date-picker"
+                  />
+                </button>
+
                     <h3>Checklist Items</h3>
                     <table>
                       <thead>
@@ -211,29 +261,26 @@ function Browse() {
                                 />
                               ) : (
                                 <div>
-                                  <label>
-                                    <input
-                                      type="radio"
-                                      value="Yes"
-                                      name={`yesNo-${index}`}
-                                      onChange={() =>
-                                        handleYesNoChange(index, "Yes")
-                                      }
-                                    />{" "}
-                                    Yes
-                                  </label>
-                                  <label>
-                                    <input
-                                      type="radio"
-                                      value="No"
-                                      name={`yesNo-${index}`}
-                                      onChange={() =>
-                                        handleYesNoChange(index, "No")
-                                      }
-                                    />{" "}
-                                    No
-                                  </label>
-                                </div>
+                                <label>
+                                  <input
+                                    type="radio"
+                                    value="Yes"
+                                    name={`yesNo`}
+                                    onChange={() => handleYesNoChange(index, "Yes")}
+                                  />{" "}
+                                  Yes
+                                </label>
+                                <label>
+                                  <input
+                                    type="radio"
+                                    value="No"
+                                    name={`yesNo`}
+                                    // checked={item.response === false} 
+                                    onChange={() => handleYesNoChange(index, "No")}
+                                  />{" "}
+                                  No
+                                </label>
+                              </div>
                               )}
                             </td>
                             <td>
@@ -261,6 +308,7 @@ function Browse() {
                         ))}
                       </tbody>
                     </table>
+                   
                     <Button
                       style={{ backgroundColor: "#25274D" }}
                       variant="contained"

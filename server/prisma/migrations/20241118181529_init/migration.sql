@@ -26,10 +26,9 @@ CREATE TABLE `Organisation_Users` (
     `organisation_id` INTEGER NOT NULL,
     `user_id` INTEGER NOT NULL,
     `user_type` VARCHAR(191) NULL DEFAULT 'USER ',
-    `user_position` VARCHAR(191) NULL,
+    `user_position` ENUM('FULL_STACK_DEVELOPER', 'POWER_BI_DEVELOPER', 'SALES', 'HUMAN_RESOURCE', 'TESTING', 'SALESFORCE') NULL,
     `created_at` DATETIME(3) NULL,
 
-    UNIQUE INDEX `Organisation_Users_organisation_id_user_id_key`(`organisation_id`, `user_id`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
@@ -38,10 +37,9 @@ CREATE TABLE `Organisation_User_position` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `organisation_user_id` INTEGER NOT NULL,
     `user_id` INTEGER NULL,
-    `user_position` VARCHAR(191) NOT NULL,
+    `user_position` ENUM('FULL_STACK_DEVELOPER', 'POWER_BI_DEVELOPER', 'SALES', 'HUMAN_RESOURCE', 'TESTING', 'SALESFORCE') NOT NULL,
     `created_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
 
-    UNIQUE INDEX `Organisation_User_position_organisation_user_id_user_id_key`(`organisation_user_id`, `user_id`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
@@ -53,7 +51,8 @@ CREATE TABLE `tags` (
     `organisation_user_id` INTEGER NOT NULL,
     `created_at` DATETIME(3) NOT NULL,
     `recurrent` BOOLEAN NOT NULL DEFAULT false,
-    `user_position` VARCHAR(191) NOT NULL,
+    `user_position` ENUM('FULL_STACK_DEVELOPER', 'POWER_BI_DEVELOPER', 'SALES', 'HUMAN_RESOURCE', 'TESTING', 'SALESFORCE') NOT NULL,
+    `type` VARCHAR(191) NULL,
 
     UNIQUE INDEX `tags_tag_name_key`(`tag_name`),
     PRIMARY KEY (`id`)
@@ -70,6 +69,7 @@ CREATE TABLE `checklist_template` (
     `created_at` DATETIME(3) NOT NULL,
     `organisation_id` INTEGER NOT NULL,
     `current_version_id` INTEGER NULL,
+    `Instructions` VARCHAR(191) NULL,
 
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
@@ -81,7 +81,6 @@ CREATE TABLE `checklist_template_version` (
     `organisation_user_id` INTEGER NOT NULL,
     `created_at` DATETIME(3) NOT NULL,
 
-    UNIQUE INDEX `checklist_template_version_checklist_template_id_key`(`checklist_template_id`),
     PRIMARY KEY (`version_id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
@@ -114,6 +113,7 @@ CREATE TABLE `checklist_items` (
     `organisation_user_id` INTEGER NOT NULL,
     `organisation_id` INTEGER NOT NULL,
     `Instructions` VARCHAR(191) NOT NULL,
+    `input_type` VARCHAR(191) NULL,
     `status` ENUM('PENDING', 'COMPLETED', 'IN_PROGRESS', 'NOT_STARTED') NOT NULL DEFAULT 'COMPLETED',
 
     PRIMARY KEY (`id`)
@@ -132,6 +132,7 @@ CREATE TABLE `checklist_item_response` (
     `number_input` INTEGER NULL,
     `text_input` VARCHAR(191) NULL,
     `boolean_input` BOOLEAN NULL,
+    `responded_at` DATETIME(3) NOT NULL,
 
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;

@@ -14,7 +14,6 @@ passport.use(
     async function (request, accessToken, refreshToken, profile, done) {
       try {
         const email = profile.email;
-        const { user_position } = request.body;
 
         const user = await prisma.user.upsert({
           where: { email: email },
@@ -63,7 +62,6 @@ passport.use(
               id: org_user.id, 
             },
             data: {
-              user_position,
               created_at: new Date(),
             },
           });
@@ -72,7 +70,6 @@ passport.use(
             data: {
               organisation_id: organisation.id,
               user_id: user.id,
-              user_position,
               created_at: new Date(),
             },
           });

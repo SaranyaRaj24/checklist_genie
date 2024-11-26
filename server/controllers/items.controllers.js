@@ -11,11 +11,59 @@ const getAllItems = async (req, res) => {
   }
 };
 
+// const createItems = async (req, res) => {
+//   try {
+//     const { checklist_name, tag_id, Instructions, template_version_id } =
+//       req.body;
+//     const { organisation_user_id, organisation_id } = req.user;
+
+//     const newItem = await prisma.checklist_items.create({
+//       data: {
+//         checklist_name,
+//         tag_id,
+//         organisation_user_id,
+//         organisation_id,
+//         Instructions,
+//       },
+//     });
+
+//     const templateVersion = await prisma.checklist_template_version.findFirst({
+//       where: {
+//         version_id: template_version_id,
+//       },
+//       orderBy: { created_at: "desc" },
+//     });
+
+//     const linkedItems = await prisma.checklist_template_linked_items.create({
+//       data: {
+//         template_version_id: templateVersion.version_id,
+//         checklist_item_id: newItem.id,
+//         created_at: new Date(),
+//       },
+//     });
+//     res.status(200).json({ newItem, linkedItems });
+//   } catch (error) {
+//     console.log(error);
+//     res.status(400).json({ error: "error in " });
+//   }
+// };
+
 const createItems = async (req, res) => {
   try {
     const { checklist_name, tag_id, Instructions, template_version_id } =
       req.body;
     const { organisation_user_id, organisation_id } = req.user;
+
+    
+    let input_type = "String"; 
+if (
+  checklist_name.toLowerCase().includes("number") ||
+  checklist_name.toLowerCase().startsWith("no of")
+) {
+  input_type = "Number";
+}
+
+
 
     const newItem = await prisma.checklist_items.create({
       data: {
@@ -24,6 +72,7 @@ const createItems = async (req, res) => {
         organisation_user_id,
         organisation_id,
         Instructions,
+        input_type, 
       },
     });
 
@@ -41,13 +90,13 @@ const createItems = async (req, res) => {
         created_at: new Date(),
       },
     });
+
     res.status(200).json({ newItem, linkedItems });
   } catch (error) {
-    console.log(error);
-    res.status(400).json({ error: "error in " });
+    console.error(error);
+    res.status(400).json({ error: "Error creating checklist item." });
   }
 };
-
 
 const getItemsByTemplate = async (req, res) => {
   try {

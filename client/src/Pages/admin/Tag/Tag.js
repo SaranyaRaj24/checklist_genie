@@ -9,8 +9,8 @@ const Tag = () => {
   const [tagName, setTagName] = useState('');
   const [description, setDescription] = useState('');
   const [frequency, setFrequency] = useState('');
-  const [type, setType] = useState('');
-  const [applicableTeam, setApplicableTeam] = useState('');
+  // const [type, setType] = useState('');
+  const [applicableTeam, setApplicableTeam] = useState([]);
 
   const handleDelete = () => {
     setDeleted(true);
@@ -28,7 +28,7 @@ const Tag = () => {
         tag_name: tagName,
         description,
         frequency,
-        type,
+        // type,
         user_position: applicableTeam,  
       },
       {
@@ -69,10 +69,10 @@ const Tag = () => {
               <label>Frequency</label>
               <input type="text" value={frequency} onChange={(e) => setFrequency(e.target.value)} />
             </div>
-            <div className="form-row">
+            {/* <div className="form-row">
               <label>Type</label>
               <input type="text" value={type} onChange={(e) => setType(e.target.value)} />
-            </div>
+            </div> */}
             <div className="form-row">
               <label>Applicable Team</label>
               <input type="text" value={applicableTeam} onChange={(e) => setApplicableTeam(e.target.value)} />

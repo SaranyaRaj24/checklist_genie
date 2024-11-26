@@ -1,5 +1,5 @@
 const express = require('express')
-const {PrismaClient} = require('@prisma/client')
+const {PrismaClient, userPosition} = require('@prisma/client')
 const prisma = new PrismaClient();
 
 const getAllTags = async (req, res) => {
@@ -53,18 +53,18 @@ const createTags = async (req, res) => {
 
 const getAllTagsPosition = async (req, res) => {
     try {
-
         const tagPosition = await prisma.tags.findMany({
             where: {
                 user_position: {
                     in: [
-                        "testing", 
-                        "Sales", 
-                        "Full Stack", 
-                        "Power BI",
-                        "All"
-                    ], 
-                },
+                        "FULL_STACK_DEVELOPER",
+                        "POWER_BI_DEVELOPER",
+                        "SALES",
+                        "HUMAN_RESOURCE",
+                        "TESTING",
+                        "SALESFORCE"
+                    ]
+                }
             },
             include: {
                 ChecklistTemplate: {
@@ -73,48 +73,31 @@ const getAllTagsPosition = async (req, res) => {
                             include: {
                                 ChecklistTemplateLinkedItems: {
                                     include: {
-                                        ChecklistItems: true, 
-                                    },
-                                },
-                            },
-                        },
-                    },
-                },
-            },
+                                        ChecklistItems: true
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         });
 
-
-
-
-        const mapTags = tagPosition.map(tag => ({
-            Tag_id : tag.id,
-            Tag_name : tag.tag_name,
-            user_position : tag.user_position,
-            Templates : tag.ChecklistTemplate.map(template => ({
-                Template_id : template.id,
-                Template_name : template.template_name,
-                tag_id : template.tag_id,
-                ChecklistItems : template.TemplateVersion.ChecklistTemplateLinkedItems.map(item => ({
-                    id : item.ChecklistItems.id,
-                    Item_name : item.ChecklistItems.checklist_name,
-                }))
-            }))
-           }))
-    
-                 res.status(200).json(mapTags)
- } catch (error) {
-        console.error('Error fetching tags for position:', error);
-        res.status(500).json({ error: 'Failed to fetch tags for position' });
+        res.json(tagPosition);
+    } catch (error) {
+        console.error("Error fetching tags for position:", error);
+        res.status(500).json({ error: "Failed to fetch tags for position." });
     }
 };
 
+
 const getTagsForPosition = async (req, res) => {
     try {
-        const { user_position } = req.body; 
+        const { userPosition } = req.body; 
 
         const positionTags = await prisma.tags.findMany({
             where: {
-                user_position: user_position 
+                user_position: userPosition
             },
             include: {
                 ChecklistTemplate: {
@@ -132,7 +115,7 @@ const getTagsForPosition = async (req, res) => {
                 },
             },
         });
-        // res.status(200).json(positionTags)
+       
 
         const mapTags = positionTags.map(tag => ({
             Tag_id : tag.id,
@@ -145,7 +128,7 @@ const getTagsForPosition = async (req, res) => {
                 ChecklistItems : template.TemplateVersion.ChecklistTemplateLinkedItems.map(item => ({
                     id : item.ChecklistItems.id,
                     Item_name : item.ChecklistItems.checklist_name,
-                    input_type : item.ChecklistItems.Input_type
+                    input_type : item.ChecklistItems.input_type
                 }))
             }))
            }))
@@ -160,13 +143,26 @@ const getTagsByUserPosition = async (req, res) => {
     try {
       const { organisation_user_id } = req.user;
   
-      const tags = await prisma.tags.findMany({
-        where: {
-          organisation_user_id: organisation_user_id,
+      const getPositionTags = await prisma.organisation_User_position.findMany({
+        where : {
+            organisation_user_id : organisation_user_id
         },
-      });
+        select : {
+            user_position : true
+        }
+      })
+
+      const user_position = getPositionTags.map((pos) => pos.user_position)
+
+      const tags = await prisma.tags.findMany({
+        where : {
+            user_position : {
+                in : user_position
+            }
+        }
+      })
   
-      res.status(200).json(tags);
+      res.status(200).json({message : "Tags fetched",tags});
     } catch (error) {
       console.error(error);
       res.status(500).json({ message: 'Failed to fetch tags.' });

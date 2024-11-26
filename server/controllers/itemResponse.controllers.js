@@ -56,7 +56,7 @@ const updateItemResponse = async (req, res) => {
         user_assigned_checklist_template_id: 1,
         template_version : templateVersion.version_id,
         selected_date : dateTime,
-        responded_at: new Date(),
+        created_at: new Date(),
       },
     });
 

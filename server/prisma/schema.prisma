@@ -48,7 +48,6 @@ model Organisation_Users{
   organisation_id Int
   user_id  Int 
   user_type String? @default("USER ")
-  user_position userPosition?
   created_at DateTime?
   user User @relation(fields: [user_id],references: [id])
   organisation Organisation @relation(fields: [organisation_id], references:[id])
@@ -78,10 +77,8 @@ model tags {
   created_at DateTime
   recurrent  Boolean @default(false)
   user_position userPosition
-  type String?
   OrganisationUsers Organisation_Users? @relation(fields: [organisation_user_id],references: [id]) 
   ChecklistTemplate checklist_template[] 
-
 }
 
 
@@ -95,7 +92,6 @@ model checklist_template{
   created_at DateTime
   organisation_id Int
   current_version_id Int?
-  Instructions String?
   Tags tags @relation(fields: [tag_id], references: [id])
   OrganisationUsers Organisation_Users? @relation(fields: [organisation_user_id],references: [id]) 
   Organisation Organisation? @relation(fields: [organisation_id], references: [id])
@@ -145,7 +141,7 @@ model checklist_items {
   organisation_user_id Int
   organisation_id Int
   Instructions String
-  input_type String?
+  input_type String? 
   ChecklistTemplateLinkedItems checklist_template_linked_items[]
   items1 checklist_template[]
 }

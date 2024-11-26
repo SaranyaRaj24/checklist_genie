@@ -78,7 +78,6 @@ const createTemplate = async (req, res) => {
 const getTemplatesByTags  = async (req, res) => {
   try {
 
-    console.log("Inside theeeeee get templste by tags")
     const { organisation_user_id } = req.user;
     console.log( "organisation user id : " ,organisation_user_id)
 
@@ -90,7 +89,6 @@ const getTemplatesByTags  = async (req, res) => {
         Tags: true, 
       },
     });
-       console.log(templates,"No templates")
     res.status(200).json(templates);
   } catch (error) {
     console.error(error);
@@ -120,4 +118,48 @@ const getTagsbyTemplates = async (req,res) => {
 }
 
 
-module.exports = { getAllTemplate, createTemplate, getTemplatesByTags,getTagsbyTemplates };
+const getTemplatesForUserPositions = async (req, res) => {
+  try {
+    const { organisation_user_id } = req.user;
+
+    const userPositionss = await prisma.organisation_User_position.findMany({
+      where: { organisation_user_id },
+      select: { user_position: true },
+    });
+
+    const user_position = userPositionss.map((pos) => pos.user_position);
+
+    if (user_position.length === 0) {
+      return res.status(404).json({ message: 'No positions found for this user.' });
+    }
+
+    const tags = await prisma.tags.findMany({
+      where: { user_position: { in: user_position } },
+      select: { 
+        id: true,
+        tag_name : true
+       },
+    });
+
+    const tagIds = tags.map((tag) => tag.id);
+
+    if (tagIds.length === 0) {
+      return res.status(404).json({ message: 'No tags found for the user positions.' });
+    }
+
+    const templates = await prisma.checklist_template.findMany({
+      where: { tag_id: { in: tagIds } },
+      
+    });
+
+   
+
+    res.status(200).json({templates,tags});
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Failed to fetch templates.' });
+  }
+};
+
+
+module.exports = { getAllTemplate, createTemplate, getTemplatesByTags,getTagsbyTemplates,getTemplatesForUserPositions };

@@ -10,6 +10,7 @@ const itemRoutes = require('./routes/items.routes')
 // const linkedRoutes = require('./routes/linkedItems.routes');
 const responseRoutes = require('./routes/itemResponse.routes');
 const positionRoutes = require('./routes/userPosition.routes');
+const userTypeRoutes = require('./routes/userTypes.routes');
 const cors = require('cors');
 const { authentication } = require('./utils/jwt');
 const app = express();
@@ -51,6 +52,7 @@ app.use('/response',responseRoutes);
 
 
 app.use('/position',positionRoutes);
+app.use('/type',userTypeRoutes);
 
 app.listen(port, () => {
   console.log('Server is running on port ' + port);

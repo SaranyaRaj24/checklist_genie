@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "../../admin/Checklist/Checklist.css";
@@ -15,10 +16,12 @@ const Checklist = () => {
 
   const [tags, setTags] = useState([]);
   const [tag_id, setTag_id] = useState(null);
-  const [tag_name,setTag_name] = useState("");
-  const [checklist_name,setChecklist_name] = useState("");
-  const [Instructions,setInstructions] = useState("");
-  
+  const [tag_name, setTag_name] = useState("");
+  const [checklist_name, setChecklist_name] = useState("");
+  const [Instructions, setInstructions] = useState("");
+  const [dataType, setDataType] = useState(""); 
+
+  const priorities = ["High", "Medium", "Low"];
 
   const handleShared = () => {
     setDropdownVisible(true);
@@ -62,7 +65,6 @@ const Checklist = () => {
     "Aswathi",
     "Selva",
   ];
-  const priorities = ["High", "Medium", "Low"];
 
   const handleAddItemsClick = async () => {
     try {
@@ -76,7 +78,7 @@ const Checklist = () => {
         `${process.env.REACT_APP_BACKEND_SERVER_URL}/template/createTemplate`,
         {
           template_name,
-          tag_id : parseInt(tag_id),
+          tag_id: parseInt(tag_id),
           tag_name,
         },
         {
@@ -85,12 +87,12 @@ const Checklist = () => {
           },
         }
       );
-      alert("Template Created Successfully!!!")
+      alert("Template Created Successfully!!!");
       console.log("Template Created:", template.data);
       setUpdate(true);
     } catch (error) {
       console.log("Error saving template:", error);
-      alert("No Templates created!!")
+      alert("No Templates created!!");
     }
 
     setIsModalOpen(true);
@@ -109,7 +111,7 @@ const Checklist = () => {
     storeTokenNew();
 
     const storedToken = localStorage.getItem("token");
-    
+
     if (storedToken) {
       console.log("Token retrieved:", storedToken);
     } else {
@@ -138,8 +140,6 @@ const Checklist = () => {
     getTags();
   }, []);
 
-
-
   const handleSelectName = (e) => {
     const selectedTagName = e.target.value;
     setTag_name(selectedTagName);
@@ -149,31 +149,30 @@ const Checklist = () => {
       setTag_id(selectedTag.id);
     }
   };
-  const handleSaveNewItem = async () => {
-    
 
+  const handleSaveNewItem = async () => {
     try {
-      const token = localStorage.getItem('token')
-      const item = await axios.post(`${process.env.REACT_APP_BACKEND_SERVER_URL}/items/createItems`,
+      const token = localStorage.getItem("token");
+      const item = await axios.post(
+        `${process.env.REACT_APP_BACKEND_SERVER_URL}/items/createItems`,
         {
           checklist_name,
           Instructions,
-          tag_id :parseInt(tag_id),
-          
+          tag_id: parseInt(tag_id),
+          data_type: dataType, 
         },
         {
           headers: {
-          Authorization : `Bearer ${token}`
-        },
-      }
+            Authorization: `Bearer ${token}`,
+          },
+        }
       );
-      alert("Items created Successfully")
-      console.log("item", item.data)
+      alert("Items created Successfully");
+      console.log("item", item.data);
     } catch (error) {
-      console.log(error)
-      alert("No items created")
+      console.log(error);
+      alert("No items created");
     }
-    
   };
 
   return (
@@ -186,27 +185,24 @@ const Checklist = () => {
 
         <div className="content">
           <div className="ready-check">
-            Checklist Name :
+            Checklist Name:
             <input
               type="text"
               value={template_name}
               onChange={(e) => setTemplate_name(e.target.value)}
             />
           </div>
-
-         
-
+<br></br>
           <div className="tag-dropdown">
             <label>Select Tag:</label>
             <select value={tag_name} onChange={handleSelectName}>
-    <option value="">Select a tag Name</option>
-    {tags.map((tag) => (
-      <option key={tag.id} value={tag.tag_name}>
-        {tag.tag_name}
-        
-      </option>
-    ))}
-  </select>
+              <option value="">Select a tag Name</option>
+              {tags.map((tag) => (
+                <option key={tag.id} value={tag.tag_name}>
+                  {tag.tag_name}
+                </option>
+              ))}
+            </select>
           </div>
 
           <button className="add-position" onClick={handleAddItemsClick}>
@@ -240,7 +236,7 @@ const Checklist = () => {
             <div className="modal-content">
               <h2>Checklist Name</h2>
               <div className="first-fill">
-                <button>
+                <button style={{marginRight:"10rem"}}>
                   Date:{" "}
                   <input
                     type="date"
@@ -250,7 +246,7 @@ const Checklist = () => {
                   />
                 </button>
 
-                <button
+                <button style={{marginRight:"10rem"}}
                   onClick={handlePriorityClick}
                   className="priority-label"
                 >
@@ -282,11 +278,20 @@ const Checklist = () => {
                 <textarea
                   value={Instructions}
                   onChange={(e) => setInstructions(e.target.value)}
-                />
+                /><br></br>
+                <label>Data Type:</label>
+                <select
+                  value={dataType}
+                  onChange={(e) => setDataType(e.target.value)}
+                >
+                  <option value="">Select Data Type</option><br></br>
+                  <option value="Boolean">Boolean</option>
+                  <option value="Numeric">Numeric</option>
+                </select>
               </div>
-
-              <button onClick={handleSaveNewItem}>Save</button>
-              <button onClick={handleShared}>Assign to</button>
+<br></br>
+              <button style={{backgroundColor:"#25274D"}} onClick={handleSaveNewItem}>Save</button>
+              {/* <button style={{backgroundColor:"#25274D"}} onClick={handleShared}>Assign to</button> */}
             </div>
           </div>
         )}

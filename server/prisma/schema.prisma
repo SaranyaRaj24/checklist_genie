@@ -15,6 +15,7 @@ enum userPosition {
   HUMAN_RESOURCE
   TESTING
   SALESFORCE
+  ADMIN
 }
 
 enum priority {
@@ -23,7 +24,10 @@ enum priority {
   LOW
 }
 
-
+enum inputType {
+  Boolean
+  Numeric
+}
 
 model User {
   id      Int      @id @default(autoincrement())
@@ -48,6 +52,7 @@ model Organisation_Users{
   organisation_id Int
   user_id  Int 
   user_type String? @default("USER ")
+  user_position String?
   created_at DateTime?
   user User @relation(fields: [user_id],references: [id])
   organisation Organisation @relation(fields: [organisation_id], references:[id])
@@ -141,7 +146,7 @@ model checklist_items {
   organisation_user_id Int
   organisation_id Int
   Instructions String
-  input_type String? 
+  input_type inputType
   ChecklistTemplateLinkedItems checklist_template_linked_items[]
   items1 checklist_template[]
 }

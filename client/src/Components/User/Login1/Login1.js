@@ -108,10 +108,11 @@ const Login1 = () => {
     'SALESFORCE',
     'TESTING',
     'HUMAN_RESOURCE',
+    'ADMIN'
   ];
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <div>Loading...!</div>;
   }
 
   return (

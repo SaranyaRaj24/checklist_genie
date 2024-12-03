@@ -1,87 +1,108 @@
-*{
-    margin: 0;
-    padding: 0;
+/* General Styling */
+.home-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-size: cover;
+  background-position: center;
+  font-family: 'Arial', sans-serif;
+  color: #fff;
+  overflow: hidden;
 }
 
-
-.name{
-        background-color: #25274D;
-        height: 4rem;
-        width: 100%;
-        position: fixed;
+/* Centered Container */
+.signin-section {
+  background: rgba(0, 0, 0, 0.5); /* Semi-transparent black background */
+  padding: 3rem 4rem;
+  border-radius: 15px;
+  text-align: center;
+  box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(10px);
+  max-width: 500px;
+  width: 100%;
 }
 
-  
-.img{
-    position: fixed;
-    height:50px;
-    margin-left: 4rem;
-    top: 0.5rem;
+/* Headline & Subtext */
+.welcome-message {
+  font-size: 2.5rem;
+  font-weight: bold;
+  margin-bottom: 1.5rem;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: black;
+  font-weight: 800;
 }
 
-
-.hom{
-    margin-top: 20px;
-    text-align: right;
-    padding-right: 4rem;
-    font-weight: bold;
-    color: white;
-}
-
-.sty{
-    background-color: #f9f9f9;          
-    border-radius: 10px;     
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); 
-    width: 25rem;
-    padding-right: 2rem;
-    padding-left: 2rem;
-    padding-bottom: 1rem;
-    margin-top: 5rem;
-    margin-left: 35rem;
-    height: 10rem;
-    padding-top: 2rem;
-    display: grid;
-    text-align: center;
+.welcome-subtext {
+  font-size: 1.2rem;
+  margin-bottom: 2.5rem;
+  font-weight: 500;
+  color: whitesmoke;
+  font-style: italic;
 
 }
-  
-.ggg{
-    
-    height: 100vh;
-    width: 96rem;
-    background-color: #AAABB8;
+
+/* Button Section */
+.signin-buttons {
+  display: flex;
+  justify-content: space-between; /* Align buttons side by side */
+  gap: 20px; /* Space between the buttons */
+  flex-wrap: wrap; /* Allow wrapping on small screens */
+  margin-top: 20px;
 }
 
-.signing{
-    background-color: #ffffff;
-    border-radius: 5rem;
-    width: 20rem;
-    height: 2rem;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); 
-    display: flex;
-    justify-items: center;
-    text-align: center;
-    justify-content: center;
-    padding-top: 1rem;
-    font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
-    font-size: 1.1rem;
-    font-weight:bolder;
-    color: #25274D;
-    margin-left: 2.1rem;
-    cursor: pointer;
+/* General Button Styling */
+.signin-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 15px 25px;
+  font-size: 1.1rem;
+  border-radius: 50px;
+  border: none;
+  cursor: pointer;
+  width: 220px;
+  transition: all 0.3s ease;
+  letter-spacing: 1px;
+  font-weight: 500;
+  box-shadow: 0px 10px 15px rgba(0, 0, 0, 0.2);
+  align-items: center; /* Center the content in button */
 }
 
-.signing:hover{
-    
-    background-color: #e6e1e1;
-    
+.signin-button:hover {
+  transform: translateY(-4px);
+  box-shadow: 0px 20px 30px rgba(0, 0, 0, 0.3);
 }
 
-.use{
-    color: rgb(87, 83, 83);
+.signin-button-google {
+  background: #fff;
+  color: #4285f4;
+  font-weight: 600;
+  border: 1px solid #4285f4;
 }
 
-.genie{
-    font-weight: bold;
-    font-size: 1.5rem;
+.signin-button-google:hover {
+  background: #f1f1f1;
+  color: #4285f4;
+}
+
+.signin-button-microsoft {
+  background: #0069b7;
+  color: white;
+  font-weight: 600;
+  border: none;
+  position: relative;
+}
+
+.signin-button-microsoft:hover {
+  background: #005b96;
+  transform: translateY(-4px);
+}
+
+/* Microsoft Button Logo */
+.microsoft-logo {
+  height : 30px;
+  width: 70px; /* Adjust size of logo */
+  margin-right: 10px; /* Space between logo and text */
 }

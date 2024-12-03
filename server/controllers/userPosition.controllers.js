@@ -25,38 +25,35 @@ const getUserPosition = async (req,res) => {
   
   
 
-  const createUserPosition = async (req, res) => {
-    try {
+const createUserPosition = async (req, res) => {
+  try {
       const { user_position } = req.body; 
-      const { organisation_user_id,user_id } = req.user; 
-  
+      const { organisation_user_id, user_id } = req.user; 
+
       if (!Array.isArray(user_position) || user_position.length === 0) {
-        return res.status(400).json({ error: 'userPositions must be a non-empty array' });
+          return res.status(400).json({ error: "userPositions must be a non-empty array" });
       }
-  
+
       const positionsToAdd = user_position.map((userPosition) => ({
-        organisation_user_id,
-        user_id,
-        user_position: userPosition, 
+          organisation_user_id,
+          user_id,
+          user_position: userPosition,
       }));
-  
+
       const createdPositions = await prisma.organisation_User_position.createMany({
-        
-        data: positionsToAdd,
-        
+          data: positionsToAdd,
       });
-  
+
       res.status(201).json({
-        message: 'User positions added successfully.',
-        createdPositions
-           
+          message: "User positions added successfully.",
+          createdPositions,
       });
-    } catch (error) {
-      console.error(error);
-      res.status(500).json({ error: 'Something went wrong' });
-    }
-  };
-  
+  } catch (error) {
+      console.error("Error in createUserPosition:", error);
+      res.status(500).json({ error: "Something went wrong" });
+  }
+};
+
 
 
 module.exports = {getUserPosition,createUserPosition}

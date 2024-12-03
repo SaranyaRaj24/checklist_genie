@@ -1,5 +1,5 @@
 const express = require("express");
-const { PrismaClient } = require("@prisma/client");
+const { PrismaClient, inputType } = require("@prisma/client");
 const prisma = new PrismaClient();
 
 const getAllItems = async (req, res) => {
@@ -50,18 +50,13 @@ const getAllItems = async (req, res) => {
 
 const createItems = async (req, res) => {
   try {
-    const { checklist_name, tag_id, Instructions, template_version_id } =
+    const { checklist_name, tag_id, Instructions, template_version_id,input_type } =
       req.body;
     const { organisation_user_id, organisation_id } = req.user;
 
     
-    let input_type = "String"; 
-if (
-  checklist_name.toLowerCase().includes("number") ||
-  checklist_name.toLowerCase().startsWith("no of")
-) {
-  input_type = "Number";
-}
+    
+
 
 
 

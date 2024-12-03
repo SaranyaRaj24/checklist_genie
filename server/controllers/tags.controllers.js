@@ -33,7 +33,6 @@ const createTags = async (req, res) => {
     try {
         const { tag_name, user_position, description } = req.body;
         const { organisation_user_id } = req.user; 
-        
         const newTag = await prisma.tags.create({
             data: {
                 tag_name,
@@ -172,8 +171,7 @@ const getTagsByUserPosition = async (req, res) => {
 
 
 
-module.exports = { getAllTags, createTags, getAllTagsPosition,getTagsForPosition, 
-    getTagsByUserPosition};
+module.exports = { getAllTags, createTags, getAllTagsPosition,getTagsForPosition, getTagsByUserPosition};
 
 
 

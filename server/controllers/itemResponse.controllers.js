@@ -18,9 +18,8 @@ const getItemResponses = async (req, res) => {
 
 const updateItemResponse = async (req, res) => {
   try {
-    const { status,comments,checklist_template_linked_items_id,template_version,selected_date } = req.body;
+    const { status,comments,checklist_template_linked_items_id,template_version,selected_date,input} = req.body;
      
-   console.log("req.body ", status, comments)
 
 
     const { organisation_user_id } = req.user;
@@ -31,14 +30,12 @@ const updateItemResponse = async (req, res) => {
     }
     
    })
-   console.log("Linked Items ID ",linkedItems)
 
     const templateVersions = await prisma.checklist_template_version.findMany({
       where: {
         version_id : template_version
       }
     })
-    console.log("Template Version ID ", templateVersions)
 
   
     const linkedItem = linkedItems[0];
@@ -57,6 +54,7 @@ const updateItemResponse = async (req, res) => {
         template_version : templateVersion.version_id,
         selected_date : dateTime,
         created_at: new Date(),
+        input
       },
     });
 

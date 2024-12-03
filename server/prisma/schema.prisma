@@ -155,15 +155,15 @@ model checklist_items {
 model checklist_item_response {
   id Int @id @default(autoincrement())
   status Boolean?
-  comments String
-  organisation_user_id Int
-  checklist_template_linked_items_id Int
-  user_assigned_checklist_template_id Int
-  template_version Int
-  selected_date String
-  created_at DateTime
-  input String
-  OrganisationUserChecklistItemResponse Organisation_Users @relation(fields: [organisation_user_id],references: [id])
-  ChecklistTemplateLinkedItems checklist_template_linked_items @relation(fields: [checklist_template_linked_items_id],references: [id])
-  ChecklistTemplateVersion checklist_template_version @relation(fields: [template_version],references: [version_id])
+  comments String?
+  organisation_user_id Int?
+  checklist_template_linked_items_id Int?
+  user_assigned_checklist_template_id Int?
+  template_version Int?
+  selected_date String?
+  created_at DateTime?
+  input String?
+  OrganisationUserChecklistItemResponse Organisation_Users? @relation(fields: [organisation_user_id],references: [id])
+  ChecklistTemplateLinkedItems checklist_template_linked_items? @relation(fields: [checklist_template_linked_items_id],references: [id])
+  ChecklistTemplateVersion checklist_template_version? @relation(fields: [template_version],references: [version_id])
 }

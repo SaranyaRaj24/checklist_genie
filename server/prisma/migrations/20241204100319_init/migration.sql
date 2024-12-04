@@ -37,7 +37,7 @@ CREATE TABLE `Organisation_User_position` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `organisation_user_id` INTEGER NOT NULL,
     `user_id` INTEGER NULL,
-    `user_position` ENUM('FULL_STACK_DEVELOPER', 'POWER_BI_DEVELOPER', 'SALES', 'HUMAN_RESOURCE', 'TESTING', 'SALESFORCE', 'ADMIN', 'PUBLIC') NOT NULL,
+    `user_position` ENUM('FULL_STACK_DEVELOPER', 'POWER_BI_DEVELOPER', 'SALES', 'HUMAN_RESOURCE', 'TESTING', 'SALESFORCE', 'PUBLIC') NOT NULL,
     `created_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
 
     PRIMARY KEY (`id`)
@@ -51,7 +51,7 @@ CREATE TABLE `tags` (
     `organisation_user_id` INTEGER NOT NULL,
     `created_at` DATETIME(3) NOT NULL,
     `recurrent` BOOLEAN NOT NULL DEFAULT false,
-    `user_position` ENUM('FULL_STACK_DEVELOPER', 'POWER_BI_DEVELOPER', 'SALES', 'HUMAN_RESOURCE', 'TESTING', 'SALESFORCE', 'ADMIN', 'PUBLIC') NOT NULL,
+    `user_position` ENUM('FULL_STACK_DEVELOPER', 'POWER_BI_DEVELOPER', 'SALES', 'HUMAN_RESOURCE', 'TESTING', 'SALESFORCE', 'PUBLIC') NOT NULL,
 
     UNIQUE INDEX `tags_tag_name_key`(`tag_name`),
     PRIMARY KEY (`id`)
@@ -120,14 +120,14 @@ CREATE TABLE `checklist_items` (
 CREATE TABLE `checklist_item_response` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `status` BOOLEAN NULL,
-    `comments` VARCHAR(191) NOT NULL,
-    `organisation_user_id` INTEGER NOT NULL,
-    `checklist_template_linked_items_id` INTEGER NOT NULL,
-    `user_assigned_checklist_template_id` INTEGER NOT NULL,
-    `template_version` INTEGER NOT NULL,
-    `selected_date` VARCHAR(191) NOT NULL,
-    `created_at` DATETIME(3) NOT NULL,
-    `input` VARCHAR(191) NOT NULL,
+    `comments` VARCHAR(191) NULL,
+    `organisation_user_id` INTEGER NULL,
+    `checklist_template_linked_items_id` INTEGER NULL,
+    `user_assigned_checklist_template_id` INTEGER NULL,
+    `template_version` INTEGER NULL,
+    `selected_date` VARCHAR(191) NULL,
+    `created_at` DATETIME(3) NULL,
+    `input` VARCHAR(191) NULL,
 
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
@@ -187,13 +187,13 @@ ALTER TABLE `checklist_template_owners` ADD CONSTRAINT `checklist_template_owner
 ALTER TABLE `checklist_template_owners` ADD CONSTRAINT `checklist_template_owners_organisation_user_id_fkey` FOREIGN KEY (`organisation_user_id`) REFERENCES `Organisation_Users`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `checklist_item_response` ADD CONSTRAINT `checklist_item_response_organisation_user_id_fkey` FOREIGN KEY (`organisation_user_id`) REFERENCES `Organisation_Users`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `checklist_item_response` ADD CONSTRAINT `checklist_item_response_organisation_user_id_fkey` FOREIGN KEY (`organisation_user_id`) REFERENCES `Organisation_Users`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `checklist_item_response` ADD CONSTRAINT `checklist_item_response_checklist_template_linked_items_id_fkey` FOREIGN KEY (`checklist_template_linked_items_id`) REFERENCES `checklist_template_linked_items`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `checklist_item_response` ADD CONSTRAINT `checklist_item_response_checklist_template_linked_items_id_fkey` FOREIGN KEY (`checklist_template_linked_items_id`) REFERENCES `checklist_template_linked_items`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `checklist_item_response` ADD CONSTRAINT `checklist_item_response_template_version_fkey` FOREIGN KEY (`template_version`) REFERENCES `checklist_template_version`(`version_id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `checklist_item_response` ADD CONSTRAINT `checklist_item_response_template_version_fkey` FOREIGN KEY (`template_version`) REFERENCES `checklist_template_version`(`version_id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `_checklist_itemsTochecklist_template` ADD CONSTRAINT `_checklist_itemsTochecklist_template_A_fkey` FOREIGN KEY (`A`) REFERENCES `checklist_items`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;

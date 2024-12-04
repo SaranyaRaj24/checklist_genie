@@ -15,7 +15,6 @@ enum userPosition {
   HUMAN_RESOURCE
   TESTING
   SALESFORCE
-  ADMIN
   PUBLIC
 }
 

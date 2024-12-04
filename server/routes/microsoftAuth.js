@@ -109,17 +109,12 @@ passport.use(
 
 router.get("/", passport.authenticate("microsoft", { prompt: "select_account" }));
 
-router.get(
-    "/callback",
-    passport.authenticate("microsoft", { failureRedirect: "/login" }),
+router.get( "/callback", passport.authenticate("microsoft", { failureRedirect: "/login" }),
     (req, res) => {
         try {
-            const user = req.user;
-
-            const token = generateToken(user);
-
-
-            res.redirect(`${process.env.CLIENT_URL}/user/Login1/?token=${token}`);
+           const user = req.user;
+           const token = generateToken(user);
+           res.redirect(`${process.env.CLIENT_URL}/user/Login1/?token=${token}`);
         } catch (error) {
             console.error("Error in callback processing:", error);
             res.status(500).send("Authentication failed. Please try again.");

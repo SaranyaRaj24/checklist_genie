@@ -108,7 +108,6 @@ const Login1 = () => {
     'SALESFORCE',
     'TESTING',
     'HUMAN_RESOURCE',
-    'ADMIN'
   ];
 
   if (loading) {

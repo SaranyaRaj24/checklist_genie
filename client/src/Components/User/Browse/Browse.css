@@ -24,9 +24,9 @@
   border-radius: 5px;
   padding: 20px;
   width: 90%;
-  max-width: 1200px; /* Adjusted for better width scaling */
+  max-width: 1200px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  margin: 0 auto; /* Center the main card */
+  margin: 0 auto; 
 }
 
 .filter-container {
@@ -57,9 +57,9 @@
 
 .card-container {
   display: grid;
-  grid-template-columns: repeat(4, 1fr); /* Create 5 columns */
-  gap: 20px; /* Spacing between the cards */
-  justify-items: center; /* Center the cards in each column */
+  grid-template-columns: repeat(4, 1fr); 
+  gap: 20px; 
+  justify-items: center; 
   margin-top: 20px;
 }
 
@@ -260,4 +260,22 @@ input[type="number"] {
 .icon-green {
   color: green;
   font-size: 1.2rem;
+}
+.submit-container {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.submit-button {
+  background-color: #4caf50;
+  color: white;
+  padding: 10px 20px;
+  font-size: 1rem;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.submit-button:hover {
+  background-color: #45a049;
 }

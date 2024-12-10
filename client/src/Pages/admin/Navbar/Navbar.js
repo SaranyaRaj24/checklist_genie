@@ -29,6 +29,8 @@ import { useNavigate } from 'react-router-dom';
 import PersonIcon from '@mui/icons-material/Person';
 import './Navbar.css';
 
+
+
 const drawerWidth = 240;
 
 const openedMixin = (theme) => ({
@@ -110,6 +112,8 @@ export default function MiniDrawer() {
     navigate('/');
     handleMenuClose();
   };
+
+ 
 
   return (
     <> 
@@ -233,7 +237,12 @@ export default function MiniDrawer() {
             {
               text: 'User',
               icon: <PersonIcon />
-            }
+            },
+            {
+              text: 'Assigned-Task',
+            icon: <PersonIcon />
+            },
+            
             ].map(({ text, icon }) => (
               <ListItem key={text} disablePadding sx={{ display: 'block' }}>
                 <ListItemButton

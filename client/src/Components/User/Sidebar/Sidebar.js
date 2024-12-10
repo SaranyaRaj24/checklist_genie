@@ -24,7 +24,7 @@ import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import { useNavigate } from "react-router-dom"; 
 import "./Sidebar.css";
-import axios from 'axios'
+import axios from 'axios';
 
 const drawerWidth = 240;
 
@@ -197,6 +197,9 @@ export default function MiniDrawer() {
                 icon: <SettingsIcon />,
                 path: "/user/settings",
               },
+              
+
+             
               ...(userType === "ADMIN"
                 ? [
                     {
@@ -206,6 +209,7 @@ export default function MiniDrawer() {
                     },
                   ]
                 : []),
+              
             ].map(({ text, icon, path }) => (
               <ListItem key={text} disablePadding sx={{ display: "block" }}>
                 <ListItemButton

@@ -59,6 +59,10 @@ function Browse() {
   
       const fetchedItems = response.data.map((item) => ({
         ...item,
+        checklist_template_linked_items_id:
+          item.ChecklistTemplateLinkedItems?.[0]?.checklist_item_id || null,
+        template_version:
+          item.ChecklistTemplateLinkedItems?.[0]?.template_version_id || null,
         response: item.input_type === "Boolean" ? item.response || "" : null,
         numberInput: item.input_type === "Numeric" ? item.numberInput || "" : null,
         comments: item.comments || "",
@@ -71,6 +75,8 @@ function Browse() {
       console.error("Error fetching items:", error);
     }
   };
+  
+  
   
 
   const handleCloseModal = () => {
@@ -99,17 +105,19 @@ function Browse() {
     try {
       const token = localStorage.getItem("token");
       const dateToSubmit = selectedDate || new Date().toISOString().split("T")[0];
-
+  
       const payload = {
         status: true,
         input: item.input,
         comments: item.comments || null,
-        checklist_template_linked_items_id: item.linkedItemId,
+        checklist_template_linked_items_id: item.checklist_template_linked_items_id, 
         user_assigned_checklist_template_id: 1,
-        template_version: item.templateVersionId,
-        selected_date : dateToSubmit
+        template_version: item.template_version, 
+        selected_date: dateToSubmit,
       };
-
+  
+      console.log("Payload being sent:", payload);
+  
       await axios.post(
         `${process.env.REACT_APP_BACKEND_SERVER_URL}/response/createResponse`,
         payload,
@@ -119,16 +127,51 @@ function Browse() {
           },
         }
       );
+  
       alert("Checklist submitted successfully!");
     } catch (error) {
       console.error("Error submitting checklist:", error);
       alert("Failed to submit checklist. Please try again.");
     }
   };
+  
 
   const handleDateChange = (e) => {
     setSelectedDate(e.target.value);
   };
+  const handleBulkSubmit = async () => {
+    try {
+      const token = localStorage.getItem("token");
+  
+      for (const item of items) {
+        console.log("Submitting item:", item); 
+  
+        await axios.post(
+          `${process.env.REACT_APP_BACKEND_SERVER_URL}/response/createResponse`,
+          {
+            status: true,
+            input: item.input,
+            comments: item.comments || null,
+            checklist_template_linked_items_id: item.checklist_template_linked_items_id,
+            user_assigned_checklist_template_id: 1,
+            template_version: item.template_version, 
+            selected_date: selectedDate || new Date().toISOString().split("T")[0],
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+      }
+  
+      alert("Checklist submitted successfully!");
+    } catch (error) {
+      console.error("Error submitting checklist:", error);
+      alert("Failed to submit checklist. Please try again.");
+    }
+  };
+  
 
   return (
     <>
@@ -179,115 +222,124 @@ function Browse() {
           </div>
 
           {isModalOpen && (
-            <div className="modal">
-              <div className="modal-content">
-                <span className="close" onClick={handleCloseModal}>
-                  &times;
-                </span>
+  <div className="modal">
+    <div className="modal-content">
+      <span className="close" onClick={handleCloseModal}>
+        &times;
+      </span>
 
-                {modalContent === "Items" && (
-                  <div>
-                    <button>
-                      Date:{" "}
-                      <input
-                        type="date"
-                        value={selectedDate}
-                        onChange={handleDateChange}
-                        className="date-picker"
+      {modalContent === "Items" && (
+        <div>
+          <button>
+            Date:{" "}
+            <input
+              type="date"
+              value={selectedDate}
+              onChange={handleDateChange}
+              className="date-picker"
+            />
+          </button>
+          <h3>Checklist Items</h3>
+          <table>
+            <thead>
+              <tr>
+                <th>S.No</th>
+                <th>Description</th>
+                <th>Response</th>
+                <th>Comments</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {items.map((item, index) => (
+                <tr key={index}>
+                  <td>{index + 1}</td>
+                  <td>{item.checklist_name}</td>
+
+                  <td>
+                    {item.input_type === "Boolean" ? (
+                      <RadioGroup
+                        row
+                        value={item.response || ""}
+                        onChange={(e) =>
+                          handleInputChange(
+                            index,
+                            "response",
+                            e.target.value
+                          )
+                        }
+                      >
+                        <FormControlLabel
+                          value="Yes"
+                          control={<Radio />}
+                          label="Yes"
+                        />
+                        <FormControlLabel
+                          value="No"
+                          control={<Radio />}
+                          label="No"
+                        />
+                      </RadioGroup>
+                    ) : item.input_type === "Numeric" ? (
+                      <TextField
+                        type="number"
+                        variant="outlined"
+                        size="small"
+                        value={item.numberInput || ""}
+                        onChange={(e) =>
+                          handleInputChange(
+                            index,
+                            "numberInput",
+                            e.target.value
+                          )
+                        }
                       />
-                    </button>
-                    <h3>Checklist Items</h3>
-                    <table>
-                      <thead>
-                        <tr>
-                          <th>S.No</th>
-                          <th>Description</th>
-                          <th>Response</th>
-                          <th>Comments</th>
-                          <th>Action</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {items.map((item, index) => (
-                          <tr key={index}>
-                            <td>{index + 1}</td>
-                            <td>{item.checklist_name}</td>
+                    ) : null}
+                  </td>
 
-                            <td>
-                              {item.input_type === "Boolean" ? (
-                                <RadioGroup
-                                  row
-                                  value={item.response || ""} 
-                                  onChange={(e) =>
-                                    handleInputChange(
-                                      index,
-                                      "response",
-                                      e.target.value
-                                    )
-                                  }
-                                >
-                                  <FormControlLabel
-                                    value="Yes"
-                                    control={<Radio />}
-                                    label="Yes"
-                                  />
-                                  <FormControlLabel
-                                    value="No"
-                                    control={<Radio />}
-                                    label="No"
-                                  />
-                                </RadioGroup>
-                              ) : item.input_type === "Numeric" ? (
-                                <TextField
-                                  type="number"
-                                  variant="outlined"
-                                  size="small"
-                                  value={item.numberInput || ""}
-                                  onChange={(e) =>
-                                    handleInputChange(
-                                      index,
-                                      "numberInput",
-                                      e.target.value
-                                    )
-                                  }
-                                />
-                              ) : null}
-                            </td>
+                  <td>
+                    <TextField
+                      variant="outlined"
+                      size="small"
+                      value={item.comments || ""}
+                      onChange={(e) =>
+                        handleInputChange(
+                          index,
+                          "comments",
+                          e.target.value
+                        )
+                      }
+                      placeholder="Add comments"
+                    />
+                  </td>
+                  <td>
+                    <IoMdSend
+                      style={{
+                        color: "green",
+                        fontSize: "1.5rem",
+                        cursor: "pointer",
+                      }}
+                      onClick={() => handleActionClick(index)}
+                    />
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+          <div className="submit-container">
+            <button
+              className="submit-button"
+              onClick={handleBulkSubmit}
+            >
+              Submit 
+            </button>
+          </div>
+        </div>
+      )}
+    </div>
+  </div>
+)}
 
-                            <td>
-                              <TextField
-                                variant="outlined"
-                                size="small"
-                                value={item.comments || ""}
-                                onChange={(e) =>
-                                  handleInputChange(
-                                    index,
-                                    "comments",
-                                    e.target.value
-                                  )
-                                }
-                                placeholder="Add comments"
-                              />
-                            </td>
-                            <td>
-                              <IoMdSend
-                                style={{
-                                  color: "green",
-                                  fontSize: "1.5rem",
-                                  cursor: "pointer",
-                                }}
-                                onClick={() => handleActionClick(index)}
-                              />
-                            </td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  </div>
-                )}
-              </div>
-            </div>
-          )}
         </div>
       </div>
     </>

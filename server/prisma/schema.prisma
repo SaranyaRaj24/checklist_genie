@@ -51,7 +51,7 @@ model Organisation_Users{
   id Int @id @default(autoincrement())
   organisation_id Int
   user_id  Int 
-  user_type String? @default("USER ")
+  user_type String? @default("USER")
   user_position String?
   created_at DateTime?
   user User @relation(fields: [user_id],references: [id])

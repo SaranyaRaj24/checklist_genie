@@ -25,8 +25,8 @@ const getUserPosition = async (req, res) => {
 
 const createUserPosition = async (req, res) => {
   try {
-    const { user_position } = req.body; 
-    const { organisation_user_id, user_id } = req.user;
+    const { user_position } = req.body;
+    const { organisation_user_id, user_id, email } = req.user; 
 
     if (!Array.isArray(user_position) || user_position.length === 0) {
       return res
@@ -34,28 +34,30 @@ const createUserPosition = async (req, res) => {
         .json({ error: "user_position must be a non-empty array" });
     }
 
-    const publicPosition = await prisma.organisation_User_position.findFirst({
-      where: {
-        organisation_user_id,
-        user_position: "PUBLIC",
-      },
-    });
+    const domain = email.substring(email.lastIndexOf("@") + 1, email.lastIndexOf("."));
 
-    if (!publicPosition) {
-      await prisma.organisation_User_position.create({
-        data: {
-          organisation_user_id,
-          user_id,
-          user_position: "PUBLIC",
-        },
-      });
-    }
-
-    const positionsToAdd = user_position.map((position) => ({
+    let positionsToAdd = user_position.map((position) => ({
       organisation_user_id,
       user_id,
       user_position: position,
     }));
+
+    if (domain === "ibacustechlabs") {
+      const publicPositionExists = await prisma.organisation_User_position.findFirst({
+        where: {
+          organisation_user_id,
+          user_position: "PUBLIC",
+        },
+      });
+
+      if (!publicPositionExists) {
+        positionsToAdd.push({
+          organisation_user_id,
+          user_id,
+          user_position: "PUBLIC",
+        });
+      }
+    }
 
     const createdPositions = await prisma.organisation_User_position.createMany({
       data: positionsToAdd,

@@ -8,17 +8,14 @@ const getAllTags = async (req, res) => {
         const tags = await prisma.tags.findMany({
             include: {
                 ChecklistTemplate: {
-                    include: {
-                        TemplateVersion: {
-                            include: {
-                                ChecklistTemplateLinkedItems: {
-                                    include: {
-                                        ChecklistItems: true, 
-                                    },
-                                },
-                            },
-                        },
-                    },
+                    include : {
+                        items : {
+                            include : {
+                                ChecklistTemplateLinkedItems : true
+                                    
+                            }
+                        }
+                    }
                 },
             },
         });
@@ -28,6 +25,8 @@ const getAllTags = async (req, res) => {
         res.status(500).json({ error: 'Failed to fetch tags' });
     }
 };
+
+
 
 const createTags = async (req, res) => {
     try {
@@ -138,6 +137,50 @@ const getTagsForPosition = async (req, res) => {
     }
 }
 
+const getTagWithTemplateAndItems = async (req, res) => {
+    try {
+        const { tag_id } = req.params; 
+
+        const tag = await prisma.tags.findUnique({
+            where: {
+                id : parseInt(tag_id)
+            },
+            include: {
+                ChecklistTemplate : true
+            },
+        });
+
+        if (!tag) {
+            return res.status(404).json({ message: "Tag not found" });
+        }
+        const items = await prisma.checklist_items.findMany({
+            where : {
+                tag_id : parseInt(tag_id)
+            }
+        })
+
+        const response = {
+            Tag_id: tag.id,
+            Tag_name: tag.tag_name,
+            Templates: tag.ChecklistTemplate.map(template => ({
+                Template_id: template.id,
+                Template_name: template.template_name,
+            })),
+            Items: items.map(item => ({
+                Item_id: item.id,
+                Item_name: item.checklist_name,
+                Input_type: item.input_type,
+            })),
+        };
+
+        res.status(200).json(response);
+    } catch (error) {
+        console.error("Error fetching tag with template and items:", error);
+        res.status(500).json({ error: "Failed to fetch tag with template and items." });
+    }
+};
+
+
 const getTagsByUserPosition = async (req, res) => {
     try {
       const { organisation_user_id } = req.user;
@@ -171,7 +214,7 @@ const getTagsByUserPosition = async (req, res) => {
 
 
 
-module.exports = { getAllTags, createTags, getAllTagsPosition,getTagsForPosition, getTagsByUserPosition};
+module.exports = { getAllTags, createTags, getAllTagsPosition,getTagsForPosition, getTagsByUserPosition,getTagWithTemplateAndItems};
 
 
 

@@ -10,6 +10,10 @@ import AdminTag from "./Pages/admin/Tag/Tag";
 import AdminDetails from "./Pages/admin/Details/Details";
 import AdminSettings from "./Pages/admin/Settings/Settings";
 import AdminChecklist from "./Pages/admin/Checklist/Checklist";
+import AssignedTask from "./Pages/admin/AssignedTask/AssignedTask";
+
+
+
 
 import UserPending from "./Components/User/Pending/Pending";
 import UserSettings from "./Components/User/Settings/Settings";
@@ -18,6 +22,7 @@ import UserNotification from "./Components/User/Notification/Notification";
 import UserComplete from "./Components/User/Complete/Complete";
 import UserBrowse from "./Components/User/Browse/Browse";
 import UserLogin1 from './Components/User/Login1/Login1';
+
 
 
 function App() {
@@ -49,6 +54,8 @@ function App() {
             <Route path="details" element={<AdminDetails />} />
             <Route path="settings" element={<AdminSettings />} />
             <Route path="checklist" element={<AdminChecklist />} />
+            <Route path="assigned-task" element = {<AssignedTask />} />
+          
           </Route>
         </Routes>
       </BrowserRouter>

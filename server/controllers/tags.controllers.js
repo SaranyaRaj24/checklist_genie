@@ -5,20 +5,7 @@ const prisma = new PrismaClient();
 const getAllTags = async (req, res) => {
     try {
         
-        const tags = await prisma.tags.findMany({
-            include: {
-                ChecklistTemplate: {
-                    include : {
-                        items : {
-                            include : {
-                                ChecklistTemplateLinkedItems : true
-                                    
-                            }
-                        }
-                    }
-                },
-            },
-        });
+        const tags = await prisma.tags.findMany()
         res.status(200).json(tags);
     } catch (error) {
         console.error('Error fetching all tags:', error);

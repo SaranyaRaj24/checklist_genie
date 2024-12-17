@@ -211,10 +211,55 @@ const getTagsByUserPosition = async (req, res) => {
     }
   };
   
+  const deleteTag = async (req, res) => {
+    try {
+        const { tag_id } = req.params;
+
+        const tagId = parseInt(tag_id);
+
+        await prisma.checklist_template_linked_items.deleteMany({
+            where : {
+                ChecklistItems : {tag_id : tagId}
+            }
+        })
+
+        await prisma.checklist_template_owners.deleteMany({
+            where : {
+                ChecklistTemplate : {
+                    tag_id : tagId
+                }
+            }
+        })
+        await prisma.checklist_template_version.deleteMany({
+            where : {
+                ChecklistTemplate : {
+                    tag_id : tagId
+                }
+            }
+        })
+
+        await prisma.checklist_items.deleteMany({
+            where: { tag_id: tagId },
+        });
+
+        await prisma.checklist_template.deleteMany({
+            where: { tag_id: tagId },
+        });
+
+        const delTags = await prisma.tags.delete({
+            where: { id: tagId },
+        });
+
+        res.status(200).json({ message: "Successfully deleted" });
+    } catch (error) {
+        console.error(error);
+        res.status(400).json({ error: "Error deleting tag and related data" });
+    }
+};
 
 
 
-module.exports = { getAllTags, createTags, getAllTagsPosition,getTagsForPosition, getTagsByUserPosition,getTagWithTemplateAndItems};
+module.exports = { getAllTags, createTags, getAllTagsPosition,getTagsForPosition, getTagsByUserPosition,getTagWithTemplateAndItems,deleteTag};
 
 
 

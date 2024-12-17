@@ -84,27 +84,29 @@ model tags {
   user_position userPosition
   OrganisationUsers Organisation_Users? @relation(fields: [organisation_user_id],references: [id]) 
   ChecklistTemplate checklist_template[] 
+  ChecklistItems checklist_items[] 
 }
 
 
-model checklist_template{
-  id Int @id @default(autoincrement())
-  template_name String 
-  repeating Boolean @default(false)
-  tag_id Int
-  priority priority 
+model checklist_template {
+  id                Int                      @id @default(autoincrement())
+  template_name     String
+  repeating         Boolean                  @default(false)
+  tag_id            Int
+  priority          priority
   organisation_user_id Int
-  created_at DateTime
-  organisation_id Int
+  created_at        DateTime
+  organisation_id   Int
   current_version_id Int?
-  Tags tags @relation(fields: [tag_id], references: [id])
-  OrganisationUsers Organisation_Users? @relation(fields: [organisation_user_id],references: [id]) 
-  Organisation Organisation? @relation(fields: [organisation_id], references: [id])
-  TemplateVersion checklist_template_version? @relation(name: "Current Version",fields: [current_version_id],references: [version_id])
+  
+  Tags              tags                     @relation(fields: [tag_id], references: [id], onDelete: Cascade)
+  OrganisationUsers Organisation_Users?     @relation(fields: [organisation_user_id], references: [id])
+  Organisation      Organisation?            @relation(fields: [organisation_id], references: [id])
+  TemplateVersion   checklist_template_version? @relation(name: "Current Version", fields: [current_version_id], references: [version_id])
   ChecklistTemplate checklist_template_version[] @relation("Version")
   ChecklistTemplateOwners checklist_template_owners[]
-  items checklist_items[]
-  }
+  items             checklist_items[]         @relation("TemplateItems")
+}
 
   model checklist_template_version {
   version_id Int @id @default(autoincrement())
@@ -140,16 +142,20 @@ model checklist_template_owners {
 }
 
 model checklist_items {
-  id Int @id @default(autoincrement())
-  checklist_name String
-  tag_id Int?
-  organisation_user_id Int
-  organisation_id Int
-  Instructions String
-  input_type inputType 
+  id                     Int                        @id @default(autoincrement())
+  checklist_name         String
+  organisation_user_id   Int
+  tag_id                 Int
+  organisation_id        Int
+  Instructions           String?
+  input_type             inputType
   ChecklistTemplateLinkedItems checklist_template_linked_items[]
-  items1 checklist_template[]
+  items1                 checklist_template[]       @relation("TemplateItems")
+  items2                 tags                       @relation(fields: [tag_id], references: [id], onDelete: Cascade)
+  
+  
 }
+
 
 model checklist_item_response {
   id Int @id @default(autoincrement())

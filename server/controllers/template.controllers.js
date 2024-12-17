@@ -162,4 +162,5 @@ const getTemplatesForUserPositions = async (req, res) => {
 };
 
 
+
 module.exports = { getAllTemplate, createTemplate, getTemplatesByTags,getTagsbyTemplates,getTemplatesForUserPositions };

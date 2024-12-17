@@ -82,8 +82,36 @@ const getItemsByTemplate = async (req, res) => {
   }
 };
 
+const addExtraItems = async(req,res) => {
+  try {
+    const {checklist_name,Instructions,input_type} = req.body;
+    const {organisation_user_id,organisation_id} = req.user;
+    const {tag_id} = req.params;
+
+    const extraItems = await prisma.checklist_items.create({
+      data : {
+        checklist_name,
+        organisation_user_id,
+        tag_id : parseInt(tag_id),
+        organisation_id,
+        Instructions,
+        input_type
+          
+      }
+    })
+    res.status(200).json({
+      message: "New item created",
+      extraItems,
+    });
+      } catch (error) {
+    console.log(error)
+    res.status(404).json({error : "No items added "})
+  }
+}
 
 
 
-module.exports = { getAllItems, createItems,getItemsByTemplate,
-};
+
+
+
+module.exports = { getAllItems, createItems,getItemsByTemplate,addExtraItems};

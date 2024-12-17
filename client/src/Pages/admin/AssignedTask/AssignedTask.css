@@ -26,7 +26,7 @@
   
   
   
-  .card-header {
+  .card-headerr {
     
     align-items: center;
   }
@@ -62,13 +62,15 @@
   }
   
   .modal-content {
-    background-color: #fff;
+    display: flex;
+    flex-direction: column;
+    width: 90%;
+    max-width: 800px;
+    background: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     padding: 20px;
-    border-radius: 10px;
-    width: 60%;
-    max-width: 700px;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-    position: relative;
+    margin: auto;
   }
   
   .close-button {
@@ -92,7 +94,92 @@
     margin: 20px 0;
   }
   
+  .iconss{
+    display: flex;
+justify-content: end;  
+}
   
   
-  
-  
+.modal-body {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.edit-item-section,
+.existing-items-section {
+  flex: 1;
+  border: 1px solid #ccc;
+  padding: 20px;
+  border-radius: 8px;
+}
+
+.details-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.details-table th,
+.details-table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+}
+
+.details-table th {
+  background-color: #f4f4f4;
+}
+.edit-item-section {
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  background: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+.edit-item-section h3 {
+  margin-bottom: 15px;
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #333333;
+  text-align: center;
+}
+
+.edit-item-section input,
+.edit-item-section select {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 1rem;
+  box-sizing: border-box;
+  transition: border 0.3s ease;
+}
+
+.edit-item-section input:focus,
+.edit-item-section select:focus {
+  border-color: #007bff;
+  outline: none;
+}
+
+.edit-item-section button {
+  background: #007bff;
+  color: #ffffff;
+  font-size: 1rem;
+  font-weight: 600;
+  padding: 12px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.edit-item-section button:hover {
+  background: #0056b3;
+}
+
+.edit-item-section form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}

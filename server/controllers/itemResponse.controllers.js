@@ -27,21 +27,22 @@ const updateItemResponse = async (req, res) => {
       input,
     } = req.body;
 
-
     const { organisation_user_id } = req.user;
+
+   
 
     const linkedItem = await prisma.checklist_template_linked_items.findFirst({
       where: { id: checklist_template_linked_items_id },
     });
 
+   
     const templateVersion = await prisma.checklist_template_version.findFirst({
       where: { version_id: template_version },
     });
 
-   
+    
 
-    const dateTime =
-      selected_date || new Date().toISOString().split("T")[0];
+    const dateTime = selected_date || new Date().toISOString().split("T")[0];
 
     const updatedItem = await prisma.checklist_item_response.create({
       data: {
@@ -56,15 +57,16 @@ const updateItemResponse = async (req, res) => {
         input,
       },
     });
-
-    return res
-      .status(200)
-      .json({ message: "Response updated successfully", updatedItem });
+    return res.status(200).json({
+      message: "Response updated successfully",
+      updatedItem,
+    });
   } catch (error) {
     console.error("Error updating item response:", error);
     return res.status(500).json({ error: "Error updating item response" });
   }
 };
+
 
 
 

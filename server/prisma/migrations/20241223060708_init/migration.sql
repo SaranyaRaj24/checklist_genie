@@ -25,7 +25,7 @@ CREATE TABLE `Organisation_Users` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `organisation_id` INTEGER NOT NULL,
     `user_id` INTEGER NOT NULL,
-    `user_type` VARCHAR(191) NULL DEFAULT 'USER ',
+    `user_type` VARCHAR(191) NULL DEFAULT 'USER',
     `user_position` VARCHAR(191) NULL,
     `created_at` DATETIME(3) NULL,
 
@@ -107,10 +107,10 @@ CREATE TABLE `checklist_template_owners` (
 CREATE TABLE `checklist_items` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `checklist_name` VARCHAR(191) NOT NULL,
-    `tag_id` INTEGER NULL,
     `organisation_user_id` INTEGER NOT NULL,
+    `tag_id` INTEGER NOT NULL,
     `organisation_id` INTEGER NOT NULL,
-    `Instructions` VARCHAR(191) NOT NULL,
+    `Instructions` VARCHAR(191) NULL,
     `input_type` ENUM('Boolean', 'Numeric') NOT NULL,
 
     PRIMARY KEY (`id`)
@@ -133,12 +133,12 @@ CREATE TABLE `checklist_item_response` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
-CREATE TABLE `_checklist_itemsTochecklist_template` (
+CREATE TABLE `_TemplateItems` (
     `A` INTEGER NOT NULL,
     `B` INTEGER NOT NULL,
 
-    UNIQUE INDEX `_checklist_itemsTochecklist_template_AB_unique`(`A`, `B`),
-    INDEX `_checklist_itemsTochecklist_template_B_index`(`B`)
+    UNIQUE INDEX `_TemplateItems_AB_unique`(`A`, `B`),
+    INDEX `_TemplateItems_B_index`(`B`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- AddForeignKey
@@ -157,7 +157,7 @@ ALTER TABLE `Organisation_User_position` ADD CONSTRAINT `Organisation_User_posit
 ALTER TABLE `tags` ADD CONSTRAINT `tags_organisation_user_id_fkey` FOREIGN KEY (`organisation_user_id`) REFERENCES `Organisation_Users`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `checklist_template` ADD CONSTRAINT `checklist_template_tag_id_fkey` FOREIGN KEY (`tag_id`) REFERENCES `tags`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `checklist_template` ADD CONSTRAINT `checklist_template_tag_id_fkey` FOREIGN KEY (`tag_id`) REFERENCES `tags`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `checklist_template` ADD CONSTRAINT `checklist_template_organisation_user_id_fkey` FOREIGN KEY (`organisation_user_id`) REFERENCES `Organisation_Users`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
@@ -187,6 +187,9 @@ ALTER TABLE `checklist_template_owners` ADD CONSTRAINT `checklist_template_owner
 ALTER TABLE `checklist_template_owners` ADD CONSTRAINT `checklist_template_owners_organisation_user_id_fkey` FOREIGN KEY (`organisation_user_id`) REFERENCES `Organisation_Users`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
+ALTER TABLE `checklist_items` ADD CONSTRAINT `checklist_items_tag_id_fkey` FOREIGN KEY (`tag_id`) REFERENCES `tags`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
 ALTER TABLE `checklist_item_response` ADD CONSTRAINT `checklist_item_response_organisation_user_id_fkey` FOREIGN KEY (`organisation_user_id`) REFERENCES `Organisation_Users`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
@@ -196,7 +199,7 @@ ALTER TABLE `checklist_item_response` ADD CONSTRAINT `checklist_item_response_ch
 ALTER TABLE `checklist_item_response` ADD CONSTRAINT `checklist_item_response_template_version_fkey` FOREIGN KEY (`template_version`) REFERENCES `checklist_template_version`(`version_id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `_checklist_itemsTochecklist_template` ADD CONSTRAINT `_checklist_itemsTochecklist_template_A_fkey` FOREIGN KEY (`A`) REFERENCES `checklist_items`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `_TemplateItems` ADD CONSTRAINT `_TemplateItems_A_fkey` FOREIGN KEY (`A`) REFERENCES `checklist_items`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `_checklist_itemsTochecklist_template` ADD CONSTRAINT `_checklist_itemsTochecklist_template_B_fkey` FOREIGN KEY (`B`) REFERENCES `checklist_template`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `_TemplateItems` ADD CONSTRAINT `_TemplateItems_B_fkey` FOREIGN KEY (`B`) REFERENCES `checklist_template`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;

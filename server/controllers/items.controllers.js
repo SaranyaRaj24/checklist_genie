@@ -84,7 +84,7 @@ const getItemsByTemplate = async (req, res) => {
 
 const addExtraItems = async(req,res) => {
   try {
-    const {checklist_name,Instructions,input_type} = req.body;
+    const {checklist_name,Instructions,template_version_id,input_type} = req.body;
     const {organisation_user_id,organisation_id} = req.user;
     const {tag_id} = req.params;
 
@@ -99,9 +99,25 @@ const addExtraItems = async(req,res) => {
           
       }
     })
+    const templateVersion = await prisma.checklist_template_version.findFirst({
+      where: {
+        version_id: template_version_id,
+      },
+      orderBy: { created_at: "desc" },
+    });
+
+    const linkedItems = await prisma.checklist_template_linked_items.create({
+      data: {
+        template_version_id: templateVersion.version_id,
+        checklist_item_id:extraItems.id,
+        created_at: new Date(),
+      },
+    });
     res.status(200).json({
       message: "New item created",
       extraItems,
+      templateVersion,
+      linkedItems
     });
       } catch (error) {
     console.log(error)

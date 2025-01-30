@@ -13,7 +13,6 @@ const getItemResponses = async (req, res) => {
   }
 };
 
-
 const updateItemResponse = async (req, res) => {
   try {
     const {
@@ -53,7 +52,7 @@ const updateItemResponse = async (req, res) => {
         status,
         organisation_user_id,
         comments,
-        checklist_template_linked_items_id: linkedItem.id,
+        checklist_template_linked_items_id: checklist_template_linked_items_id,
         user_assigned_checklist_template_id: 1,
         template_version: templateVersion.version_id,
         selected_date: dateTime,

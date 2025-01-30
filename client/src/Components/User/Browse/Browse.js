@@ -14,6 +14,7 @@ function Browse() {
   const [templates, setTemplates] = useState([]);
   const [items, setItems] = useState([]);
   const [selectedDate, setSelectedDate] = useState("");
+  const [openedId, SetOpenedID] = useState();
 
   const navigate = useNavigate();
 
@@ -47,6 +48,7 @@ function Browse() {
   const handleView = async (tag_id) => {
     try {
       const token = localStorage.getItem("token");
+      SetOpenedID(tag_id);
       const response = await axios.get(
         `${process.env.REACT_APP_BACKEND_SERVER_URL}/items/getItemsByTemplate/${tag_id}`,
         {
@@ -98,11 +100,11 @@ function Browse() {
       field === "numberInput" &&
       updatedItems[index].input_type === "Numeric"
     ) {
-       console.log("wewewewwww", updatedItems[index].input,value);
+      console.log("wewewewwww", updatedItems[index].input, value);
       updatedItems[index].input = value || null;
     }
 
-    console.log("upppp",updatedItems)
+    console.log("upppp", updatedItems);
     setItems(updatedItems);
   };
 
@@ -147,6 +149,7 @@ function Browse() {
     setSelectedDate(e.target.value);
   };
 
+
   const handleBulkSubmit = async () => {
     try {
       const token = localStorage.getItem("token");
@@ -155,6 +158,18 @@ function Browse() {
         username: {},
         email: "",
       };
+
+      if (!items || items.length === 0) {
+        alert("No checklist items to submit.");
+        return;
+      }
+
+      const checklistTemplateId = openedId;
+
+      if (!checklistTemplateId) {
+        alert("Checklist Template ID is missing.");
+        return;
+      }
 
       const submissionPromises = items.map((item) => {
         console.log("Submitting item:", item);
@@ -180,6 +195,7 @@ function Browse() {
           }
         );
       });
+      console.log("Items before submission:", items);
 
       await Promise.all(submissionPromises);
 
@@ -188,8 +204,9 @@ function Browse() {
       const emailResponse = await axios.post(
         `${process.env.REACT_APP_BACKEND_SERVER_URL}/checklist/submit`,
         {
-          userDetails: userDetails,
-          items: items,
+          checklistTemplateId,
+          checklistItems: items,
+          username: userDetails.username,
         },
         {
           headers: {
@@ -210,7 +227,6 @@ function Browse() {
       alert("Failed to submit checklist. Please try again.");
     }
   };
-
 
   return (
     <>

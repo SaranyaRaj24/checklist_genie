@@ -1,20 +1,18 @@
-const express = require('express');
-const { PrismaClient } = require('@prisma/client');
+const express = require("express");
+const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 
 const getItemResponses = async (req, res) => {
-    try {
-        
-            const itemResponse = await prisma.checklist_item_response.findMany();
-            
-       
+  try {
+    const itemResponse = await prisma.checklist_item_response.findMany();
 
-     return res.status(200).json(itemResponse);
-    } catch (error) {
-        console.error('Error creating item response:', error);
-        return res.status(500).json({ error: 'Error creating item response' });
-    }
+    return res.status(200).json(itemResponse);
+  } catch (error) {
+    console.error("Error creating item response:", error);
+    return res.status(500).json({ error: "Error creating item response" });
+  }
 };
+
 
 const updateItemResponse = async (req, res) => {
   try {
@@ -29,18 +27,24 @@ const updateItemResponse = async (req, res) => {
 
     const { organisation_user_id } = req.user;
 
-   
-
-    const linkedItem = await prisma.checklist_template_linked_items.findFirst({
+    const linkedItem = await prisma.checklist_template_linked_items.findMany({
       where: { id: checklist_template_linked_items_id },
     });
 
-   
+    console.log("jjjjjjjjjjj", linkedItem);
+    if (!linkedItem) {
+      return res
+        .status(404)
+        .json({ error: "Checklist template linked item not found." });
+    }
+
     const templateVersion = await prisma.checklist_template_version.findFirst({
       where: { version_id: template_version },
     });
 
-    
+    if (!templateVersion) {
+      return res.status(404).json({ error: "Template version not found." });
+    }
 
     const dateTime = selected_date || new Date().toISOString().split("T")[0];
 
@@ -57,6 +61,7 @@ const updateItemResponse = async (req, res) => {
         input,
       },
     });
+
     return res.status(200).json({
       message: "Response updated successfully",
       updatedItem,
@@ -67,10 +72,4 @@ const updateItemResponse = async (req, res) => {
   }
 };
 
-
-
-
-module.exports = { getItemResponses , updateItemResponse };
-
-
-
+module.exports = { getItemResponses, updateItemResponse };

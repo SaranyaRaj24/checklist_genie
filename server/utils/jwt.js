@@ -26,6 +26,7 @@ const authentication = (req, res, next) => {
   try {
     const token = authHeaders.split(' ')[1]; 
     const verified = jwt.verify(token, process.env.SECRET);
+
     req.user = verified;
     next();
   } catch (error) {

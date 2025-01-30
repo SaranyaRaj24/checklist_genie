@@ -134,11 +134,6 @@ const submitChecklist = async (req, res) => {
       .json({ message: "Checklist submitted and email sent successfully!" });
   } catch (error) {
     console.error("Error submitting checklist:", error);
-    console.error(
-      `Error submitting checklist for template ${checklistTemplateId} by ${username}:`,
-      error
-    );
-
     res
       .status(500)
       .json({ message: "Failed to submit checklist. Please try again." });

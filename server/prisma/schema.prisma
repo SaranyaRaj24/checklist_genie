@@ -37,6 +37,7 @@ model User {
   created_at DateTime?
   OrganisationUsers Organisation_Users[]
   OrganisationUsersPosition Organisation_User_position[]
+ templateRecipients     TemplateRecipients[] 
 }
 
 model Organisation {
@@ -106,6 +107,7 @@ model checklist_template {
   ChecklistTemplate checklist_template_version[] @relation("Version")
   ChecklistTemplateOwners checklist_template_owners[]
   items             checklist_items[]         @relation("TemplateItems")
+TemplateRecipients TemplateRecipients[]     
 }
 
   model checklist_template_version {
@@ -171,4 +173,17 @@ model checklist_item_response {
   OrganisationUserChecklistItemResponse Organisation_Users? @relation(fields: [organisation_user_id],references: [id])
   ChecklistTemplateLinkedItems checklist_template_linked_items? @relation(fields: [checklist_template_linked_items_id],references: [id])
   ChecklistTemplateVersion checklist_template_version? @relation(fields: [template_version],references: [version_id])
+}
+
+model TemplateRecipients {
+  id                      Int                @id @default(autoincrement())
+  checklist_template_id    Int                
+  recipient_email          String            
+  cc_bcc_emails            String            
+  assigned_by_user_id      Int               
+  created_at               DateTime           @default(now())
+  updated_at               DateTime           @updatedAt
+
+  checklistTemplate        checklist_template  @relation(fields: [checklist_template_id], references: [id], onDelete: Cascade)
+  assignedByUser           User               @relation(fields: [assigned_by_user_id], references: [id])  
 }

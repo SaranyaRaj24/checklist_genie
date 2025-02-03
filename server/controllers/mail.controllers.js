@@ -12,14 +12,19 @@ const formatChecklistDataForEmail = (items) => {
   return items
     .map(
       (item, index) => `
+
       <tr>
         <td style="padding: 10px; border: 1px solid #ddd;">${index + 1}</td>
         <td style="padding: 10px; border: 1px solid #ddd;">${
           item.checklist_name || "N/A"
         }</td>
-        <td style="padding: 10px; border: 1px solid #ddd;">${
-          item.input ?? ""
-        }</td>
+       <td style="padding: 10px; border: 1px solid #ddd;">${
+         item.input === true || item.input === "Yes"
+           ? "Yes"
+           : item.input === false || item.input === "No"
+           ? "No"
+           : item.input || ""
+       }</td>
         <td style="padding: 10px; border: 1px solid #ddd;">${
           item.comments || "No comments"
         }</td>
@@ -32,7 +37,9 @@ const sendEmailToManager = async (
   username,
   checklistItems,
   recipientEmail,
-  ccEmails
+  ccEmails,
+  templateName,
+  selectedDate
 ) => {
   try {
     if (!recipientEmail || recipientEmail.length === 0) {
@@ -50,9 +57,11 @@ const sendEmailToManager = async (
 
     const emailContent = `
       <div style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
-        <h2 style="color: #4CAF50;">Checklist Submission</h2>
-        <p>Hello,</p>
-        <p><strong>${username}</strong> has successfully submitted a checklist.</p>
+        <h3 style="color: #4CAF50;">Checklist Submission  - ${templateName}</h3>
+        <p><strong>Hi,</strong></p>
+
+        <p><strong>${username}</strong> has successfully submitted the checklist for<strong> ${selectedDate}</strong></p>
+
         <table style="width: 100%; border-collapse: collapse; margin: 20px 0; border: 1px solid #ddd;">
           <thead>
             <tr style="background-color: #f2f2f2;">
@@ -91,8 +100,12 @@ const submitChecklist = async (req, res) => {
   console.log("User:", req.user);
   try {
     const username = req.user?.name;
-    const { checklistTemplateId, checklistItems } = req.body;
-    console.log("IIIIIIIIIIIIIIII", checklistTemplateId);
+    const userEmail = req.user?.email;
+    const {
+      checklistTemplateId,
+      checklistItems,
+      selectedDate: selectedDateFromUI,
+    } = req.body;
 
     if (!checklistTemplateId) {
       console.error("Error: checklistTemplateId is undefined or missing.");
@@ -101,7 +114,34 @@ const submitChecklist = async (req, res) => {
         .json({ error: "Checklist Template ID is required." });
     }
 
-    console.log("Received checklistTemplateId:", checklistTemplateId);
+    const checklistTemplate = await prisma.checklist_template.findUnique({
+      where: { id: checklistTemplateId },
+      select: { template_name: true },
+    });
+
+    if (!checklistTemplate) {
+      return res.status(404).json({ error: "Checklist template not found." });
+    }
+
+    const templateName = checklistTemplate.template_name;
+
+    const dbResponse = await prisma.checklist_item_response.findFirst({
+      where: { id: checklistTemplateId },
+      select: { selected_date: true },
+    });
+
+    const rawDate = selectedDateFromUI || dbResponse?.selected_date;
+    if (!rawDate) {
+      console.error("No selected date available");
+      return res.status(400).json({ error: "Selected date is required." });
+    }
+
+    const formattedDate = new Date(rawDate).toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    });
+    console.log("Formatted Date:", formattedDate);
 
     const templateRecipients = await prisma.templateRecipients.findMany({
       where: { checklist_template_id: checklistTemplateId },
@@ -115,23 +155,31 @@ const submitChecklist = async (req, res) => {
         .json({ message: "No recipients found for the template." });
     }
 
-    const recipientEmails = templateRecipients
+    let recipientEmails = templateRecipients
       .map((r) => r.recipient_email)
       .filter(Boolean);
-    const ccEmails = templateRecipients
+
+    let ccEmails = templateRecipients
       .map((r) => r.cc_bcc_emails)
       .filter(Boolean);
+
+    if (userEmail) {
+      ccEmails.push(userEmail);
+    }
 
     await sendEmailToManager(
       username,
       checklistItems,
       recipientEmails,
-      ccEmails
+      ccEmails,
+      templateName,
+      formattedDate
     );
 
-    res
-      .status(200)
-      .json({ message: "Checklist submitted and email sent successfully!" });
+    res.status(200).json({
+      message: "Checklist submitted and email sent successfully!",
+      checklist_template_name: templateName,
+    });
   } catch (error) {
     console.error("Error submitting checklist:", error);
     res

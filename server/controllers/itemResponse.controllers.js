@@ -5,8 +5,11 @@ const prisma = new PrismaClient();
 const getItemResponses = async (req, res) => {
   try {
     const itemResponse = await prisma.checklist_item_response.findMany();
-
-    return res.status(200).json(itemResponse);
+    const itemResponsesFormatted = itemResponse.map((item) => ({
+      ...item,
+      status: item.status ? "Yes" : "No",
+    }));
+    return res.status(200).json(itemResponse, itemResponsesFormatted);
   } catch (error) {
     console.error("Error creating item response:", error);
     return res.status(500).json({ error: "Error creating item response" });
@@ -49,7 +52,7 @@ const updateItemResponse = async (req, res) => {
 
     const updatedItem = await prisma.checklist_item_response.create({
       data: {
-        status,
+        status: status === "Yes",
         organisation_user_id,
         comments,
         checklist_template_linked_items_id: checklist_template_linked_items_id,
@@ -60,6 +63,8 @@ const updateItemResponse = async (req, res) => {
         input,
       },
     });
+
+    console.log(updatedItem, "ooooooooooooooooooooooo");
 
     return res.status(200).json({
       message: "Response updated successfully",

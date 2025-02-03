@@ -93,18 +93,17 @@ function Browse() {
   const handleInputChange = (index, field, value) => {
     const updatedItems = [...items];
     updatedItems[index][field] = value;
+
     if (field === "response" && updatedItems[index].input_type === "Boolean") {
-      updatedItems[index].input =
-        value === "Yes" ? "true" : value === "No" ? "false" : null;
+      updatedItems[index].input = value;
     } else if (
       field === "numberInput" &&
       updatedItems[index].input_type === "Numeric"
     ) {
-      console.log("wewewewwww", updatedItems[index].input, value);
       updatedItems[index].input = value || null;
     }
 
-    console.log("upppp", updatedItems);
+    console.log("Updated Items:", updatedItems);
     setItems(updatedItems);
   };
 
@@ -116,8 +115,9 @@ function Browse() {
         selectedDate || new Date().toISOString().split("T")[0];
 
       const payload = {
-        status: true,
-        input: item.input,
+        status:
+          item.response === true || item.response === "Yes" ? "Yes" : "No",
+        input: item.input || "",
         comments: item.comments || null,
         checklist_template_linked_items_id:
           item.checklist_template_linked_items_id,
@@ -149,7 +149,6 @@ function Browse() {
     setSelectedDate(e.target.value);
   };
 
-
   const handleBulkSubmit = async () => {
     try {
       const token = localStorage.getItem("token");
@@ -177,7 +176,8 @@ function Browse() {
         return axios.post(
           `${process.env.REACT_APP_BACKEND_SERVER_URL}/response/createResponse`,
           {
-            status: true,
+            status: item.response === true ? "Yes" : "No",
+
             input: item.input,
             comments: item.comments || null,
             checklist_template_linked_items_id:
@@ -186,7 +186,7 @@ function Browse() {
             template_version: item.template_version,
             selected_date:
               selectedDate || new Date().toISOString().split("T")[0],
-            response: item.response,
+            response: item.input,
           },
           {
             headers: {
@@ -207,6 +207,7 @@ function Browse() {
           checklistTemplateId,
           checklistItems: items,
           username: userDetails.username,
+          selectedDate: selectedDate || new Date().toISOString().split("T")[0],
         },
         {
           headers: {
@@ -364,7 +365,7 @@ function Browse() {
                                     e.target.value
                                   )
                                 }
-                                placeholder="Add comments"
+                                placeholder="Add comments (optional)"
                               />
                             </td>
                             <td>

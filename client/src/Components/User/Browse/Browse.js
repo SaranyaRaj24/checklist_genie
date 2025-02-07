@@ -349,6 +349,7 @@ function Browse() {
                                       e.target.value
                                     )
                                   }
+                                  inputProps={{ min: 0 }}
                                 />
                               ) : null}
                             </td>

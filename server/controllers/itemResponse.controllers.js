@@ -18,6 +18,7 @@ const getItemResponses = async (req, res) => {
 
 const updateItemResponse = async (req, res) => {
   try {
+    console.log("req.body", req.body)
     const {
       status,
       comments,
@@ -34,6 +35,8 @@ const updateItemResponse = async (req, res) => {
     });
 
     console.log("jjjjjjjjjjj", linkedItem);
+    console.log("kkkkkkkkkkkkkk");
+
     if (!linkedItem) {
       return res
         .status(404)

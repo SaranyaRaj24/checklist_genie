@@ -59,6 +59,7 @@ const createItems = async (req, res) => {
 
 const getItemsByTemplate = async (req, res) => {
   try {
+    console.log("tag id", req.params.tag_id)
     const {tag_id} = req.params;
 
     const items = await prisma.checklist_items.findMany({

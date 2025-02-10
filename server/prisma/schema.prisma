@@ -118,7 +118,7 @@ TemplateRecipients TemplateRecipients[]
   ChecklistTemplate checklist_template @relation(name: "Version" ,fields: [checklist_template_id], references: [id])
   OrganisationUsers Organisation_Users @relation(fields: [organisation_user_id],references: [id])
   ChecklistTemplateVersion checklist_template[] @relation(name: "Current Version")
-  ChecklistTemplateLinkedItems checklist_template_linked_items[]
+  ChecklistTemplateLinkedItems checklist_template_linked_items[] 
   ChecklistTemplateResponse checklist_item_response[]
 }
 

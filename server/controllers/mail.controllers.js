@@ -80,10 +80,18 @@ const sendEmailToManager = async (
       </div>
     `;
 
-    const mailOptions = {
+    /* const mailOptions = {
       from: process.env.OUTLOOK_EMAIL,
       to: recipientEmail.join(", "),
       cc: ccEmails.filter(Boolean).join(", "),
+      subject: `Checklist Submitted by ${username}`,
+      html: emailContent,
+    }; */
+
+
+    const mailOptions = {
+      from: process.env.OUTLOOK_EMAIL,
+      to: recipientEmail,
       subject: `Checklist Submitted by ${username}`,
       html: emailContent,
     };
@@ -97,7 +105,7 @@ const sendEmailToManager = async (
 };
 
 const submitChecklist = async (req, res) => {
-  console.log("User:", req.user);
+  console.log("User:", req.user, req.body);
   try {
     const username = req.user?.name;
     const userEmail = req.user?.email;

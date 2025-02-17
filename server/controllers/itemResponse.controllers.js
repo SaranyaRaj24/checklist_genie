@@ -34,10 +34,10 @@ const updateItemResponse = async (req, res) => {
       where: { id: checklist_template_linked_items_id },
     });
 
-    console.log("jjjjjjjjjjj", linkedItem);
-    console.log("kkkkkkkkkkkkkk");
+    console.log("Request body", req.body);
+    console.log("LinkedItem",linkedItem);
 
-    if (!linkedItem) {
+    if (linkedItem.length === 0) {
       return res
         .status(404)
         .json({ error: "Checklist template linked item not found." });
@@ -46,6 +46,8 @@ const updateItemResponse = async (req, res) => {
     const templateVersion = await prisma.checklist_template_version.findFirst({
       where: { version_id: template_version },
     });
+
+    console.log("templayte version",templateVersion);
 
     if (!templateVersion) {
       return res.status(404).json({ error: "Template version not found." });

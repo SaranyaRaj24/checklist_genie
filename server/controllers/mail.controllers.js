@@ -80,22 +80,14 @@ const sendEmailToManager = async (
       </div>
     `;
 
-    /* const mailOptions = {
+    const mailOptions = {
       from: process.env.OUTLOOK_EMAIL,
       to: recipientEmail.join(", "),
       cc: ccEmails.filter(Boolean).join(", "),
       subject: `Checklist Submitted by ${username}`,
       html: emailContent,
-    }; */
-
-
-    const mailOptions = {
-      from: process.env.OUTLOOK_EMAIL,
-      to: recipientEmail,
-      subject: `Checklist Submitted by ${username}`,
-      html: emailContent,
     };
-
+    
     await transporter.sendMail(mailOptions);
     console.log("Email sent successfully.");
   } catch (error) {

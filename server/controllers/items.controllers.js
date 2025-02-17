@@ -69,6 +69,7 @@ const getItemsByTemplate = async (req, res) => {
       include : {
         ChecklistTemplateLinkedItems : {
           select : {
+            id:true,
             checklist_item_id:true,
             template_version_id:true
           }

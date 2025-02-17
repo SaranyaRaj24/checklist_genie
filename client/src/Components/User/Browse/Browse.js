@@ -172,8 +172,6 @@ function Browse() {
 
       const submissionPromises = items.map((item) => {
         console.log("Submitting item:", item);
-      
-
         return axios.post(
           `${process.env.REACT_APP_BACKEND_SERVER_URL}/response/createResponse`,
           {
@@ -181,7 +179,7 @@ function Browse() {
             input: item.input,
             comments: item.comments || null,
             checklist_template_linked_items_id:
-              item.ChecklistTemplateLinkedItems.checklist_item_id,
+              item.ChecklistTemplateLinkedItems[0].id,
             user_assigned_checklist_template_id: 1,
             template_version: item.template_version,
             selected_date:

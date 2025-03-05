@@ -37,7 +37,7 @@ function App() {
             
             <Route path="checklisthistory" element={<ChecklistHistory />} />
             <Route path="tag" element={<AdminTag />} />
-            <Route path="checklist" element={<AdminTemplate />} />
+            <Route path="checklist" element={<AdminChecklist />} />
 
             <Route path="login1" element={<UserLogin1/>}/>
 

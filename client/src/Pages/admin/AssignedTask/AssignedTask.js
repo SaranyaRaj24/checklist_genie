@@ -3,27 +3,26 @@ import axios from "axios";
 import "./AssignedTask.css";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
+import Navbar from "../../../Pages/admin/Navbar/Navbar";
 // import ShareIcon from "@mui/icons-material/Share";
 
 const AssignedTask = () => {
   const [data, setData] = useState([]);
-  const [selectedTag, setSelectedTag] = useState(null);
+  const [selectedTemplateDetails, setSelectedTemplateDetails] = useState(null);
+  const [selectedTemplate, setSelectedTemplate] = useState(null);
   const [isViewModalOpen, setIsViewModalOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [checklist_name, setChecklist_name] = useState("");
   const [Instructions, setInstructions] = useState("");
   const [dataType, setDataType] = useState("");
 
- 
-
- 
   useEffect(() => {
     const token = localStorage.getItem("token");
 
     const fetchAllTags = async () => {
       try {
         const response = await axios.get(
-          `${process.env.REACT_APP_BACKEND_SERVER_URL}/tags/getAll`,
+          `${process.env.REACT_APP_BACKEND_SERVER_URL}/template/getTemplate`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -39,38 +38,53 @@ const AssignedTask = () => {
     fetchAllTags();
   }, []);
 
-  const getTagWithTemplateAndItems = async (tag_id) => {
+  const getTagWithTemplateAndItems = async (
+    tag_id,
+    current_version_id,
+    template_id
+  ) => {
     const token = localStorage.getItem("token");
 
     try {
+      const selectedTemplate = data.find((item) => item.id === template_id);
+
+      setSelectedTemplateDetails(selectedTemplate);
+
       const response = await axios.get(
-        `${process.env.REACT_APP_BACKEND_SERVER_URL}/tags/getInfo/${tag_id}`,
+        `${process.env.REACT_APP_BACKEND_SERVER_URL}/items/getItemsByTemplate/${tag_id}/${current_version_id}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         }
       );
-      setSelectedTag(response.data);
+
+      setSelectedTemplate(response.data);
       setIsViewModalOpen(true);
     } catch (error) {
       console.error("Error fetching tag with template and items:", error);
     }
   };
 
-  const editTag = async (tag_id) => {
+  const editTag = async (tag_id, current_version_id, template_id) => {
     const token = localStorage.getItem("token");
-
     try {
+      
       const response = await axios.get(
-        `${process.env.REACT_APP_BACKEND_SERVER_URL}/tags/getInfo/${tag_id}`,
+        `${process.env.REACT_APP_BACKEND_SERVER_URL}/items/getItemsByTemplate/${tag_id}/${current_version_id}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         }
       );
-      setSelectedTag(response.data);
+     
+      const selectedTemplate = data.find((item) => item.id === template_id);
+
+      setSelectedTemplateDetails(selectedTemplate);
+
+
+      setSelectedTemplate(response.data);
       setIsModalOpen(true);
     } catch (error) {
       console.error("Error fetching tag for editing:", error);
@@ -97,12 +111,12 @@ const AssignedTask = () => {
     }
   };
 
-  const addExtraItem = async () => {
+  const addExtraItem = async (tag_id,template_id) => {
     const token = localStorage.getItem("token");
-  
+
     try {
       const response = await axios.post(
-        `${process.env.REACT_APP_BACKEND_SERVER_URL}/items/addItem/${selectedTag.Tag_id}`,
+        `${process.env.REACT_APP_BACKEND_SERVER_URL}/items/addItem/${tag_id}/${template_id}`,
         {
           checklist_name,
           Instructions,
@@ -114,22 +128,25 @@ const AssignedTask = () => {
           },
         }
       );
-  
-      const newItem = response.data?.extraItems;
-  
+
+      const newItem = response.data?.extraItem;
+
       if (newItem) {
-        setSelectedTag((prevTag) => ({
-          ...prevTag,
-          Items: [...(prevTag?.Items || []), { 
+        setSelectedTemplate((prevTag) => [
+          ...prevTag, 
+          {
             id: newItem.id,
-            Item_name: newItem.checklist_name, 
-            Input_type: newItem.input_type,
-          }],
-        }));
-      }
-  
-      alert("Item successfully added!");
+            checklist_name: newItem.checklist_name,
+            input_type: newItem.input_type,
+          },
+        ]);
       
+      }
+
+      alert("Item successfully added!");
+
+      
+
       setChecklist_name("");
       setInstructions("");
       setDataType("");
@@ -138,168 +155,185 @@ const AssignedTask = () => {
       alert("Failed to add item.");
     }
   };
-  
-  
-  
-  
 
   const closeViewModal = () => {
     setIsViewModalOpen(false);
-    setSelectedTag(null);
+    setSelectedTemplate(null);
   };
 
   const closeModal = () => {
     setIsModalOpen(false);
-    setSelectedTag(null);
+    setSelectedTemplate(null);
   };
-  
 
   return (
-    <div className="container">
-      {data.map((tag) => (
-        <div key={tag.id} className="cardd">
-          <div className="card-headerr">
-            <h2>{tag.tag_name}</h2>
-            <p>
-              <strong>User Positions:</strong> {tag.user_position}
-            </p>
-            <button onClick={() => getTagWithTemplateAndItems(tag.id)}>VIEW</button>
-            <div className="iconss">
-              <p onClick={() => editTag(tag.id)} style={{ cursor: "pointer" }}>
-                <EditIcon />
+    <>
+      <Navbar />
+      <div className="container">
+        {data.map((template) => (
+          <div key={template.id} className="cardd">
+            <div className="card-headerr">
+              <h2>{template.template_name}</h2>
+              <p>
+                <strong>User Positions:</strong> {template.Tags.user_position}
               </p>
-              <p 
-              onClick={() => deleteTag(tag.id)} style={{ cursor: "pointer" }}
+              <button
+                onClick={() =>
+                  getTagWithTemplateAndItems(
+                    template.Tags.id,
+                    template.current_version_id,
+                    template.id
+                  )
+                }
               >
-                <DeleteIcon />
-              </p>
-             
+                VIEW
+              </button>
+              <div className="iconss">
+                <p
+                  onClick={() =>
+                    editTag(
+                      template.Tags.id,
+                      template.current_version_id,
+                      template.id
+                    )
+                  }
+                  style={{ cursor: "pointer" }}
+                >
+                  <EditIcon />
+                </p>
+                <p
+                  onClick={() => deleteTag(template.id)}
+                  style={{ cursor: "pointer" }}
+                >
+                  <DeleteIcon />
+                </p>
+              </div>
             </div>
           </div>
-        </div>
-      ))}
+        ))}
 
-      {/* View Modal */}
-      {isViewModalOpen && selectedTag && (
-        <div className="modal">
-          <div className="modal-content">
-            <span className="close-button" onClick={closeViewModal}>
-              &times;
-            </span>
-            <h2>{selectedTag.tag_name}</h2>
-            <h3>Existing Items</h3>
-            <table className="details-table">
-              <thead>
-                <tr>
-                  <th>Item Name</th>
-                  <th>Input Type</th>
-                </tr>
-              </thead>
-              <tbody>
-                {selectedTag.Items && selectedTag.Items.length > 0 ? (
-                  selectedTag.Items.map((item) => (
-                    <tr key={item.id}>
-                      <td>{item.Item_name}</td>
-                      <td>{item.Input_type}</td>
-                    </tr>
-                  ))
-                ) : (
+        {/* View Modal */}
+        {isViewModalOpen && selectedTemplate && (
+          <div className="modal">
+            <div className="modal-content">
+              <span className="close-button" onClick={closeViewModal}>
+                &times;
+              </span>
+              <h2>{selectedTemplateDetails.template_name}</h2>
+              <h3>Existing Items</h3>
+              <table className="details-table">
+                <thead>
                   <tr>
-                    <td colSpan="2">No items available.</td>
+                    <th>Item Name</th>
+                    <th>Input Type</th>
                   </tr>
-                )}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {selectedTemplate && selectedTemplate.length > 0 ? (
+                    selectedTemplate.map((item) => (
+                      <tr key={item.id}>
+                        <td>{item.checklist_name}</td>
+                        <td>{item.input_type}</td>
+                      </tr>
+                    ))
+                  ) : (
+                    <tr>
+                      <td colSpan="2">No items available.</td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
+            </div>
           </div>
-        </div>
-      )}
+        )}
 
-      {/* Edit Modal */}
-      {isModalOpen && selectedTag && (
-  <div className="modal">
-    <div className="modal-content">
-      <span className="close-button" onClick={closeModal}>
-        &times;
-      </span>
-      <h2>{selectedTag.tag_name}</h2>
+        {/* Edit Modal */}
+        {isModalOpen && selectedTemplate && (
+          <div className="modal">
+            <div className="modal-content">
+              <span className="close-button" onClick={closeModal}>
+                &times;
+              </span>
+              <h2>{selectedTemplateDetails.template_name}</h2>
 
-      <div className="modal-body">
-        {/* Left Side: Edit/Add Item */}
-        <div className="edit-item-section">
-          <h3>Edit/Add Item</h3>
-          <form
-            onSubmit={(e) => {
-              e.preventDefault();
-            }}
-          >
-            <input
-              type="text"
-              placeholder="Checklist Name"
-              value={checklist_name}
-              onChange={(e) => setChecklist_name(e.target.value)}
-            />
-            
-            <input
-              type="text"
-              name="Instructions"
-              placeholder="Instructions"
-              value={Instructions}
-              onChange={(e) => setInstructions(e.target.value)}
-            />
-            <select
-              name="input_type"
-              value={dataType}
-              onChange={(e) => setDataType(e.target.value)}
-            >
-              <option value="">Select Input Type</option>
-              <option value="Boolean">Boolean</option>
-              <option value="Numeric">Numeric</option>
-            </select>
-            <br />
-<button
-  type="submit"
-  onClick={(e) => {
-    e.preventDefault();
-    addExtraItem(selectedTag.Tag_id); 
-  }}
->
-  Add/Update Item
-</button>
-          </form>
-        </div>
+              <div className="modal-body">
+                {/* Left Side: Edit/Add Item */}
+                <div className="edit-item-section">
+                  <h3>Edit/Add Item</h3>
+                  <form
+                    onSubmit={(e) => {
+                      e.preventDefault();
+                    }}
+                  >
+                    <input
+                      type="text"
+                      placeholder="Checklist Name"
+                      value={checklist_name}
+                      onChange={(e) => setChecklist_name(e.target.value)}
+                    />
 
-        {/* Right Side: Existing Items */}
-        <div className="existing-items-section">
-          <h3>Existing Items</h3>
-          <table className="details-table">
-            <thead>
-              <tr>
-                <th>Item Name</th>
-                <th>Input Type</th>
-              </tr>
-            </thead>
-            <tbody>
-              {selectedTag.Items && selectedTag.Items.length > 0 ? (
-                selectedTag.Items.map((item) => (
-                  <tr key={item.id}>
-                    <td>{item.Item_name}</td>
-                    <td>{item.Input_type}</td>
-                  </tr>
-                ))
-              ) : (
-                <tr>
-                  <td colSpan="2">No items available.</td>
-                </tr>
-              )}
-            </tbody>
-          </table>
-        </div>
+                    <input
+                      type="text"
+                      name="Instructions"
+                      placeholder="Instructions"
+                      value={Instructions}
+                      onChange={(e) => setInstructions(e.target.value)}
+                    />
+                    <select
+                      name="input_type"
+                      value={dataType}
+                      onChange={(e) => setDataType(e.target.value)}
+                    >
+                      <option value="">Select Input Type</option>
+                      <option value="Boolean">Boolean</option>
+                      <option value="Numeric">Numeric</option>
+                    </select>
+                    <br />
+                    <button
+                      type="submit"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        addExtraItem(selectedTemplateDetails.Tags.id, selectedTemplateDetails.id);
+                      }}
+                    >
+                      Add/Update Item
+                    </button>
+                  </form>
+                </div>
+
+                {/* Right Side: Existing Items */}
+                <div className="existing-items-section">
+                  <h3>Existing Items</h3>
+                  <table className="details-table">
+                    <thead>
+                      <tr>
+                        <th>Item Name</th>
+                        <th>Input Type</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {selectedTemplate &&
+                      selectedTemplate.length > 0 ? (
+                        selectedTemplate.map((item) => (
+                          <tr key={item.id}>
+                            <td>{item.checklist_name}</td>
+                            <td>{item.input_type}</td>
+                          </tr>
+                        ))
+                      ) : (
+                        <tr>
+                          <td colSpan="2">No items available.</td>
+                        </tr>
+                      )}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
-    </div>
-  </div>
-)}
-
-    </div>
+    </>
   );
 };
 

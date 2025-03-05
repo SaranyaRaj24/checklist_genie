@@ -14,10 +14,10 @@ const
 const router = express.Router();
 
 router.use(authentication);
-
+ 
 router.get('/getItems',getAllItems);
 router.post('/createItems',createItems);
-router.get('/getItemsByTemplate/:tag_id',getItemsByTemplate);
-router.post('/addItem/:tag_id',addExtraItems)
+router.get('/getItemsByTemplate/:tag_id/:current_version_id',getItemsByTemplate);
+router.post('/addItem/:tag_id/:template_id',addExtraItems);
 
 module.exports = router;

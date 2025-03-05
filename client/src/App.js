@@ -12,9 +12,6 @@ import AdminSettings from "./Pages/admin/Settings/Settings";
 import AdminChecklist from "./Pages/admin/Checklist/Checklist";
 import AssignedTask from "./Pages/admin/AssignedTask/AssignedTask";
 
-
-
-
 import UserPending from "./Components/User/Pending/Pending";
 import UserSettings from "./Components/User/Settings/Settings";
 import UserSidebar from "./Components/User/Sidebar/Sidebar";
@@ -22,7 +19,7 @@ import UserNotification from "./Components/User/Notification/Notification";
 import UserComplete from "./Components/User/Complete/Complete";
 import UserBrowse from "./Components/User/Browse/Browse";
 import UserLogin1 from './Components/User/Login1/Login1';
-
+import ChecklistHistory from "./Components/User/ChecklistHistory/ChecklistHistory";
 
 
 function App() {
@@ -37,6 +34,10 @@ function App() {
             <Route path="complete" element={<UserComplete />} />
             <Route path="notification" element={<UserNotification />} />
             <Route path="settings" element={<UserSettings />} />
+            
+            <Route path="checklisthistory" element={<ChecklistHistory />} />
+            <Route path="tag" element={<AdminTag />} />
+            <Route path="checklist" element={<AdminTemplate />} />
 
             <Route path="login1" element={<UserLogin1/>}/>
 

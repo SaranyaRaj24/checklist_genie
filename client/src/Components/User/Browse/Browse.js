@@ -15,6 +15,7 @@ function Browse() {
   const [items, setItems] = useState([]);
   const [selectedDate, setSelectedDate] = useState("");
   const [openedId, SetOpenedID] = useState();
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const navigate = useNavigate();
 
@@ -45,19 +46,18 @@ function Browse() {
     fetchTemplates();
   }, [navigate]);
 
-  const handleView = async (tag_id) => {
+  const handleView = async (tag_id, current_version_id, template_id) => {
     try {
       const token = localStorage.getItem("token");
-      SetOpenedID(tag_id);
+      SetOpenedID(template_id);
       const response = await axios.get(
-        `${process.env.REACT_APP_BACKEND_SERVER_URL}/items/getItemsByTemplate/${tag_id}`,
+        `${process.env.REACT_APP_BACKEND_SERVER_URL}/items/getItemsByTemplate/${tag_id}/${current_version_id}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         }
       );
-      console.log("Fetched Items:", response.data);
 
       const fetchedItems = response.data.map((item) => ({
         ...item,
@@ -103,13 +103,14 @@ function Browse() {
       updatedItems[index].input = value || null;
     }
 
-    console.log("Updated Items:", updatedItems);
     setItems(updatedItems);
   };
 
   const handleActionClick = async (index) => {
+
     const item = items[index];
     try {
+      setIsSubmitting(true);
       const token = localStorage.getItem("token");
       const dateToSubmit =
         selectedDate || new Date().toISOString().split("T")[0];
@@ -120,13 +121,12 @@ function Browse() {
         input: item.input || "",
         comments: item.comments || null,
         checklist_template_linked_items_id:
-          item.checklist_template_linked_items_id,
+          item.ChecklistTemplateLinkedItems[0].id,
         user_assigned_checklist_template_id: 1,
         template_version: item.template_version,
         selected_date: dateToSubmit,
       };
 
-      console.log("Payload being sent:", payload);
 
       await axios.post(
         `${process.env.REACT_APP_BACKEND_SERVER_URL}/response/createResponse`,
@@ -142,6 +142,8 @@ function Browse() {
     } catch (error) {
       console.error("Error submitting checklist:", error);
       alert("Failed to submit checklist. Please try again.");
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -152,6 +154,7 @@ function Browse() {
   const handleBulkSubmit = async () => {
     try {
       const token = localStorage.getItem("token");
+      setIsSubmitting(true);
 
       const userDetails = {
         username: {},
@@ -169,9 +172,8 @@ function Browse() {
         alert("Checklist Template ID is missing.");
         return;
       }
-
+     
       const submissionPromises = items.map((item) => {
-        console.log("Submitting item:", item);
         return axios.post(
           `${process.env.REACT_APP_BACKEND_SERVER_URL}/response/createResponse`,
           {
@@ -193,11 +195,8 @@ function Browse() {
           }
         );
       });
-      console.log("Items before submission:", items);
 
       await Promise.all(submissionPromises);
-
-      console.log("All checklist items submitted successfully!", items);
 
       const emailResponse = await axios.post(
         `${process.env.REACT_APP_BACKEND_SERVER_URL}/checklist/submit`,
@@ -214,8 +213,6 @@ function Browse() {
         }
       );
 
-      console.log("Email response:", emailResponse);
-
       if (emailResponse.status === 200) {
         alert("Checklist submitted and email sent successfully!");
       } else {
@@ -224,6 +221,8 @@ function Browse() {
     } catch (error) {
       console.error("Error submitting checklist:", error);
       alert("Failed to submit checklist. Please try again.");
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -263,7 +262,7 @@ function Browse() {
                     <h3>{template.template_name}</h3>
                     <h3
                       className="view"
-                      onClick={() => handleView(template.tag_id)}
+                      onClick={() => handleView(template.tag_id, template.current_version_id, template.id)}
                     >
                       View
                     </h3>
@@ -370,21 +369,29 @@ function Browse() {
                             <td>
                               <IoMdSend
                                 style={{
-                                  color: "green",
+                                  color: isSubmitting ? "gray" : "green", 
                                   fontSize: "1.5rem",
-                                  cursor: "pointer",
+                                  cursor: isSubmitting
+                                    ? "not-allowed"
+                                    : "pointer", 
                                 }}
-                                onClick={() => handleActionClick(index)}
+                                onClick={
+                                  isSubmitting
+                                    ? undefined
+                                    : () => handleActionClick(index)
+                                } 
                               />
                             </td>
                           </tr>
                         ))}
                       </tbody>
                     </table>
+
                     <div className="submit-container">
                       <button
                         className="submit-button"
                         onClick={handleBulkSubmit}
+                        disabled={isSubmitting}
                       >
                         Submit
                       </button>

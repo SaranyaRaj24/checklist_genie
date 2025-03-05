@@ -5,7 +5,6 @@ const prisma = new PrismaClient();
 const getUserPosition = async (req, res) => {
   try {
     const { user_id } = req.user;
-    console.log("User ID:", user_id);
 
     const userPositions = await prisma.organisation_User_position.findMany({
       where: {

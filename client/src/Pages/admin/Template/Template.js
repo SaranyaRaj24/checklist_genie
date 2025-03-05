@@ -1,4 +1,3 @@
-
 // import React, { useState } from 'react';
 // import '../../admin/Template/Template.css';
 // import Navbar from '../../../Pages/admin/Navbar/Navbar';
@@ -6,11 +5,10 @@
 // import { faPen, faTrash } from '@fortawesome/free-solid-svg-icons';
 // import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-
 // const Template = () => {
 //   const [update, setUpdated] = useState(false);
-//   const [anchorEl, setAnchorEl] = useState(null); 
-//   const [sharedUser, setSharedUser] = useState(''); 
+//   const [anchorEl, setAnchorEl] = useState(null);
+//   const [sharedUser, setSharedUser] = useState('');
 //   const [items, setItems] = useState([
 //     { description: 'Daily ClockIn', type: 'yesNo', comments: '' },
 //     { description: 'Monday Meeting', type: 'yesNo', comments: '' },
@@ -30,13 +28,12 @@
 
 //   const handleSelectUser = (user) => {
 //     setAnchorEl(null);
-//     setSharedUser(user); 
+//     setSharedUser(user);
 //   };
 
 //   const handleAddItem = () => {
 //     setItems([...items, { description: '', type: 'yesNo', comments: '' }]);
 //   };
-
 
 //   const handleDescriptionChange = (index, event) => {
 //     const updatedItems = [...items];
@@ -50,8 +47,6 @@
 //     setItems(updatedItems);
 //   };
 
-
-
 //   return (
 //     <>
 //       <div className='dashboard-container'>
@@ -59,7 +54,7 @@
 //         {update && <div className="alert-message-position">Updated Successfully!</div>}
 //         {sharedUser && <div className="alert-message-position">Checklist is shared with {sharedUser}!</div>}
 
-//         <h2 className='template'>Daily Checklist</h2> 
+//         <h2 className='template'>Daily Checklist</h2>
 //         <button className='items-position' onClick={handleAddItem}>Add Items</button>
 
 //         <div className='back-position'>
@@ -77,7 +72,7 @@
 //               {items.map((item, index) => (
 //                 <tr key={index}>
 //                   <td>{index + 1}.</td>
-                  
+
 //                   <td>
 //                     <input
 //                       type="text"
@@ -87,8 +82,7 @@
 //                     />
 //                   </td>
 //                   <td>  Select</td>
-                  
-                  
+
 //                   <td>
 //                     <textarea
 //                       value={item.comments}
@@ -107,7 +101,7 @@
 //         </div>
 
 //         <div className='same-line'>
-//           <button> Date  <input type='date'/></button>  
+//           <button> Date  <input type='date'/></button>
 //           <button onClick={handleUpdate}>Save</button>
 //           <button onClick={handleShareClick}>Share to</button>
 
@@ -116,9 +110,8 @@
 //             open={Boolean(anchorEl)}
 //             onClose={() => setAnchorEl(null)}>
 //             <MenuItem className='' onClick={() => handleSelectUser(' All')}> Public </MenuItem>
-//           </Menu>  
+//           </Menu>
 
-      
 //         </div>
 //       </div>
 //     </>
@@ -126,7 +119,6 @@
 // };
 
 // export default Template;
-
 
 // import React, { useState } from 'react';
 // import '../../admin/Template/Template.css';
@@ -197,9 +189,6 @@
 //     updatedItems[index].type = event.target.value;
 //     setItems(updatedItems);
 //   };
-
-
-  
 
 //   return (
 //     <>
@@ -290,7 +279,7 @@
 //             <input type="text" placeholder="Enter a value" />
 //           ) : null}
 //         </div>
-//       )} 
+//       )}
 
 //                   <td>
 //                     <textarea
@@ -327,8 +316,6 @@
 // };
 
 // export default Template;
-
-
 
 // import React, { useState } from 'react';
 // import '../../admin/Template/Template.css';
@@ -509,7 +496,6 @@
 
 // export default Template;
 
-
 // import React, { useState } from 'react';
 // import '../../admin/Template/Template.css';
 // import Navbar from '../../../Pages/admin/Navbar/Navbar';
@@ -615,7 +601,7 @@
 //                     </div>
 //                     {showOptions[index] && (
 //                       <select>
-                        
+
 //                         <option  onClick={() => handleTypeChange(index, 'yesNo')}>Yes/No</option>
 //                         <option onClick={() => handleTypeChange(index, 'input')}>Enter a number</option>
 //                       </select>
@@ -676,26 +662,31 @@
 
 // export default Template;
 
-
-import React, { useState } from 'react';
-import '../../admin/Template/Template.css';
-import Navbar from '../../../Pages/admin/Navbar/Navbar';
-import { Menu, MenuItem } from '@mui/material';
-import { faPen, faTrash } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import React, { useState } from "react";
+import "../../admin/Template/Template.css";
+import Navbar from "../../../Pages/admin/Navbar/Navbar";
+import { Menu, MenuItem } from "@mui/material";
+import { faPen, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import UserNav from '../../../Components/User/Sidebar/Sidebar';
+import { useLocation } from "react-router-dom";
 
 const Template = () => {
   const [update, setUpdated] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
-  const [sharedUser, setSharedUser] = useState('');
+  const [sharedUser, setSharedUser] = useState("");
   const [items, setItems] = useState([
-    { description: 'Daily ClockIn', type: '', comments: '' },
-    { description: 'Monday Meeting', type: '', comments: '' },
-    { description: 'Workdone email', type: '', comments: '' },
-    { description: 'Daily Clockout', type: '', comments: '' },
-    { description: 'No of tasks completed', type: '', comments: '' }
+    { description: "Daily ClockIn", type: "", comments: "" },
+    { description: "Monday Meeting", type: "", comments: "" },
+    { description: "Workdone email", type: "", comments: "" },
+    { description: "Daily Clockout", type: "", comments: "" },
+    { description: "No of tasks completed", type: "", comments: "" },
   ]);
-  const [showOptions, setShowOptions] = useState(Array(items.length).fill(false));
+  const [showOptions, setShowOptions] = useState(
+    Array(items.length).fill(false)
+  );
+  const location = useLocation();
+  const isAdmin = location.pathname.includes("/admin/template");
 
   const handleUpdate = () => {
     setUpdated(true);
@@ -712,7 +703,7 @@ const Template = () => {
   };
 
   const handleAddItem = () => {
-    setItems([...items, { description: '', type: '', comments: '' }]);
+    setItems([...items, { description: "", type: "", comments: "" }]);
     setShowOptions([...showOptions, false]);
   };
 
@@ -738,26 +729,34 @@ const Template = () => {
     const updatedItems = [...items];
     updatedItems[index].type = type;
     setItems(updatedItems);
-    setShowOptions(prev => prev.map((_, i) => i === index ? false : _)); 
+    setShowOptions((prev) => prev.map((_, i) => (i === index ? false : _)));
   };
 
   return (
     <>
-      <div className='dashboard-container'>
-        <Navbar />
-        {update && <div className="alert-message-position">Updated Successfully!</div>}
-        {sharedUser && <div className="alert-message-position">Checklist is shared with {sharedUser}!</div>}
+      <div className="dashboard-container">
+        {isAdmin ? <Navbar /> : <UserNav />}
+        {update && (
+          <div className="alert-message-position">Updated Successfully!</div>
+        )}
+        {sharedUser && (
+          <div className="alert-message-position">
+            Checklist is shared with {sharedUser}!
+          </div>
+        )}
 
-        <h2 className='template'>Daily Checklist</h2>
-        <button className='items-position' onClick={handleAddItem}>Add Items</button>
+        <h2 className="template">Daily Checklist</h2>
+        <button className="items-position" onClick={handleAddItem}>
+          Add Items
+        </button>
 
-        <div className='back-position'>
-          <table className='template-position'>
+        <div className="back-position">
+          <table className="template-position">
             <thead>
               <tr>
                 <th>S.No</th>
                 <th>Checklist Items</th>
-                <th style={{ width: '15rem' }}>Type</th>
+                <th style={{ width: "15rem" }}>Type</th>
                 <th>Comments</th>
                 <th>Action</th>
               </tr>
@@ -771,32 +770,55 @@ const Template = () => {
                     <input
                       type="text"
                       value={item.description}
-                      onChange={(event) => handleDescriptionChange(index, event)}
+                      onChange={(event) =>
+                        handleDescriptionChange(index, event)
+                      }
                       placeholder="Enter item description"
                     />
                   </td>
 
                   <td>
-                    <div style={{ textAlign: 'center', cursor: 'pointer' }} onClick={() => handleChooseClick(index)}>
+                    <div
+                      style={{ textAlign: "center", cursor: "pointer" }}
+                      onClick={() => handleChooseClick(index)}
+                    >
                       Select the type
                     </div>
                     {showOptions[index] && (
                       <div>
-                        <button onClick={() => handleTypeChange(index, 'yesNo')}>Yes/No</button>
-                        <button onClick={() => handleTypeChange(index, 'input')}>Enter a number</button>
+                        <button
+                          onClick={() => handleTypeChange(index, "yesNo")}
+                        >
+                          Yes/No
+                        </button>
+                        <button
+                          onClick={() => handleTypeChange(index, "input")}
+                        >
+                          Enter a number
+                        </button>
                       </div>
                     )}
-                    {item.type === 'yesNo' && (
+                    {item.type === "yesNo" && (
                       <div>
                         <label>
-                          <input type="radio" value="Yes" name={`yesNo-${index}`} /> Yes
+                          <input
+                            type="radio"
+                            value="Yes"
+                            name={`yesNo-${index}`}
+                          />{" "}
+                          Yes
                         </label>
                         <label>
-                          <input type="radio" value="No" name={`yesNo-${index}`} /> No
+                          <input
+                            type="radio"
+                            value="No"
+                            name={`yesNo-${index}`}
+                          />{" "}
+                          No
                         </label>
                       </div>
                     )}
-                    {item.type === 'input' && (
+                    {item.type === "input" && (
                       <input
                         type="number"
                         placeholder="Enter a number"
@@ -814,8 +836,12 @@ const Template = () => {
                     />
                   </td>
                   <td>
-                    <button><FontAwesomeIcon icon={faPen} /></button>
-                    <button><FontAwesomeIcon icon={faTrash} /></button>
+                    <button>
+                      <FontAwesomeIcon icon={faPen} />
+                    </button>
+                    <button>
+                      <FontAwesomeIcon icon={faTrash} />
+                    </button>
                   </td>
                 </tr>
               ))}
@@ -823,16 +849,19 @@ const Template = () => {
           </table>
         </div>
 
-        <div className='same-line'>
-          <button>Date <input type='date' /></button>
+        <div className="same-line">
+          <button>
+            Date <input type="date" />
+          </button>
           <button onClick={handleUpdate}>Save</button>
           <button onClick={handleShareClick}>Share to</button>
 
           <Menu
             anchorEl={anchorEl}
             open={Boolean(anchorEl)}
-            onClose={() => setAnchorEl(null)}>
-            <MenuItem onClick={() => handleSelectUser('All')}>Public</MenuItem>
+            onClose={() => setAnchorEl(null)}
+          >
+            <MenuItem onClick={() => handleSelectUser("All")}>Public</MenuItem>
           </Menu>
         </div>
       </div>
@@ -841,7 +870,3 @@ const Template = () => {
 };
 
 export default Template;
-
-
-
-

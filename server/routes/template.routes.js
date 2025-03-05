@@ -3,7 +3,7 @@ const { authentication } = require('../utils/jwt');
 const { getAllTemplate, createTemplate,getTemplatesByTags,getTagsbyTemplates, getTemplatesForUserPositions} = require('../controllers/template.controllers');
 const router = express.Router();
 
-router.use(authentication);
+router.use(authentication); 
 
 
 router.get('/getTemplate',getAllTemplate);

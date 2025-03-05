@@ -97,7 +97,6 @@ const sendEmailToManager = async (
 };
 
 const submitChecklist = async (req, res) => {
-  console.log("User:", req.user, req.body);
   try {
     const username = req.user?.name;
     const userEmail = req.user?.email;
@@ -141,7 +140,6 @@ const submitChecklist = async (req, res) => {
       month: "long",
       day: "numeric",
     });
-    console.log("Formatted Date:", formattedDate);
 
     const templateRecipients = await prisma.templateRecipients.findMany({
       where: { checklist_template_id: checklistTemplateId },
@@ -190,7 +188,6 @@ const submitChecklist = async (req, res) => {
 
 const addRecipient = async (req, res) => {
   try {
-    console.log("Authenticated User:", req.user);
 
     if (!req.user || !req.user.user_id) {
       return res.status(400).json({ message: "User not authenticated." });

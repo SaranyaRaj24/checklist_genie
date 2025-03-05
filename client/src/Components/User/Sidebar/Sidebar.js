@@ -17,14 +17,23 @@ import ListItemText from "@mui/material/ListItemText";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import TemplateIcon from "@mui/icons-material/Description";
 import SettingsIcon from "@mui/icons-material/Settings";
-import PersonIcon from '@mui/icons-material/Person';
+import PersonIcon from "@mui/icons-material/Person";
+
+import {
+  Checklist as ChecklistIcon,
+  History as HistoryIcon,
+  Label as TagIcon,
+  Assignment as CreateChecklistIcon,
+  AdminPanelSettings as AdminIcon
+} from "@mui/icons-material";
+
 import imagelogo from "../../../Assets/logo.jpg";
 import { IoPersonCircleSharp } from "react-icons/io5";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
-import { useNavigate } from "react-router-dom"; 
+import { useNavigate } from "react-router-dom";
 import "./Sidebar.css";
-import axios from 'axios';
+import axios from "axios";
 
 const drawerWidth = 240;
 
@@ -90,9 +99,8 @@ export default function MiniDrawer() {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [userType, setUserType] = useState("");
   const openMenu = Boolean(anchorEl);
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
 
- 
   const toggleDrawer = () => {
     setOpen(!open);
   };
@@ -106,19 +114,21 @@ export default function MiniDrawer() {
   };
 
   const handleNavigation = (path) => {
-    navigate(path); 
+    navigate(path);
   };
-
 
   useEffect(() => {
     const fetchUserType = async () => {
       try {
-        const token = localStorage.getItem("token"); 
-        const response = await axios.get(`${process.env.REACT_APP_BACKEND_SERVER_URL}/type/getUserType`, {
-          headers: {
-            Authorization: `Bearer ${token}`, 
-          },
-        });
+        const token = localStorage.getItem("token");
+        const response = await axios.get(
+          `${process.env.REACT_APP_BACKEND_SERVER_URL}/type/getUserType`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
         const type = response.data.getUserType[0]?.user_type || null;
         setUserType(type);
       } catch (error) {
@@ -184,8 +194,24 @@ export default function MiniDrawer() {
             {[
               {
                 text: "Browse Checklist",
-                icon: <TemplateIcon />,
-                path: "/user/browse", 
+                icon: <ChecklistIcon />,
+                path: "/user/browse",
+              },
+
+              {
+                text: "Checklist History",
+                icon: <HistoryIcon />,
+                path: "/user/checklisthistory",
+              },
+              {
+                text: "Create Tag",
+                icon: <TagIcon />,
+                path: "/user/tag",
+              },
+              {
+                text: "Create Checklist",
+                icon: <CreateChecklistIcon />,
+                path: "/user/checklist",
               },
               {
                 text: "Notifications",
@@ -197,19 +223,15 @@ export default function MiniDrawer() {
                 icon: <SettingsIcon />,
                 path: "/user/settings",
               },
-              
-
-             
               ...(userType === "ADMIN"
                 ? [
                     {
-                      text: "Admin",
-                      icon: <PersonIcon />,
-                      path: "/admin/Dashboard",
+                      text: "Admin Portal",
+                      icon: <AdminIcon />,
+                      path: "/admin/dashboard",
                     },
                   ]
                 : []),
-              
             ].map(({ text, icon, path }) => (
               <ListItem key={text} disablePadding sx={{ display: "block" }}>
                 <ListItemButton

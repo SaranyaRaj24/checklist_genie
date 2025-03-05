@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "../../admin/Checklist/Checklist.css";
 import Navbar from "../../../Pages/admin/Navbar/Navbar";
+import UserNav from "../../../Components/User/Sidebar/Sidebar";
+import { useLocation } from "react-router-dom";
 
 const Checklist = () => {
   const [update, setUpdate] = useState(false);
@@ -16,10 +18,10 @@ const Checklist = () => {
   const [checklist_name, setChecklist_name] = useState("");
   const [Instructions, setInstructions] = useState("");
   const [dataType, setDataType] = useState("");
+  const location = useLocation();
+  const isAdmin = location.pathname.includes("/admin/checklist");
 
   const priorities = ["High", "Medium", "Low"];
-
-  
 
   const handlePriorityClick = () => {
     setPriorityVisible(!priorityVisible);
@@ -35,8 +37,6 @@ const Checklist = () => {
     setSelectedDate(e.target.value);
     console.log(`Selected date: ${e.target.value}`);
   };
-
- 
 
   const handleAddItemsClick = async () => {
     try {
@@ -125,16 +125,14 @@ const Checklist = () => {
   const handleSaveNewItem = async () => {
     try {
       const token = localStorage.getItem("token");
-  
-     
-  
+
       const item = await axios.post(
         `${process.env.REACT_APP_BACKEND_SERVER_URL}/items/createItems`,
         {
           checklist_name,
           Instructions,
           tag_id: parseInt(tag_id),
-          input_type: dataType, 
+          input_type: dataType,
         },
         {
           headers: {
@@ -142,7 +140,7 @@ const Checklist = () => {
           },
         }
       );
-  
+
       alert("Item created successfully!");
       console.log("Item response:", item.data);
     } catch (error) {
@@ -150,46 +148,46 @@ const Checklist = () => {
       alert("Failed to create item. Please try again.");
     }
   };
-  
+
   return (
     <>
       <div className="dashboard-container">
-        <Navbar />
+        {isAdmin ? <Navbar /> : <UserNav />}
         {update && (
           <div className="alert-message-position">Saved Successfully!</div>
         )}
-       <div className=" popup" >
-        <div className="content">
-          <div style={{fontWeight:'bold'}} >
-            Checklist Name:  
-            <input
-            style={{width:'12rem', height:'2.5rem', marginLeft:'2rem'}}
-              type="text"
-              value={template_name}
-              onChange={(e) => setTemplate_name(e.target.value)}
-            />
+        <div className=" popup">
+          <div className="content">
+            <div style={{ fontWeight: "bold" }}>
+              Checklist Name:
+              <input
+                style={{ width: "12rem", height: "2.5rem", marginLeft: "2rem" }}
+                type="text"
+                value={template_name}
+                onChange={(e) => setTemplate_name(e.target.value)}
+              />
+            </div>
+            <br />
+
+            <div className="tag-dropdown">
+              <label style={{ fontWeight: "bold", marginRight: "2.3rem" }}>
+                Select Tag:
+              </label>
+              <select value={tag_name} onChange={handleSelectName}>
+                <option value="">Select a tag Name</option>
+                {tags.map((tag) => (
+                  <option key={tag.id} value={tag.tag_name}>
+                    {tag.tag_name}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <button className="add-position" onClick={handleAddItemsClick}>
+              Add Items
+            </button>
           </div>
-          <br/>
- 
-          <div className="tag-dropdown">
-            <label style={{fontWeight:'bold', marginRight:'2.3rem'}} >Select Tag:</label>
-            <select value={tag_name} onChange={handleSelectName}>
-              <option value="">Select a tag Name</option>
-              {tags.map((tag) => (
-                <option key={tag.id} value={tag.tag_name}>
-                  {tag.tag_name}
-                </option>
-              ))}
-            </select>
-          </div>
- 
-          <button className="add-position" onClick={handleAddItemsClick}>
-            Add Items
-          </button>
- 
-         
         </div>
-</div>
         {isModalOpen && (
           <div className="modal">
             <div className="modal-content">
@@ -244,7 +242,7 @@ const Checklist = () => {
                 <select
                   value={dataType}
                   onChange={(e) => setDataType(e.target.value)}
-                  >
+                >
                   <option value="">Select Input Type</option>
                   <option value="Boolean">Boolean</option>
                   <option value="Numeric">Numeric</option>

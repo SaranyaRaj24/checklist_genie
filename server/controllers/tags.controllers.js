@@ -4,7 +4,18 @@ const prisma = new PrismaClient();
 
 const getAllTags = async (req, res) => {
   try {
-    const tags = await prisma.tags.findMany();
+    const { organisation_id } = req.user;
+
+    const tags = await prisma.tags.findMany({
+      where: {
+        OrganisationUsers: {
+          organisation_id: organisation_id
+        }
+      },
+      include: {
+        OrganisationUsers: true 
+      }
+    });
     res.status(200).json(tags);
   } catch (error) {
     console.error("Error fetching all tags:", error);

@@ -1,9 +1,10 @@
- 
 import React, { useState } from "react";
 import axios from "axios";
 import "../../admin/Tag/Tag.css";
 import Navbar from "../../../Pages/admin/Navbar/Navbar";
- 
+import UserNav from "../../../Components/User/Sidebar/Sidebar";
+import { useLocation } from "react-router-dom";
+
 const Tag = () => {
   const [saved, setSaved] = useState(false);
   const [deleted, setDeleted] = useState(false);
@@ -11,7 +12,9 @@ const Tag = () => {
   const [description, setDescription] = useState("");
   const [frequency, setFrequency] = useState("");
   const [applicableTeam, setApplicableTeam] = useState("");
- 
+  const location = useLocation();
+  const isAdmin = location.pathname.includes("/admin/tag");
+
   const teams = [
     "FULL_STACK_DEVELOPER",
     "POWER_BI_DEVELOPER",
@@ -20,24 +23,23 @@ const Tag = () => {
     "HUMAN_RESOURCE",
     "PUBLIC",
   ];
- 
+
   const handleDelete = () => {
     setDeleted(true);
     setTimeout(() => setDeleted(false), 3000);
   };
- 
+
   const handleSave = async () => {
     try {
       const token = localStorage.getItem("token");
-  
+
       const payload = {
         tag_name: tagName,
         description,
         frequency,
         user_position: applicableTeam,
       };
-  
-    
+
       const tag = await axios.post(
         `${process.env.REACT_APP_BACKEND_SERVER_URL}/tags/createTags`,
         payload,
@@ -54,11 +56,11 @@ const Tag = () => {
       console.error("Error saving tag:", error);
     }
   };
-  
+
   return (
     <>
       <div className="dashboard-container">
-        <Navbar />
+        {isAdmin ? <Navbar /> : <UserNav />}
         <h3 className="tag-pos">Tags</h3>
         {saved && <div className="alert-message">Saved Successfully!</div>}
         {deleted && <div className="alert-message">Deleted Successfully!</div>}
@@ -117,7 +119,5 @@ const Tag = () => {
     </>
   );
 };
- 
+
 export default Tag;
- 
- 

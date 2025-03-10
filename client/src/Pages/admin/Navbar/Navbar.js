@@ -168,14 +168,14 @@ export default function MiniDrawer() {
           <DrawerHeader />
           <Divider />
           <List>
-            {[{
+            {[/* {
               text: 'Dashboard',
               icon: <DashboardIcon />
             },
             {
               text: 'Template',
               icon: <TemplateIcon />
-            },
+            }, */
             {
               text: 'Tag',
               icon: <InboxIcon />
@@ -226,14 +226,14 @@ export default function MiniDrawer() {
           </List>
           <Divider />
           <List>
-            {[{
+            {[/* {
               text: 'Notification',
               icon: <NotificationsIcon />
             },
             {
               text: 'Settings',
               icon: <SettingsIcon />
-            },
+            }, */
             {
               text: 'User',
               icon: <PersonIcon />

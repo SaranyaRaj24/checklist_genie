@@ -228,7 +228,7 @@ export default function MiniDrawer() {
                     {
                       text: "Admin Portal",
                       icon: <AdminIcon />,
-                      path: "/admin/tag",
+                      path:  "/admin/tag",
                     },
                   ]
                 : []),

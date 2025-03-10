@@ -175,7 +175,7 @@ export default function MiniDrawer() {
             {
               text: 'Template',
               icon: <TemplateIcon />
-            }, */
+            },  */
             {
               text: 'Tag',
               icon: <InboxIcon />

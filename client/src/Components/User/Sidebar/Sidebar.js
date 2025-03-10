@@ -213,7 +213,7 @@ export default function MiniDrawer() {
                 icon: <CreateChecklistIcon />,
                 path: "/user/checklist",
               },
-              {
+              /* {
                 text: "Notifications",
                 icon: <NotificationsIcon />,
                 path: "/user/notification",
@@ -222,13 +222,13 @@ export default function MiniDrawer() {
                 text: "Settings",
                 icon: <SettingsIcon />,
                 path: "/user/settings",
-              },
+              }, */
               ...(userType === "ADMIN"
                 ? [
                     {
                       text: "Admin Portal",
                       icon: <AdminIcon />,
-                      path: "/admin/dashboard",
+                      path:  "/admin/tag",
                     },
                   ]
                 : []),

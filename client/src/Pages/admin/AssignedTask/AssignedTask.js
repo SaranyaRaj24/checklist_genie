@@ -29,7 +29,7 @@ const AssignedTask = () => {
             },
           }
         );
-        setData(response.data);
+        setData(response.data.templates);
       } catch (error) {
         console.error("Error fetching tags data:", error);
       }
@@ -175,7 +175,7 @@ const AssignedTask = () => {
             <div className="card-headerr">
               <h2>{template.template_name}</h2>
               <p>
-                <strong>User Positions:</strong> {template.Tags.user_position}
+                <strong>User Positions:</strong> {template.Tags?.user_position}
               </p>
               <button
                 onClick={() =>

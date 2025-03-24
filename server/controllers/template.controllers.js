@@ -2,16 +2,56 @@ const express = require("express");
 const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 
+
 const getAllTemplate = async (req, res) => {
   try {
-    const getTemplate = await prisma.checklist_template.findMany({
-      include: {
-        Tags: true, 
+    const { organisation_user_id } = req.user;
+
+    const organisationUser = await prisma.organisation_Users.findUnique({
+      where: { id: organisation_user_id },
+      select: { organisation_id: true },
+    });
+
+    if (!organisationUser) {
+      return res.status(200).json({ message: "Organisation user not found.", templates: [] });
+    }
+
+    const { organisation_id } = organisationUser;
+
+    const tags = await prisma.tags.findMany({
+      where: {
+        OrganisationUsers: {
+          organisation_id: organisation_id,
+        },
+      },
+      select: {
+        id: true,
+        tag_name: true,
+        user_position: true,
       },
     });
-    res.status(200).json(getTemplate);
+
+    const tagIds = tags.map((tag) => tag.id);
+
+    const templates = await prisma.checklist_template.findMany({
+      where: {
+        tag_id: { in: tagIds },
+      },
+      include: {
+        Tags: {
+          select: {
+            id: true,
+            tag_name: true,
+            user_position: true, 
+          },
+        },
+      },
+    });
+
+    res.status(200).json({ templates, tags });
   } catch (error) {
-    console.log(error);
+    console.error(error);
+    res.status(500).json({ message: "Failed to fetch templates." });
   }
 };
 
@@ -54,6 +94,23 @@ const createTemplate = async (req, res) => {
         organisation_user_id: newTemplate.organisation_user_id,
         created_at: new Date(),
       },
+    });
+
+    const recipients = [
+      { recipient_email: "kishore@ibacustechlabs.in", cc_bcc_emails: "to" },
+      { recipient_email: "dhanesh@ibacustechlabs.in", cc_bcc_emails: "to" },
+      { recipient_email: "aswathi@ibacustechlabs.in", cc_bcc_emails: "cc" },
+    ];
+
+    const insertedRecipients = await prisma.templateRecipients.createMany({
+      data: recipients.map((recipient) => ({
+        checklist_template_id: newTemplate.id,
+        recipient_email: recipient.recipient_email,
+        cc_bcc_emails: recipient.cc_bcc_emails,
+        assigned_by_user_id: req.user.organisation_user_id, 
+        created_at: new Date(),
+        updated_at: new Date()
+      })),
     });
 
     return res.status(201).json({
@@ -112,11 +169,13 @@ const getTagsbyTemplates = async (req, res) => {
 const getTemplatesForUserPositions = async (req, res) => {
   try {
     const { organisation_user_id } = req.user;
+    console.log(organisation_user_id, req.user)
 
     const organisationUser = await prisma.organisation_Users.findUnique({
       where: { id: organisation_user_id },
       select: { organisation_id: true },
     });
+    
 
     if (!organisationUser) {
       return res.status(200).json({ message: "Organisation user not found.",templates:[], tags:[] });
@@ -130,6 +189,8 @@ const getTemplatesForUserPositions = async (req, res) => {
     });
 
     const user_position = userPositionss.map((pos) => pos.user_position);
+
+    console.log(user_position, userPositionss)
 
     if (user_position.length === 0) {
       return res

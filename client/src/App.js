@@ -20,12 +20,17 @@ import UserComplete from "./Components/User/Complete/Complete";
 import UserBrowse from "./Components/User/Browse/Browse";
 import UserLogin1 from './Components/User/Login1/Login1';
 import ChecklistHistory from "./Components/User/ChecklistHistory/ChecklistHistory";
+import Profile from "./Components/User/Profile/Profile";
+import TemplateRecipients from "./Pages/admin/EmailRecepients/TemplateRecipients";
 
 
 function App() {
   return (
     <>
       <BrowserRouter>
+      <Routes>
+        <Route path="profile" element={<Profile />}/>
+        </Routes>
         <Routes>
           <Route path="user" element={<Outlet />}>
             <Route path="sidebar" element={<UserSidebar />} />
@@ -38,8 +43,7 @@ function App() {
             <Route path="checklisthistory" element={<ChecklistHistory />} />
             <Route path="tag" element={<AdminTag />} />
             <Route path="checklist" element={<AdminChecklist />} />
-
-
+            
             <Route path="login1" element={<UserLogin1/>}/>
 
           </Route>
@@ -57,6 +61,7 @@ function App() {
             <Route path="settings" element={<AdminSettings />} />
             <Route path="checklist" element={<AdminChecklist />} />
             <Route path="assigned-task" element = {<AssignedTask />} />
+            <Route path="templaterecepients/:templateId" element = {<TemplateRecipients />} />
           
           </Route>
         </Routes>

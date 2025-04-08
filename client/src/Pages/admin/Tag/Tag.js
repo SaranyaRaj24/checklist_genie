@@ -61,7 +61,7 @@ const Tag = () => {
     <>
       <div className="dashboard-container">
         {isAdmin ? <Navbar /> : <UserNav />}
-        <h3 className="tag-pos">Tags</h3>
+        {/* <h3 className="tag-pos">Tags</h3> */}
         {saved && <div className="alert-message">Saved Successfully!</div>}
         {deleted && <div className="alert-message">Deleted Successfully!</div>}
         <div className="notification-container">

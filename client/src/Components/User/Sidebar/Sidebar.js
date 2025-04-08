@@ -139,6 +139,13 @@ export default function MiniDrawer() {
     navigate("/");
   };
 
+
+  const handleProfileClick = () => {
+    navigate("/profile");
+  };
+
+
+
   return (
     <>
       <Box sx={{ display: "flex" }}>
@@ -185,6 +192,7 @@ export default function MiniDrawer() {
             horizontal: "right",
           }}
         >
+          <MenuItem onClick={handleProfileClick}>Profile</MenuItem>
           <MenuItem onClick={handleLogout}>Logout</MenuItem>
         </Menu>
 
@@ -204,7 +212,7 @@ export default function MiniDrawer() {
                 icon: <HistoryIcon />,
                 path: "/user/checklisthistory",
               },
-              {
+              /* {
                 text: "Create Tag",
                 icon: <TagIcon />,
                 path: "/user/tag",
@@ -213,7 +221,7 @@ export default function MiniDrawer() {
                 text: "Create Checklist",
                 icon: <CreateChecklistIcon />,
                 path: "/user/checklist",
-              },
+              }, */
               /* {
                 text: "Notifications",
                 icon: <NotificationsIcon />,

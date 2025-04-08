@@ -13,6 +13,8 @@ const responseRoutes = require("./routes/itemResponse.routes");
 const positionRoutes = require("./routes/userPosition.routes");
 const userTypeRoutes = require("./routes/userTypes.routes");
 const mailRoutes = require("./routes/mail.routes");
+const templateRecepientRoutes = require("./routes/emailRecepients.routes");
+
 const cors = require("cors");
 const { authentication } = require("./utils/jwt");
 const app = express();
@@ -52,6 +54,7 @@ app.use("/template", templateRoutes);
 app.use("/items", itemRoutes);
 app.use("/checklist", mailRoutes);
 app.use("/response", responseRoutes);
+app.use("/templaterecepients", templateRecepientRoutes);
 // app.use('/microsoft',microsoftRoutes)
 
 app.use("/position", positionRoutes);

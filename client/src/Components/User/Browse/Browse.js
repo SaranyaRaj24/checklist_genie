@@ -12,6 +12,8 @@ function Browse() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalContent, setModalContent] = useState(null);
   const [templates, setTemplates] = useState([]);
+  const [tags, setTags] = useState([]);
+  const [groupedTemplates, setGroupedTemplates] = useState({});
   const [items, setItems] = useState([]);
   const [selectedDate, setSelectedDate] = useState("");
   const [openedId, SetOpenedID] = useState();
@@ -37,7 +39,31 @@ function Browse() {
             },
           }
         );
-        setTemplates(response.data.templates);
+
+        console.log("sss", response.data);
+        const fetchedTemplates = response.data.templates;
+        const fetchedTags = response.data.tags;
+
+        setTemplates(fetchedTemplates);
+        setTags(fetchedTags);
+
+        const tagMap = {};
+        fetchedTags.forEach((tag) => {
+          tagMap[tag.id] = tag.user_position;
+        });
+
+        const grouped = {};
+        fetchedTemplates.forEach((template) => {
+          const position = tagMap[template.tag_id] || "Unknown";
+
+          if (!grouped[position]) {
+            grouped[position] = [];
+          }
+
+          grouped[position].push(template);
+        });
+
+        setGroupedTemplates(grouped);
       } catch (error) {
         console.error("Error fetching templates:", error);
       }
@@ -107,7 +133,6 @@ function Browse() {
   };
 
   const handleActionClick = async (index) => {
-
     const item = items[index];
     try {
       setIsSubmitting(true);
@@ -126,7 +151,6 @@ function Browse() {
         template_version: item.template_version,
         selected_date: dateToSubmit,
       };
-
 
       await axios.post(
         `${process.env.REACT_APP_BACKEND_SERVER_URL}/response/createResponse`,
@@ -172,7 +196,7 @@ function Browse() {
         alert("Checklist Template ID is missing.");
         return;
       }
-     
+
       const submissionPromises = items.map((item) => {
         return axios.post(
           `${process.env.REACT_APP_BACKEND_SERVER_URL}/response/createResponse`,
@@ -255,23 +279,45 @@ function Browse() {
               </div>
             </div>
 
-            <div className="card-container">
-              {templates.length > 0 ? (
-                templates.map((template) => (
-                  <div key={template.id} className="card">
-                    <h3>{template.template_name}</h3>
-                    <h3
-                      className="view"
-                      onClick={() => handleView(template.tag_id, template.current_version_id, template.id)}
-                    >
-                      View
-                    </h3>
+            {Object.entries(groupedTemplates).map(
+              ([userPosition, templates]) => (
+                <div key={userPosition} style={{ marginTop: "3rem" }}>
+                  <h2>
+                    {userPosition
+                      .toLowerCase()
+                      .split("_")
+                      .map(
+                        (word) => word.charAt(0).toUpperCase() + word.slice(1)
+                      )
+                      .join(" ")}{" "}
+                    Templates
+                  </h2>
+
+                  <div className="card-container">
+                    {templates.map((template) => (
+                      <div className="card" key={template.id}>
+                        <h3>{template.template_name}</h3>
+                        <br />
+                        <span>Priority: {template.priority}</span>
+                        <br />
+                        <h3
+                          className="view"
+                          onClick={() =>
+                            handleView(
+                              template.tag_id,
+                              template.current_version_id,
+                              template.id
+                            )
+                          }
+                        >
+                          View
+                        </h3>
+                      </div>
+                    ))}
                   </div>
-                ))
-              ) : (
-                <p>No templates found</p>
-              )}
-            </div>
+                </div>
+              )
+            )}
           </div>
 
           {isModalOpen && (
@@ -369,17 +415,17 @@ function Browse() {
                             <td>
                               <IoMdSend
                                 style={{
-                                  color: isSubmitting ? "gray" : "green", 
+                                  color: isSubmitting ? "gray" : "green",
                                   fontSize: "1.5rem",
                                   cursor: isSubmitting
                                     ? "not-allowed"
-                                    : "pointer", 
+                                    : "pointer",
                                 }}
                                 onClick={
                                   isSubmitting
                                     ? undefined
                                     : () => handleActionClick(index)
-                                } 
+                                }
                               />
                             </td>
                           </tr>

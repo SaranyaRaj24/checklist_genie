@@ -15,6 +15,11 @@ passport.use(
       try {
         const email = profile.email;
 
+        const organisationDomain = email.substring(
+          email.lastIndexOf("@") + 1,
+          email.lastIndexOf(".")
+        );
+
         const user = await prisma.user.upsert({
           where: { email: email },
           update: {
@@ -30,24 +35,33 @@ passport.use(
           },
         });
 
+        const existingOrg = await prisma.organisation.findUnique({
+          where: {
+            organisation: organisationDomain,
+          },
+        });
+
+        console.log("exist", existingOrg)
+
         const organisation = await prisma.organisation.upsert({
           where: {
-            organisation: email.substring(
-              email.lastIndexOf("@") + 1,
-              email.lastIndexOf(".")
-            ),
+            organisation: organisationDomain,
           },
           update: {
             created_at: new Date(),
           },
           create: {
-            organisation: email.substring(
-              email.lastIndexOf("@") + 1,
-              email.lastIndexOf(".")
-            ),
+            organisation: organisationDomain,
             created_at: new Date(),
           },
         });
+
+        
+        const isNewOrganization = !existingOrg;
+
+
+        console.log("new", isNewOrganization)
+
 
         let org_user = await prisma.organisation_Users.findFirst({
           where: {
@@ -66,11 +80,17 @@ passport.use(
             },
           });
         } else {
+          const userType = isNewOrganization ? "ADMIN" : "USER";
+
+          console.log("usertype", userPosition)
+
+          
           org_user = await prisma.organisation_Users.create({
             data: {
               organisation_id: organisation.id,
               user_id: user.id,
               created_at: new Date(),
+              user_type: userType, 
             },
           });
         }
@@ -81,6 +101,7 @@ passport.use(
           user_id: user.id,
           name: user.name,
           email: user.email,
+          position: org_user.position,
         });
       } catch (error) {
         return done(error, null);
@@ -88,6 +109,7 @@ passport.use(
     }
   )
 );
+
 passport.serializeUser(function (user, done) {
   done(null, user);
 });

@@ -39,9 +39,9 @@ const Login1 = () => {
             headers: { Authorization: `Bearer ${storedToken}` },
           }
         );
-           console.log("Roles for this ID ",response.data)
+           console.log("Roles for this ID ",response.data.userPositions)
           
-        const existingRoles = response.data;
+        const existingRoles = response.data.userPositions;
 
          if (existingRoles.length > 0) {
           console.log('Roles already selected:', existingRoles);

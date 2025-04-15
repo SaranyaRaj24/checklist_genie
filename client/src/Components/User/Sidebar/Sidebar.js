@@ -14,17 +14,13 @@ import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
-import NotificationsIcon from "@mui/icons-material/Notifications";
-import TemplateIcon from "@mui/icons-material/Description";
-import SettingsIcon from "@mui/icons-material/Settings";
-import PersonIcon from "@mui/icons-material/Person";
 
 import {
   Checklist as ChecklistIcon,
   History as HistoryIcon,
   Label as TagIcon,
   Assignment as CreateChecklistIcon,
-  AdminPanelSettings as AdminIcon
+  AdminPanelSettings as AdminIcon,
 } from "@mui/icons-material";
 
 import imagelogo from "../../../Assets/logo.jpg";
@@ -138,6 +134,18 @@ export default function MiniDrawer() {
     fetchUserType();
   }, []);
 
+  const handleLogout = () => {
+    localStorage.clear();
+    navigate("/");
+  };
+
+
+  const handleProfileClick = () => {
+    navigate("/profile");
+  };
+
+
+
   return (
     <>
       <Box sx={{ display: "flex" }}>
@@ -184,7 +192,8 @@ export default function MiniDrawer() {
             horizontal: "right",
           }}
         >
-          <MenuItem onClick={handleMenuClose}>Logout</MenuItem>
+          <MenuItem onClick={handleProfileClick}>Profile</MenuItem>
+          <MenuItem onClick={handleLogout}>Logout</MenuItem>
         </Menu>
 
         <Drawer variant="permanent" open={open}>
@@ -203,7 +212,7 @@ export default function MiniDrawer() {
                 icon: <HistoryIcon />,
                 path: "/user/checklisthistory",
               },
-              {
+              /* {
                 text: "Create Tag",
                 icon: <TagIcon />,
                 path: "/user/tag",
@@ -212,23 +221,23 @@ export default function MiniDrawer() {
                 text: "Create Checklist",
                 icon: <CreateChecklistIcon />,
                 path: "/user/checklist",
-              },
-              {
+              }, */
+              /* {
                 text: "Notifications",
                 icon: <NotificationsIcon />,
                 path: "/user/notification",
               },
               {
-                text: "Settings",
-                icon: <SettingsIcon />,
-                path: "/user/settings",
-              },
+                text: "Email Recipients",
+                icon: <AttachEmailIcon />,
+                path: "/user/emailrecipient",
+              }, */
               ...(userType === "ADMIN"
                 ? [
                     {
                       text: "Admin Portal",
                       icon: <AdminIcon />,
-                      path: "/admin/dashboard",
+                      path: "/admin/tag",
                     },
                   ]
                 : []),

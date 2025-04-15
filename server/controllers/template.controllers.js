@@ -4,14 +4,55 @@ const prisma = new PrismaClient();
 
 const getAllTemplate = async (req, res) => {
   try {
-    const getTemplate = await prisma.checklist_template.findMany({
-      include: {
-        Tags: true, 
+    const { organisation_user_id } = req.user;
+
+    const organisationUser = await prisma.organisation_Users.findUnique({
+      where: { id: organisation_user_id },
+      select: { organisation_id: true },
+    });
+
+    if (!organisationUser) {
+      return res
+        .status(200)
+        .json({ message: "Organisation user not found.", templates: [] });
+    }
+
+    const { organisation_id } = organisationUser;
+
+    const tags = await prisma.tags.findMany({
+      where: {
+        OrganisationUsers: {
+          organisation_id: organisation_id,
+        },
+      },
+      select: {
+        id: true,
+        tag_name: true,
+        user_position: true,
       },
     });
-    res.status(200).json(getTemplate);
+
+    const tagIds = tags.map((tag) => tag.id);
+
+    const templates = await prisma.checklist_template.findMany({
+      where: {
+        tag_id: { in: tagIds },
+      },
+      include: {
+        Tags: {
+          select: {
+            id: true,
+            tag_name: true,
+            user_position: true,
+          },
+        },
+      },
+    });
+
+    res.status(200).json({ templates, tags });
   } catch (error) {
-    console.log(error);
+    console.error(error);
+    res.status(500).json({ message: "Failed to fetch templates." });
   }
 };
 
@@ -55,6 +96,26 @@ const createTemplate = async (req, res) => {
         created_at: new Date(),
       },
     });
+
+    const owner = await prisma.organisation_Users.findUnique({
+      where: { id: organisation_user_id },
+      include: { user: true },
+    });
+
+    console.log("owners", owner)
+
+    if (owner && owner.user.email) {
+      await prisma.templateRecipients.create({
+        data: {
+          checklist_template_id: newTemplate.id,
+          recipient_email: owner.user.email,
+          cc_bcc_emails: "to",
+          assigned_by_user_id: organisation_user_id,
+          created_at: new Date(),
+          updated_at: new Date(),
+        },
+      });
+    }
 
     return res.status(201).json({
       message: "New template created with item",
@@ -112,6 +173,7 @@ const getTagsbyTemplates = async (req, res) => {
 const getTemplatesForUserPositions = async (req, res) => {
   try {
     const { organisation_user_id } = req.user;
+    console.log(organisation_user_id, req.user);
 
     const organisationUser = await prisma.organisation_Users.findUnique({
       where: { id: organisation_user_id },
@@ -119,7 +181,13 @@ const getTemplatesForUserPositions = async (req, res) => {
     });
 
     if (!organisationUser) {
-      return res.status(200).json({ message: "Organisation user not found.",templates:[], tags:[] });
+      return res
+        .status(200)
+        .json({
+          message: "Organisation user not found.",
+          templates: [],
+          tags: [],
+        });
     }
 
     const { organisation_id } = organisationUser;
@@ -131,10 +199,16 @@ const getTemplatesForUserPositions = async (req, res) => {
 
     const user_position = userPositionss.map((pos) => pos.user_position);
 
+    console.log(user_position, userPositionss);
+
     if (user_position.length === 0) {
       return res
         .status(200)
-        .json({ message: "No positions found for this user.",templates:[], tags:[] });
+        .json({
+          message: "No positions found for this user.",
+          templates: [],
+          tags: [],
+        });
     }
 
     const tags = await prisma.tags.findMany({
@@ -145,6 +219,7 @@ const getTemplatesForUserPositions = async (req, res) => {
       select: {
         id: true,
         tag_name: true,
+        user_position: true,
         OrganisationUsers: {
           select: {
             organisation_id: true,
@@ -153,21 +228,32 @@ const getTemplatesForUserPositions = async (req, res) => {
       },
     });
 
+    console.log("tags", tags);
+
     if (tags.length === 0) {
       return res
         .status(200)
-        .json({ message: "No tags found for the user positions.",templates:[], tags:[] });
+        .json({
+          message: "No tags found for the user positions.",
+          templates: [],
+          tags: [],
+        });
     }
 
-    const filteredTags = tags.filter(tag => tag.OrganisationUsers.organisation_id === organisation_id);
-
+    const filteredTags = tags.filter(
+      (tag) => tag.OrganisationUsers.organisation_id === organisation_id
+    );
 
     const tagIds = filteredTags.map((tag) => tag.id);
 
     if (tagIds.length === 0) {
       return res
         .status(200)
-        .json({ message: "No tags found for the user positions.",templates:[], tags:[] });
+        .json({
+          message: "No tags found for the user positions.",
+          templates: [],
+          tags: [],
+        });
     }
 
     const templates = await prisma.checklist_template.findMany({

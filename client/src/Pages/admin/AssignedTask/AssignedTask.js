@@ -3,10 +3,16 @@ import axios from "axios";
 import "./AssignedTask.css";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
+import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import Navbar from "../../../Pages/admin/Navbar/Navbar";
+import { useNavigate } from "react-router-dom";
+
 // import ShareIcon from "@mui/icons-material/Share";
 
 const AssignedTask = () => {
+  const navigate = useNavigate();
+
+
   const [data, setData] = useState([]);
   const [selectedTemplateDetails, setSelectedTemplateDetails] = useState(null);
   const [selectedTemplate, setSelectedTemplate] = useState(null);
@@ -29,7 +35,7 @@ const AssignedTask = () => {
             },
           }
         );
-        setData(response.data);
+        setData(response.data.templates);
       } catch (error) {
         console.error("Error fetching tags data:", error);
       }
@@ -166,6 +172,11 @@ const AssignedTask = () => {
     setSelectedTemplate(null);
   };
 
+  const handletemplaterecepients = (templateId) => {
+  navigate(`/admin/templaterecepients/${templateId}`);
+};
+
+
   return (
     <>
       <Navbar />
@@ -175,7 +186,7 @@ const AssignedTask = () => {
             <div className="card-headerr">
               <h2>{template.template_name}</h2>
               <p>
-                <strong>User Positions:</strong> {template.Tags.user_position}
+                <strong>User Positions:</strong> {template.Tags?.user_position}
               </p>
               <button
                 onClick={() =>
@@ -206,6 +217,13 @@ const AssignedTask = () => {
                   style={{ cursor: "pointer" }}
                 >
                   <DeleteIcon />
+                </p>
+
+                <p
+                  onClick={() => handletemplaterecepients(template.id)}
+                  style={{ cursor: "pointer" }}
+                >
+                  <PersonAddIcon />
                 </p>
               </div>
             </div>

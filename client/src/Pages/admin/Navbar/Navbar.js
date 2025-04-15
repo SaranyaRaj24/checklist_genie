@@ -113,6 +113,11 @@ export default function MiniDrawer() {
     handleMenuClose();
   };
 
+
+  const handleProfileClick = () => {
+    navigate("/profile");
+  };
+
  
 
   return (
@@ -161,6 +166,7 @@ export default function MiniDrawer() {
             horizontal: 'right',
           }}
         >
+          <MenuItem onClick={handleProfileClick}>Profile</MenuItem>
           <MenuItem onClick={handleLogout}>Logout</MenuItem>
         </Menu>
 
@@ -168,14 +174,14 @@ export default function MiniDrawer() {
           <DrawerHeader />
           <Divider />
           <List>
-            {[{
+            {[/* {
               text: 'Dashboard',
               icon: <DashboardIcon />
             },
             {
               text: 'Template',
               icon: <TemplateIcon />
-            },
+            },  */
             {
               text: 'Tag',
               icon: <InboxIcon />
@@ -226,14 +232,14 @@ export default function MiniDrawer() {
           </List>
           <Divider />
           <List>
-            {[{
+            {[/* {
               text: 'Notification',
               icon: <NotificationsIcon />
             },
             {
               text: 'Settings',
               icon: <SettingsIcon />
-            },
+            }, */
             {
               text: 'User',
               icon: <PersonIcon />

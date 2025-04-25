@@ -14,6 +14,8 @@ function Browse() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalContent, setModalContent] = useState(null);
   const [templates, setTemplates] = useState([]);
+  const [tags, setTags] = useState([]);
+  const [groupedTemplates, setGroupedTemplates] = useState({});
   const [items, setItems] = useState([]);
   const [selectedDate, setSelectedDate] = useState("");
   const [openedId, SetOpenedID] = useState();
@@ -51,6 +53,7 @@ function Browse() {
           } else if (recurrence === "Monthly") {
             nextDueDate.setDate(today.getDate() + 30);
           }
+
         } else {
           nextDueDate = new Date(submissionDate);
           if (recurrence === "Daily") {
@@ -61,6 +64,38 @@ function Browse() {
             nextDueDate.setDate(nextDueDate.getDate() + 30);
           }
         }
+
+        
+
+        console.log("sss", response.data);
+        const fetchedTemplates = response.data.templates;
+        const fetchedTags = response.data.tags;
+
+        setTemplates(fetchedTemplates);
+        setTags(fetchedTags);
+
+        const tagMap = {};
+        fetchedTags.forEach((tag) => {
+          tagMap[tag.id] = tag.user_position;
+        });
+
+        const grouped = {};
+        fetchedTemplates.forEach((template) => {
+          const position = tagMap[template.tag_id] || "Unknown";
+
+          if (!grouped[position]) {
+            grouped[position] = [];
+          }
+
+          grouped[position].push(template);
+        });
+
+        setGroupedTemplates(grouped);
+      } catch (error) {
+        console.error("Error fetching templates:", error);
+      }
+    };
+
 
         return {
           ...template,
@@ -217,6 +252,7 @@ function Browse() {
 
       const submissionPromises = items.map((item) =>
         axios.post(
+
           `${process.env.REACT_APP_BACKEND_SERVER_URL}/response/createResponse`,
           {
             status: item.response === true ? "Yes" : "No",
@@ -302,6 +338,7 @@ function Browse() {
               </div>
             </div>
 
+
             <div className="card-container">
               {templates.length > 0 ? (
                 templates.map((template) => (
@@ -382,12 +419,11 @@ function Browse() {
                     >
                       View
                     </div>
+
                   </div>
-                ))
-              ) : (
-                <p>No templates found</p>
-              )}
-            </div>
+                </div>
+              )
+            )}
           </div>
 
           {isModalOpen && (

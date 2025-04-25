@@ -3,10 +3,16 @@ import axios from "axios";
 import "./AssignedTask.css";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
+import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import Navbar from "../../../Pages/admin/Navbar/Navbar";
+import { useNavigate } from "react-router-dom";
+
 // import ShareIcon from "@mui/icons-material/Share";
 
 const AssignedTask = () => {
+  const navigate = useNavigate();
+
+
   const [data, setData] = useState([]);
   const [selectedTemplateDetails, setSelectedTemplateDetails] = useState(null);
   const [selectedTemplate, setSelectedTemplate] = useState(null);
@@ -166,6 +172,11 @@ const AssignedTask = () => {
     setSelectedTemplate(null);
   };
 
+  const handletemplaterecepients = (templateId) => {
+  navigate(`/admin/templaterecepients/${templateId}`);
+};
+
+
   return (
     <>
       <Navbar />
@@ -206,6 +217,13 @@ const AssignedTask = () => {
                   style={{ cursor: "pointer" }}
                 >
                   <DeleteIcon />
+                </p>
+
+                <p
+                  onClick={() => handletemplaterecepients(template.id)}
+                  style={{ cursor: "pointer" }}
+                >
+                  <PersonAddIcon />
                 </p>
               </div>
             </div>

@@ -113,6 +113,11 @@ export default function MiniDrawer() {
     handleMenuClose();
   };
 
+
+  const handleProfileClick = () => {
+    navigate("/profile");
+  };
+
  
 
   return (
@@ -161,6 +166,7 @@ export default function MiniDrawer() {
             horizontal: 'right',
           }}
         >
+          <MenuItem onClick={handleProfileClick}>Profile</MenuItem>
           <MenuItem onClick={handleLogout}>Logout</MenuItem>
         </Menu>
 

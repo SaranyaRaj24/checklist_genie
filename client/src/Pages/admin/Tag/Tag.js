@@ -192,6 +192,7 @@ const Tag = () => {
     <>
       <div className="dashboard-container">
         {isAdmin ? <Navbar /> : <UserNav />}
+
         {saved && <div className="alert-message">Saved Successfully!</div>}
         {deleted && <div className="alert-message">Deleted Successfully!</div>}
         <div className="notification-container">

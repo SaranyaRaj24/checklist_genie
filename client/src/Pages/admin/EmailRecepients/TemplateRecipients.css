@@ -1,0 +1,139 @@
+.recipients-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    font-family: Arial, sans-serif;
+  }
+  
+  .recipients-title {
+    font-size: 24px;
+    color: #333;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
+  }
+  
+  .error-message {
+    color: #d32f2f;
+    background-color: #fdecea;
+    padding: 10px 15px;
+    border-radius: 4px;
+    margin-bottom: 20px;
+    font-size: 14px;
+  }
+  
+  .section-title {
+    font-size: 18px;
+    color: #444;
+    margin-bottom: 15px;
+  }
+  
+  .add-recipient-section {
+    margin-bottom: 30px;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 6px;
+  }
+  
+  .recipient-form {
+    display: flex;
+    gap: 10px;
+  }
+  
+  .email-input {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+  }
+  
+  .type-select {
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background-color: white;
+    font-size: 14px;
+  }
+  
+  .add-button {
+    padding: 10px 20px;
+    background-color: #1976d2;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s;
+  }
+  
+  .add-button:hover {
+    background-color: #1565c0;
+  }
+  
+  .add-button:disabled {
+    background-color: #90caf9;
+    cursor: not-allowed;
+  }
+  
+  .current-recipients-section {
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 6px;
+  }
+  
+  .recipients-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .recipient-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 0;
+    border-bottom: 1px solid #eee;
+  }
+  
+  .recipient-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  .recipient-email {
+    font-weight: 500;
+  }
+  
+  .recipient-type {
+    color: #666;
+    font-size: 13px;
+  }
+  
+  .remove-button {
+    padding: 6px 12px;
+    background-color: #f44336;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 13px;
+    transition: background-color 0.3s;
+  }
+  
+  .remove-button:hover {
+    background-color: #d32f2f;
+  }
+  
+  .remove-button:disabled {
+    background-color: #ef9a9a;
+    cursor: not-allowed;
+  }
+  
+  .loading-message, .empty-message {
+    color: #666;
+    font-style: italic;
+    text-align: center;
+    padding: 20px;
+  }

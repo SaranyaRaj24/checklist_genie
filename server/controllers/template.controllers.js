@@ -1,6 +1,8 @@
 const express = require("express");
 const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
+const { subDays, subWeeks, subMonths } = require('date-fns');
+
 
 
 const getAllTemplate = async (req, res) => {
@@ -166,19 +168,19 @@ const getTagsbyTemplates = async (req, res) => {
   }
 };
 
+
 const getTemplatesForUserPositions = async (req, res) => {
   try {
     const { organisation_user_id } = req.user;
-    console.log(organisation_user_id, req.user)
+    console.log(organisation_user_id, req.user);
 
     const organisationUser = await prisma.organisation_Users.findUnique({
       where: { id: organisation_user_id },
       select: { organisation_id: true },
     });
-    
 
     if (!organisationUser) {
-      return res.status(200).json({ message: "Organisation user not found.",templates:[], tags:[] });
+      return res.status(200).json({ message: "Organisation user not found.", templates: [], tags: [] });
     }
 
     const { organisation_id } = organisationUser;
@@ -190,22 +192,20 @@ const getTemplatesForUserPositions = async (req, res) => {
 
     const user_position = userPositionss.map((pos) => pos.user_position);
 
-    console.log(user_position, userPositionss)
-
     if (user_position.length === 0) {
-      return res
-        .status(200)
-        .json({ message: "No positions found for this user.",templates:[], tags:[] });
+      return res.status(200).json({ message: "No positions found for this user.", templates: [], tags: [] });
     }
 
     const tags = await prisma.tags.findMany({
       where: {
         user_position: { in: user_position },
       },
-
       select: {
         id: true,
         tag_name: true,
+        description: true,
+        recurrent:true,
+        created_at:true,
         OrganisationUsers: {
           select: {
             organisation_id: true,
@@ -215,32 +215,69 @@ const getTemplatesForUserPositions = async (req, res) => {
     });
 
     if (tags.length === 0) {
-      return res
-        .status(200)
-        .json({ message: "No tags found for the user positions.",templates:[], tags:[] });
+      return res.status(200).json({ message: "No tags found for the user positions.", templates: [], tags: [] });
     }
 
     const filteredTags = tags.filter(tag => tag.OrganisationUsers.organisation_id === organisation_id);
 
-
     const tagIds = filteredTags.map((tag) => tag.id);
 
     if (tagIds.length === 0) {
-      return res
-        .status(200)
-        .json({ message: "No tags found for the user positions.",templates:[], tags:[] });
+      return res.status(200).json({ message: "No tags found for the user positions.", templates: [], tags: [] });
     }
 
-    const templates = await prisma.checklist_template.findMany({
-      where: { tag_id: { in: tagIds } },
-    });
-
+   
+   
+    const templates = await Promise.all(
+      (
+        await prisma.checklist_template.findMany({
+          where: { tag_id: { in: tagIds } },
+          select: {
+            id: true,
+            template_name: true,
+            current_version_id: true,
+            created_at: true,
+            Tags: {
+              select: {
+                id: true,
+                description: true,
+                recurrent: true,
+                created_at: true,
+              },
+            },
+          },
+        })
+      ).map(async (template) => {
+        // 🔍 Find latest submission for this template
+        const latestResponse = await prisma.checklist_item_response.findFirst({
+          where: {
+            template_version: template.current_version_id,
+            organisation_user_id: organisation_user_id,
+          },
+          orderBy: {
+            created_at: "desc",
+          },
+          select: {
+            created_at: true,
+          },
+        });
+    
+        return {
+          ...template,
+          lastSubmitted: latestResponse?.created_at || null, 
+        };
+      })
+    );
+    
     res.status(200).json({ templates, tags });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Failed to fetch templates." });
   }
 };
+
+
+
 
 module.exports = {
   getAllTemplate,

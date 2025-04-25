@@ -6,6 +6,8 @@ import { useNavigate } from "react-router-dom";
 import { IoMdSend } from "react-icons/io";
 import { TextField } from "@mui/material";
 import { RadioGroup, FormControlLabel, Radio } from "@mui/material";
+import { Tooltip, IconButton } from "@mui/material";
+import { AiOutlineQuestionCircle } from "react-icons/ai";
 
 function Browse() {
   const [sortBy, setSortBy] = useState("Assigned");
@@ -16,33 +18,64 @@ function Browse() {
   const [selectedDate, setSelectedDate] = useState("");
   const [openedId, SetOpenedID] = useState();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [tooltipOpen, setTooltipOpen] = useState(null);
+  const [openDescriptionId, setOpenDescriptionId] = useState(null);
 
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (!token) {
-      console.error("Token is missing. Please log in.");
-      navigate("/login");
-      return;
-    }
+  const fetchTemplates = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await axios.get(
+        `${process.env.REACT_APP_BACKEND_SERVER_URL}/template/getTemplates`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
-    const fetchTemplates = async () => {
-      try {
-        const response = await axios.get(
-          `${process.env.REACT_APP_BACKEND_SERVER_URL}/template/getTemplates`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
+      const templatesWithDueDates = response.data.templates.map((template) => {
+        const submissionDate = template.lastSubmitted
+          ? new Date(template.lastSubmitted)
+          : null;
+        const recurrence = template.Tags?.recurrent;
+        const today = new Date();
+        let nextDueDate = new Date(today);
+
+        if (!submissionDate) {
+          if (recurrence === "Daily") {
+            // today already set
+          } else if (recurrence === "Weekly") {
+            nextDueDate.setDate(today.getDate() + 7);
+          } else if (recurrence === "Monthly") {
+            nextDueDate.setDate(today.getDate() + 30);
           }
-        );
-        setTemplates(response.data.templates);
-      } catch (error) {
-        console.error("Error fetching templates:", error);
-      }
-    };
+        } else {
+          nextDueDate = new Date(submissionDate);
+          if (recurrence === "Daily") {
+            nextDueDate.setDate(nextDueDate.getDate() + 1);
+          } else if (recurrence === "Weekly") {
+            nextDueDate.setDate(nextDueDate.getDate() + 7);
+          } else if (recurrence === "Monthly") {
+            nextDueDate.setDate(nextDueDate.getDate() + 30);
+          }
+        }
 
+        return {
+          ...template,
+          lastSubmitted: submissionDate,
+          nextDueDate,
+        };
+      });
+
+      setTemplates(templatesWithDueDates);
+    } catch (error) {
+      console.error("Error fetching templates:", error);
+    }
+  };
+
+  useEffect(() => {
     fetchTemplates();
   }, [navigate]);
 
@@ -50,6 +83,7 @@ function Browse() {
     try {
       const token = localStorage.getItem("token");
       SetOpenedID(template_id);
+
       const response = await axios.get(
         `${process.env.REACT_APP_BACKEND_SERVER_URL}/items/getItemsByTemplate/${tag_id}/${current_version_id}`,
         {
@@ -58,6 +92,8 @@ function Browse() {
           },
         }
       );
+
+      console.log("Fetched Items:", response.data);
 
       const fetchedItems = response.data.map((item) => ({
         ...item,
@@ -80,8 +116,19 @@ function Browse() {
       setModalContent("Items");
       setIsModalOpen(true);
     } catch (error) {
-      console.error("Error fetching items:", error);
+      console.error(
+        "Error fetching items:",
+        error.response?.data || error.message
+      );
     }
+  };
+
+  const handleTooltipToggle = (templateId) => {
+    setTooltipOpen(tooltipOpen === templateId ? null : templateId);
+  };
+
+  const toggleDescription = (itemId) => {
+    setOpenDescriptionId(openDescriptionId === itemId ? null : itemId);
   };
 
   const handleCloseModal = () => {
@@ -107,7 +154,6 @@ function Browse() {
   };
 
   const handleActionClick = async (index) => {
-
     const item = items[index];
     try {
       setIsSubmitting(true);
@@ -126,7 +172,6 @@ function Browse() {
         template_version: item.template_version,
         selected_date: dateToSubmit,
       };
-
 
       await axios.post(
         `${process.env.REACT_APP_BACKEND_SERVER_URL}/response/createResponse`,
@@ -156,36 +201,32 @@ function Browse() {
       const token = localStorage.getItem("token");
       setIsSubmitting(true);
 
-      const userDetails = {
-        username: {},
-        email: "",
-      };
-
       if (!items || items.length === 0) {
         alert("No checklist items to submit.");
         return;
       }
 
       const checklistTemplateId = openedId;
-
       if (!checklistTemplateId) {
         alert("Checklist Template ID is missing.");
         return;
       }
-     
-      const submissionPromises = items.map((item) => {
-        return axios.post(
+
+      const selectedSubmissionDate =
+        selectedDate || new Date().toISOString().split("T")[0];
+
+      const submissionPromises = items.map((item) =>
+        axios.post(
           `${process.env.REACT_APP_BACKEND_SERVER_URL}/response/createResponse`,
           {
             status: item.response === true ? "Yes" : "No",
             input: item.input,
             comments: item.comments || null,
             checklist_template_linked_items_id:
-              item.ChecklistTemplateLinkedItems[0].id,
+              item.ChecklistTemplateLinkedItems?.[0]?.id,
             user_assigned_checklist_template_id: 1,
             template_version: item.template_version,
-            selected_date:
-              selectedDate || new Date().toISOString().split("T")[0],
+            selected_date: selectedSubmissionDate,
             response: item.input,
           },
           {
@@ -193,18 +234,22 @@ function Browse() {
               Authorization: `Bearer ${token}`,
             },
           }
-        );
-      });
+        )
+      );
 
       await Promise.all(submissionPromises);
+      localStorage.setItem(
+        `submitted_${checklistTemplateId}`,
+        selectedSubmissionDate
+      );
 
+      // Email notification request
       const emailResponse = await axios.post(
         `${process.env.REACT_APP_BACKEND_SERVER_URL}/checklist/submit`,
         {
           checklistTemplateId,
           checklistItems: items,
-          username: userDetails.username,
-          selectedDate: selectedDate || new Date().toISOString().split("T")[0],
+          selectedDate: selectedSubmissionDate,
         },
         {
           headers: {
@@ -218,6 +263,8 @@ function Browse() {
       } else {
         alert("Checklist submitted, but failed to send email.");
       }
+
+      fetchTemplates();
     } catch (error) {
       console.error("Error submitting checklist:", error);
       alert("Failed to submit checklist. Please try again.");
@@ -259,13 +306,82 @@ function Browse() {
               {templates.length > 0 ? (
                 templates.map((template) => (
                   <div key={template.id} className="card">
-                    <h3>{template.template_name}</h3>
-                    <h3
+                    <div className="submission-info-row">
+                      {template.lastSubmitted && (
+                        <p>
+                          Last Submitted:{" "}
+                          <span>
+                            
+                            {
+                              new Date(template.lastSubmitted)
+                                .toISOString()
+                                .split("T")[0]
+                            }
+                            
+                          </span>
+                        </p>
+                      )}
+                      <p>
+                        Due Date:{" "}
+                        <span>
+                          
+                          {
+                            new Date(template.nextDueDate)
+                              .toISOString()
+                              .split("T")[0]
+                          }
+                          
+                        </span>
+                      </p>
+                    </div>
+
+                    <div className="template-header">
+                      <h3 className="template-title">
+                        {template.template_name}
+                      </h3>
+                      <Tooltip
+                        title={
+                          template.Tags?.description ||
+                          "No description available"
+                        }
+                        arrow
+                        open={tooltipOpen === template.id}
+                        onClose={() => setTooltipOpen(null)}
+                        componentsProps={{
+                          tooltip: {
+                            sx: {
+                              fontSize: "16px",
+                              maxWidth: 250,
+                              lineHeight: 1.6,
+                              bgcolor: "#25274D",
+                              color: "#fff",
+                              padding: "10px",
+                            },
+                          },
+                        }}
+                      >
+                        <IconButton
+                          onClick={() => handleTooltipToggle(template.id)}
+                          size="small"
+                          style={{ padding: "0", marginTop: "2px" }}
+                        >
+                          <AiOutlineQuestionCircle />
+                        </IconButton>
+                      </Tooltip>
+                    </div>
+
+                    <div
                       className="view"
-                      onClick={() => handleView(template.tag_id, template.current_version_id, template.id)}
+                      onClick={() =>
+                        handleView(
+                          template.Tags.id,
+                          template.current_version_id,
+                          template.id
+                        )
+                      }
                     >
                       View
-                    </h3>
+                    </div>
                   </div>
                 ))
               ) : (
@@ -283,15 +399,54 @@ function Browse() {
 
                 {modalContent === "Items" && (
                   <div>
-                    <button>
-                      Date:{" "}
-                      <input
-                        type="date"
-                        value={selectedDate}
-                        onChange={handleDateChange}
-                        className="date-picker"
-                      />
-                    </button>
+                    <div className="modal-header-row">
+                      <div className="left">
+                        {templates
+                          .filter((t) => t.id === openedId)
+                          .map((template) =>
+                            template.lastSubmitted ? (
+                              <p key={template.id}>
+                                <strong>Last Submitted:</strong>{" "}
+                                {
+                                  new Date(template.lastSubmitted)
+                                    .toISOString()
+                                    .split("T")[0]
+                                }
+                              </p>
+                            ) : (
+                              <p key={template.id}>No submissions yet</p>
+                            )
+                          )}
+                      </div>
+
+                      <div className="center">
+                        <label>
+                          <strong>Date:</strong>{" "}
+                          <input
+                            type="date"
+                            value={selectedDate}
+                            onChange={handleDateChange}
+                            className="date-picker"
+                          />
+                        </label>
+                      </div>
+
+                      <div className="right">
+                        {templates
+                          .filter((t) => t.id === openedId)
+                          .map((template) => (
+                            <p key={template.id}>
+                              <strong>Due Date:</strong>{" "}
+                              {
+                                new Date(template.nextDueDate)
+                                  .toISOString()
+                                  .split("T")[0]
+                              }
+                            </p>
+                          ))}
+                      </div>
+                    </div>
+
                     <h3>Checklist Items</h3>
                     <table>
                       <thead>
@@ -303,7 +458,159 @@ function Browse() {
                           <th>Action</th>
                         </tr>
                       </thead>
+
                       <tbody>
+                        {items.map((item, index) => (
+                          <tr key={index}>
+                            <td>{index + 1}</td>
+                            <td>
+                              {item.checklist_name}
+                              <Tooltip
+                                title={
+                                  item.Instructions ||
+                                  "No instructions available"
+                                }
+                                arrow
+                                open={openDescriptionId === index}
+                                onClose={() => setOpenDescriptionId(null)}
+                                componentsProps={{
+                                  tooltip: {
+                                    sx: {
+                                      fontSize: "16px",
+                                      maxWidth: 250,
+                                      lineHeight: 1.6,
+                                      bgcolor: "#25274D",
+                                      color: "#fff",
+                                      padding: "10px",
+                                    },
+                                  },
+                                }}
+                              >
+                                <IconButton
+                                  onClick={() => toggleDescription(index)}
+                                  size="small"
+                                  style={{
+                                    padding: "0",
+                                    marginLeft: "3px",
+                                    marginTop: "-3px", // Moves it a little higher
+                                  }}
+                                >
+                                  <AiOutlineQuestionCircle
+                                    style={{
+                                      fontSize: "1rem", // Smaller size
+                                      color: "#25274D",
+                                      cursor: "pointer",
+                                      position: "absolute",
+                                      marginBottom: "1rem",
+                                      marginLeft: "1rem",
+                                    }}
+                                  />
+                                </IconButton>
+                              </Tooltip>
+                            </td>
+
+                            <td>
+                              {item.input_type === "Boolean" ? (
+                                <RadioGroup
+                                  row
+                                  value={item.response || ""}
+                                  onChange={(e) =>
+                                    handleInputChange(
+                                      index,
+                                      "response",
+                                      e.target.value
+                                    )
+                                  }
+                                >
+                                  <FormControlLabel
+                                    value="Yes"
+                                    control={<Radio />}
+                                    label="Yes"
+                                  />
+                                  <FormControlLabel
+                                    value="No"
+                                    control={<Radio />}
+                                    label="No"
+                                  />
+                                </RadioGroup>
+                              ) : item.input_type === "Numeric" ? (
+                                <TextField
+                                  type="number"
+                                  variant="outlined"
+                                  size="small"
+                                  value={item.numberInput || ""}
+                                  onChange={(e) =>
+                                    handleInputChange(
+                                      index,
+                                      "numberInput",
+                                      e.target.value
+                                    )
+                                  }
+                                  inputProps={{ min: 0 }}
+                                />
+                              ) : null}
+                            </td>
+
+                            <td>
+                              <TextField
+                                variant="outlined"
+                                size="small"
+                                value={item.comments || ""}
+                                onChange={(e) =>
+                                  handleInputChange(
+                                    index,
+                                    "comments",
+                                    e.target.value
+                                  )
+                                }
+                                placeholder="Add comments (optional)"
+                              />
+                            </td>
+                            <td>
+                              <IoMdSend
+                                style={{
+                                  color: isSubmitting ? "gray" : "green",
+                                  fontSize: "1.5rem",
+                                  cursor: isSubmitting
+                                    ? "not-allowed"
+                                    : "pointer",
+                                }}
+                                onClick={
+                                  isSubmitting
+                                    ? undefined
+                                    : () => handleActionClick(index)
+                                }
+                              />
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+
+                    <div className="submit-container">
+                      <button
+                        className="submit-button"
+                        onClick={handleBulkSubmit}
+                        disabled={isSubmitting}
+                      >
+                        Submit
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+    </>
+  );
+}
+
+export default Browse;
+
+{
+  /* <tbody>
                         {items.map((item, index) => (
                           <tr key={index}>
                             <td>{index + 1}</td>
@@ -369,42 +676,20 @@ function Browse() {
                             <td>
                               <IoMdSend
                                 style={{
-                                  color: isSubmitting ? "gray" : "green", 
+                                  color: isSubmitting ? "gray" : "green",
                                   fontSize: "1.5rem",
                                   cursor: isSubmitting
                                     ? "not-allowed"
-                                    : "pointer", 
+                                    : "pointer",
                                 }}
                                 onClick={
                                   isSubmitting
                                     ? undefined
                                     : () => handleActionClick(index)
-                                } 
+                                }
                               />
                             </td>
                           </tr>
                         ))}
-                      </tbody>
-                    </table>
-
-                    <div className="submit-container">
-                      <button
-                        className="submit-button"
-                        onClick={handleBulkSubmit}
-                        disabled={isSubmitting}
-                      >
-                        Submit
-                      </button>
-                    </div>
-                  </div>
-                )}
-              </div>
-            </div>
-          )}
-        </div>
-      </div>
-    </>
-  );
+                      </tbody> */
 }
-
-export default Browse;
